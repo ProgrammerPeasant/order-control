@@ -1,0 +1,98 @@
+/* Общий контейнер страницы */
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #fff;
+}
+
+/* Карточка входа */
+.login-card {
+  background-color: #4a7dff;
+  border-radius: 20px;
+  padding: 30px 20px;
+  width: 300px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.login-title {
+  font-size: 24px;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+/* Форма */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.form-group label {
+  font-size: 14px;
+  color: #d9e6ff;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  padding: 10px;
+  border: 2px solid #b2ceff;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.3);
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+}
+
+.form-group input::placeholder {
+  color: #d9e6ff;
+}
+
+.form-group input:focus {
+  border-color: #fff;
+}
+
+/* Группа кнопок */
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* Кнопка "Назад" */
+.back-button {
+  padding: 10px;
+  border: none;
+  border-radius: 20px;
+  font-size: 14px;
+  background-color: #000;
+  color: #fff;
+  cursor: pointer;
+}
+
+.back-button:hover {
+  background-color: #333;
+}
+
+/* Кнопка "Продолжить" */
+.submit-button {
+  padding: 10px;
+  border: none;
+  border-radius: 20px;
+  font-size: 14px;
+  background-color: #003b62;
+  color: #fff;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: #005080;
+}
