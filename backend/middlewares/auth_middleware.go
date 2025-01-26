@@ -1,0 +1,41 @@
+package middlewares
+
+import (
+	"net/http"
+	_ "order-control/models"
+	"order-control/utils"
+	"strings"
+
+	"github.com/gin-gonic/gin"
+)
+
+func AuthMiddleware() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		authHeader := ctx.GetHeader("Authorization")
+		if authHeader == "" {
+			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Не указан заголовок Authorization"})
+			ctx.Abort()
+			return
+		}
+		parts := strings.Split(authHeader, " ")
+		if len(parts) != 2 || parts[0] != "Bearer" {
+			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Неверный формат токена"})
+			ctx.Abort()
+			return
+		}
+
+		tokenStr := parts[1]
+		claims, err := utils.ValidateJWT(tokenStr)
+		if err != nil {
+			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Невалидный токен"})
+			ctx.Abort()
+			return
+		}
+
+		// Сохраняем информацию о пользователе в контекст, чтобы далее использовать
+		ctx.Set("userID", claims.UserID)
+		ctx.Set("role", claims.Role)
+
+		ctx.Next()
+	}
+}
