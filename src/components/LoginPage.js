@@ -11,9 +11,17 @@ const LoginPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    // const formData = new FormData(e.target);
+    // const data = Object.fromEntries(formData);
+
+    navigate('/mainmenu');
     // Здесь можно обработать логин/пароль
     console.log('Логин отправлен!');
   };
+
+  // const form = document.querySelector('form');
+  // form.addEventListener('submit', handleSubmit);
 
   return (
     <div className="login-page">
