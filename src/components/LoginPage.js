@@ -6,7 +6,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const handleBack = () => {
-    navigate('/'); // Переход на StartPage
+    navigate('/');
   };
 
   const handleSubmit = (e) => {
@@ -25,24 +25,20 @@ const LoginPage = () => {
 
   return (
     <div className="login-page">
-      <div className="login-card">
-        <h1 className="login-title">Вход</h1>
-        <form className="login-form" onSubmit={handleSubmit}>
-          <div className="form-group">
+      <div className="login-page__card">
+        <h1 className="login-page__title">Вход</h1>
+        <form className="login-page__form" onSubmit={handleSubmit}>
+          <div className="login-page__form-group">
             <label htmlFor="login">Логин</label>
             <input type="text" id="login" placeholder="Введите логин" />
           </div>
-          <div className="form-group">
+          <div className="login-page__form-group">
             <label htmlFor="password">Пароль</label>
             <input type="password" id="password" placeholder="Введите пароль" />
           </div>
-          <div className="button-group">
-            <button type="button" className="back-button" onClick={handleBack}>
-              Назад
-            </button>
-            <button type="submit" className="submit-button">
-              Продолжить
-            </button>
+          <div className="login-page__button-group">
+            <button type="button" className="login-page__button login-page__back-button" onClick={handleBack}>Назад</button>
+            <button type="submit" className="login-page__button login-page__continue-button">Продолжить</button>
           </div>
         </form>
       </div>

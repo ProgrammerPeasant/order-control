@@ -5,15 +5,11 @@ import { useNavigate } from 'react-router-dom';
 const MainMenuPage = () => {
   const navigate = useNavigate();
 
-  const handleCreate = () => {
-    navigate('/');
+  const handleToDash = () => {
+    navigate('/dashboard');
   };
 
-  const handleOpen = () => {
-    navigate('/');
-  };
-
-  const handleUpload = () => {
+  const handleOptions = () => {
     navigate('/');
   };
 
@@ -23,20 +19,11 @@ const MainMenuPage = () => {
 
   return (
     <div className="main-menu-page">
-      <div className="main-menu-card">
-        <div className="button-group">
-          <button type="button" className="create-button" onClick={handleCreate}>
-            Создать
-          </button>
-          <button type="button" className="open-button" onClick={handleOpen}>
-            Открыть
-          </button>
-          <button type="button" className="upload-button" onClick={handleUpload}>
-            Загрузить файл
-          </button>
-          <button type="button" className="exit-button" onClick={handleExit}>
-            Выйти
-          </button>
+      <div className="main-menu-page__card">
+        <div className="main-menu-page__button-group">
+          <button className="main-menu-page__button main-menu-page__open-upload-button" onClick={handleToDash}>Мои сметы</button>
+          <button className="main-menu-page__button main-menu-page__options-button" onClick={handleOptions}>Настройки</button>
+          <button className="main-menu-page__button main-menu-page__exit-button" onClick={handleExit}>Выйти</button>
         </div>
       </div>
     </div>

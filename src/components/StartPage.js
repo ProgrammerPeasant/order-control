@@ -19,18 +19,8 @@ const StartPage = () => {
         <h1 className="start-page__title">Название</h1>
         <p className="start-page__subtitle">Дополнительный текст</p>
       </div>
-      <button
-        className="start-page__button start-page__button--primary"
-        onClick={goToRegister}
-      >
-        Зарегистрироваться
-      </button>
-      <button 
-        className="start-page__button start-page__button--secondary"
-        onClick={goToLogin}
-      >
-        Войти
-      </button>
+      <button className="start-page__button start-page__button--register" onClick={goToRegister}>Зарегистрироваться</button>
+      <button className="start-page__button start-page__button--signin" onClick={goToLogin}>Войти</button>
     </div>
   );
 };

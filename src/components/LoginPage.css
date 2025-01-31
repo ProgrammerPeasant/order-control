@@ -1,48 +1,46 @@
-/* Общий контейнер страницы */
 .login-page {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
   height: 100vh;
   background-color: #fff;
 }
 
-/* Карточка входа */
-.login-card {
+.login-page__card {
   background-color: #4a7dff;
   border-radius: 20px;
-  padding: 30px 20px;
-  width: 300px;
+  padding: 20px 20px;
   text-align: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 300px;
 }
 
-.login-title {
-  font-size: 24px;
+.login-page__title {
+  font-size: 32px;
   color: #fff;
-  margin-bottom: 20px;
+  margin: 0 0 10px;
 }
 
-/* Форма */
-.login-form {
+.login-page__form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 10px;
 }
 
-.form-group {
+.login-page__form-group {
   display: flex;
   flex-direction: column;
   text-align: left;
 }
 
-.form-group label {
+.login-page__form-group label {
   font-size: 14px;
   color: #d9e6ff;
   margin-bottom: 5px;
 }
 
-.form-group input {
+.login-page__form-group input {
   padding: 10px;
   border: 2px solid #b2ceff;
   border-radius: 20px;
@@ -52,47 +50,45 @@
   outline: none;
 }
 
-.form-group input::placeholder {
+.login-page__form-group input::placeholder {
   color: #d9e6ff;
 }
 
-.form-group input:focus {
+.login-page__form-group input:focus {
   border-color: #fff;
 }
 
-/* Группа кнопок */
-.button-group {
+.login-page__button-group {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   gap: 10px;
 }
 
-/* Кнопка "Назад" */
-.back-button {
+.login-page__button {
   padding: 10px;
   border: none;
   border-radius: 20px;
-  font-size: 14px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 10px 0;
+}
+
+.login-page__back-button {
   background-color: #000;
   color: #fff;
-  cursor: pointer;
+  width: 100px;
 }
 
-.back-button:hover {
-  background-color: #333;
+.login-page__back-button:hover {
+  background-color: #555555;
 }
 
-/* Кнопка "Продолжить" */
-.submit-button {
-  padding: 10px;
-  border: none;
-  border-radius: 20px;
-  font-size: 14px;
+.login-page__continue-button {
   background-color: #003b62;
   color: #fff;
-  cursor: pointer;
+  width: 200px;
 }
 
-.submit-button:hover {
+.login-page__continue-button:hover {
   background-color: #005080;
 }
