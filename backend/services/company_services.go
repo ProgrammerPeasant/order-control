@@ -1,8 +1,8 @@
 package services
 
 import (
-	"order-control/models"
-	"order-control/repositories"
+	"github.com/ProgrammerPeasant/order-control/models"
+	"github.com/ProgrammerPeasant/order-control/repositories"
 )
 
 type CompanyService interface {

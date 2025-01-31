@@ -1,10 +1,10 @@
 package routes
 
 import (
-	"order-control/controllers"
-	"order-control/middlewares"
-	"order-control/repositories"
-	"order-control/services"
+	"github.com/ProgrammerPeasant/order-control/controllers"
+	"github.com/ProgrammerPeasant/order-control/middlewares"
+	"github.com/ProgrammerPeasant/order-control/repositories"
+	"github.com/ProgrammerPeasant/order-control/services"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"

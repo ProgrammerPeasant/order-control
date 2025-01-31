@@ -1,9 +1,9 @@
 package middlewares
 
 import (
+	_ "github.com/ProgrammerPeasant/order-control/models"
+	"github.com/ProgrammerPeasant/order-control/utils"
 	"net/http"
-	_ "order-control/models"
-	"order-control/utils"
 	"strings"
 
 	"github.com/gin-gonic/gin"

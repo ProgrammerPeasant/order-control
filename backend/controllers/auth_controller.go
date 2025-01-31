@@ -1,9 +1,12 @@
 package controllers
 
 import (
+	"bytes"
+	"github.com/ProgrammerPeasant/order-control/models"
+	"github.com/ProgrammerPeasant/order-control/services"
+	"io/ioutil"
+	"log"
 	"net/http"
-	"order-control/models"
-	"order-control/services"
 
 	"github.com/gin-gonic/gin"
 )
@@ -17,6 +20,17 @@ func NewAuthController(us services.UserService) *AuthController {
 }
 
 func (c *AuthController) Register(ctx *gin.Context) {
+	bodyBytes, err := ioutil.ReadAll(ctx.Request.Body)
+	if err != nil {
+		log.Println("Ошибка чтения тела запроса:", err)
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Невалидный запрос"})
+		return
+	}
+	// Восстанавливаем тело запроса, так как оно было прочитано
+	ctx.Request.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBytes))
+
+	log.Printf("Register запрос: %s", string(bodyBytes))
+
 	var request struct {
 		Username string      `json:"username"`
 		Email    string      `json:"email"`
@@ -26,10 +40,11 @@ func (c *AuthController) Register(ctx *gin.Context) {
 
 	if err := ctx.BindJSON(&request); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Невалидный запрос"})
+		log.Println(err)
 		return
 	}
 
-	err := c.userService.Register(request.Username, request.Email, request.Password, request.Role)
+	err = c.userService.Register(request.Username, request.Email, request.Password, request.Role)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

@@ -1,7 +1,7 @@
 package repositories
 
 import (
-	"order-control/models"
+	"github.com/ProgrammerPeasant/order-control/models"
 
 	"github.com/jinzhu/gorm"
 )

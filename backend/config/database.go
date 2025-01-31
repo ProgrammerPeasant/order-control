@@ -2,16 +2,25 @@ package config
 
 import (
 	"fmt"
+	"github.com/ProgrammerPeasant/order-control/models"
 	"log"
 	"os"
 
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"github.com/joho/godotenv"
 )
 
-// InitDB инициализирует подключение к MySQL через GORM
+func LoadEnv() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("Warning: No .env file found")
+	}
+}
+
+// InitDB инициализирует подключение к mysql через gorm
 func InitDB() (*gorm.DB, error) {
-	// Пример извлечения параметров для подключения из переменных окружения
+
 	dbUser := os.Getenv("DB_USER")
 	dbPass := os.Getenv("DB_PASSWORD")
 	dbHost := os.Getenv("DB_HOST")
@@ -22,12 +31,11 @@ func InitDB() (*gorm.DB, error) {
 		log.Println("Некоторые переменные окружения для базы данных не заданы")
 		return nil, fmt.Errorf("missing env vars for DB connection")
 	}
+	log.Printf("Подключение...")
+	dsn := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable",
+		dbHost, dbPort, dbUser, dbName, dbPass)
 
-	// Примерная строка подключения
-	dsn := fmt.Sprintf("%s:%s@(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		dbUser, dbPass, dbHost, dbPort, dbName)
-
-	db, err := gorm.Open("mysql", dsn)
+	db, err := gorm.Open("postgres", dsn)
 	if err != nil {
 		return nil, err
 	}
@@ -35,8 +43,7 @@ func InitDB() (*gorm.DB, error) {
 	// Можно включать/выключать логирование SQL-запросов
 	db.LogMode(true)
 
-	// Миграции (как пример - мигрируем несколько сущностей)
-	// db.AutoMigrate(&models.User{}, &models.Company{})
+	db.AutoMigrate(&models.User{}, &models.Company{})
 
 	return db, nil
 }

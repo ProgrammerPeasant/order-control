@@ -1,8 +1,8 @@
 package repositories
 
 import (
+	"github.com/ProgrammerPeasant/order-control/models"
 	"github.com/jinzhu/gorm"
-	"order-control/models"
 )
 
 type CompanyRepository interface {
@@ -15,10 +15,6 @@ type CompanyRepository interface {
 
 type companyRepository struct {
 	db *gorm.DB
-}
-
-func NewCompanyRepository(db *gorm.DB) CompanyRepository {
-	return &companyRepository{db: db}
 }
 
 func (r *companyRepository) CreateCompany(company *models.Company) error {
@@ -40,4 +36,8 @@ func (r *companyRepository) UpdateCompany(company *models.Company) error {
 
 func (r *companyRepository) DeleteCompany(company *models.Company) error {
 	return r.db.Delete(company).Error
+}
+
+func NewCompanyRepository(db *gorm.DB) CompanyRepository {
+	return &companyRepository{db: db}
 }

@@ -1,8 +1,8 @@
 package controllers
 
 import (
+	"github.com/ProgrammerPeasant/order-control/services"
 	"net/http"
-	"order-control/services"
 	"strconv"
 
 	"github.com/gin-gonic/gin"

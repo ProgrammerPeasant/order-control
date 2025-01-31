@@ -2,7 +2,7 @@ package utils
 
 import (
 	"fmt"
-	"order-control/models"
+	"github.com/ProgrammerPeasant/order-control/models"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"

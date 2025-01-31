@@ -1,10 +1,10 @@
 package services
 
 import (
+	"github.com/ProgrammerPeasant/order-control/models"
+	"github.com/ProgrammerPeasant/order-control/repositories"
+	"github.com/ProgrammerPeasant/order-control/utils"
 	"golang.org/x/crypto/bcrypt"
-	"order-control/models"
-	"order-control/repositories"
-	"order-control/utils"
 	"strings"
 	_ "strings"
 

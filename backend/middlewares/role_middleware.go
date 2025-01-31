@@ -1,8 +1,8 @@
 package middlewares
 
 import (
+	"github.com/ProgrammerPeasant/order-control/models"
 	"net/http"
-	"order-control/models"
 
 	"github.com/gin-gonic/gin"
 )

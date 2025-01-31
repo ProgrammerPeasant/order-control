@@ -1,13 +1,14 @@
-package cmd
+package main
 
 import (
+	"github.com/ProgrammerPeasant/order-control/config"
+	"github.com/ProgrammerPeasant/order-control/routes"
 	"log"
-	"myapp/config"
-	"myapp/routes"
 )
 
 func main() {
-	// Инициализируем базу данных
+	// ПОдгрузка переменных окружения
+	config.LoadEnv()
 	db, err := config.InitDB()
 	if err != nil {
 		log.Fatalf("Ошибка подключения к БД: %v", err)
@@ -19,8 +20,8 @@ func main() {
 			log.Printf("Ошибка при закрытии БД: %v", err)
 		}
 	}()
-
-	// Инициализируем роуты (Gin)
+	log.Printf("Something cool almost happened")
+	// Инициализируем руты gin
 	r := routes.InitRoutes(db)
 
 	// Запуск сервера
