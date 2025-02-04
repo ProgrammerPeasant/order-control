@@ -20,7 +20,6 @@ func main() {
 			log.Printf("Ошибка при закрытии БД: %v", err)
 		}
 	}()
-	log.Printf("Something cool almost happened")
 	// Инициализируем руты gin
 	r := routes.InitRoutes(db)
 

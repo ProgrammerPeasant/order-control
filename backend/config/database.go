@@ -43,7 +43,11 @@ func InitDB() (*gorm.DB, error) {
 	// Можно включать/выключать логирование SQL-запросов
 	db.LogMode(true)
 
-	db.AutoMigrate(&models.User{}, &models.Company{})
+	db.AutoMigrate(
+		&models.User{},
+		&models.Company{},
+		&models.Estimate{},
+		&models.EstimateItem{})
 
 	return db, nil
 }
