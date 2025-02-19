@@ -25,6 +25,10 @@ func InitRoutes(db *gorm.DB) *gin.Engine {
 	authController := controllers.NewAuthController(userService)
 	companyController := controllers.NewCompanyController(companyService)
 
+	estimateRepo := repositories.NewEstimateRepositories(db)
+	estimateService := services.NewEstimateService(estimateRepo)
+	estimateController := controllers.NewEstimateController(estimateService)
+
 	// Маршруты аутентификации
 	auth := r.Group("/auth")
 	{
@@ -45,6 +49,21 @@ func InitRoutes(db *gorm.DB) *gin.Engine {
 		// Допустим, обновлять и удалять может только ADMIN
 		companies.PUT("/:id", middlewares.RoleMiddleware("ADMIN"), companyController.UpdateCompany)
 		companies.DELETE("/:id", middlewares.RoleMiddleware("ADMIN"), companyController.DeleteCompany)
+	}
+
+	authMiddleware := middlewares.AuthMiddleware()
+	roleMiddleware := middlewares.RoleMiddleware("MANAGER", "ADMIN")
+
+	estimateGroup := r.Group("/api/v1/estimates")
+	estimateGroup.Use(authMiddleware, roleMiddleware)
+	{
+		estimateGroup.POST("/", estimateController.CreateEstimate)
+
+		estimateGroup.GET("/:id", estimateController.GetEstimateByID)   // GET /api/v1/estimates/:id - Get estimate by ID
+		estimateGroup.PUT("/:id", estimateController.UpdateEstimate)    // PUT /api/v1/estimates/:id - Update estimate by ID
+		estimateGroup.DELETE("/:id", estimateController.DeleteEstimate) // DELETE /api/v1/estimates/:id - Delete estimate by ID
+
+		estimateGroup.GET("/company", estimateController.GetEstimateByCompany) // GET /api/v1/estimates/company?company_id=... - Get estimates by Company ID
 	}
 
 	return r

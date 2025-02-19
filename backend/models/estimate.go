@@ -6,9 +6,9 @@ type EstimateItem struct {
 	gorm.Model
 	EstimateID  uint
 	ProductName string
-	Quantity    uint
-	UnitPrice   uint
-	TotalPrice  uint
+	Quantity    int
+	UnitPrice   float64
+	TotalPrice  float64
 }
 
 type Estimate struct {

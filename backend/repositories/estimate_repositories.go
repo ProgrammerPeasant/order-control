@@ -39,15 +39,15 @@ func (r *EstimateRepositories) GetByID(estimateID int64) (*models.Estimate, erro
 	return &estimate, nil
 }
 
-func (r *EstimateRepositories) GetByCompany(companyName string) (*models.Estimate, error) {
-	var estimate models.Estimate
+func (r *EstimateRepositories) GetByCompanyID(companyID uint) ([]*models.Estimate, error) { // Изменено название функции и тип параметра
+	var estimates []*models.Estimate
 
-	if err := r.db.Where("company_name = ?", companyName).First(&estimate).Error; err != nil {
+	if err := r.db.Where("company_id = ?", companyID).Find(&estimates).Error; err != nil { // Используем company_id
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}
 		return nil, err
 	}
 
-	return &estimate, nil
+	return estimates, nil
 }
