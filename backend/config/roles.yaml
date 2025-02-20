@@ -1,0 +1,17 @@
+roles:
+  ADMIN:
+    permissions:
+      - estimates:create
+      - estimates:read
+      - estimates:update
+      - estimates:delete
+      - users:manage
+  MANAGER:
+    permissions:
+      - estimates:create
+      - estimates:read
+      - estimates:update
+      - estimates:delete
+  USER:
+    permissions:
+      - estimates:read
