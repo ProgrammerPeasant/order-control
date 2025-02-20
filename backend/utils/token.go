@@ -48,6 +48,7 @@ func GenerateJWT(user *models.User) (string, error) {
 // Валидация JWT
 func ValidateJWT(tokenStr string) (*Claims, error) {
 	token, err := jwt.ParseWithClaims(tokenStr, &Claims{}, func(token *jwt.Token) (interface{}, error) {
+		LoadEnv()
 		return jwtSecret, nil
 	})
 
