@@ -16,18 +16,17 @@ func InitRoutes(db *gorm.DB) *gin.Engine {
 	// Инициализируем репозитории
 	userRepo := repositories.NewUserRepository(db)
 	companyRepo := repositories.NewCompanyRepository(db)
+	estimateRepo := repositories.NewEstimateRepositories(db) // Инициализация estimateRepo
 
 	// Инициализируем сервисы
 	userService := services.NewUserService(userRepo)
 	companyService := services.NewCompanyService(companyRepo)
+	estimateService := services.NewEstimateService(estimateRepo) // Инициализация estimateService
 
 	// Инициализируем контроллеры
 	authController := controllers.NewAuthController(userService)
 	companyController := controllers.NewCompanyController(companyService)
-
-	estimateRepo := repositories.NewEstimateRepositories(db)
-	estimateService := services.NewEstimateService(estimateRepo)
-	estimateController := controllers.NewEstimateController(estimateService)
+	estimateController := controllers.NewEstimateController(estimateService) // Инициализация estimateController
 
 	// Маршруты аутентификации
 	auth := r.Group("/auth")
@@ -40,30 +39,27 @@ func InitRoutes(db *gorm.DB) *gin.Engine {
 	companies := r.Group("/companies")
 	companies.Use(middlewares.AuthMiddleware())
 	{
-		// Например, только ADMIN и MANAGER могут создавать компании
-		companies.POST("/", middlewares.RoleMiddleware("ADMIN", "MANAGER"), companyController.CreateCompany)
+		// Например, только ADMIN может создавать компании (общее право доступа "companies:create")
+		companies.POST("/", middlewares.RoleMiddleware("companies:create"), companyController.CreateCompany) // Используем RoleMiddleware для общих прав
 
-		// Доступно всем авторизованным
-		companies.GET("/:id", companyController.GetCompany)
+		companies.GET("/:id", companyController.GetCompany) // Доступно всем авторизованным
 
-		// Допустим, обновлять и удалять может только ADMIN
-		companies.PUT("/:id", middlewares.RoleMiddleware("ADMIN"), companyController.UpdateCompany)
-		companies.DELETE("/:id", middlewares.RoleMiddleware("ADMIN"), companyController.DeleteCompany)
+		// Обновлять и удалять компанию может только ADMIN или MANAGER своей компании (контекстно-зависимые права доступа)
+		companies.PUT("/:id", middlewares.CompanyRoleMiddleware(db, "company", "companies:update"), companyController.UpdateCompany)    // Используем CompanyRoleMiddleware
+		companies.DELETE("/:id", middlewares.CompanyRoleMiddleware(db, "company", "companies:delete"), companyController.DeleteCompany) // Используем CompanyRoleMiddleware
 	}
 
-	authMiddleware := middlewares.AuthMiddleware()
-	roleMiddleware := middlewares.RoleMiddleware("MANAGER", "ADMIN")
-
 	estimateGroup := r.Group("/api/v1/estimates")
-	estimateGroup.Use(authMiddleware, roleMiddleware)
+	estimateGroup.Use(middlewares.AuthMiddleware()) //  AuthMiddleware для проверки авторизации, CompanyRoleMiddleware для контекстных прав
 	{
-		estimateGroup.POST("/", estimateController.CreateEstimate)
+		// Создавать смету может MANAGER своей компании или ADMIN (контекстно-зависимые права "estimates:create")
+		estimateGroup.POST("/", middlewares.CompanyRoleMiddleware(db, "estimate", "estimates:create"), estimateController.CreateEstimate) // CompanyRoleMiddleware
 
-		estimateGroup.GET("/:id", estimateController.GetEstimateByID)   // GET /api/v1/estimates/:id - Get estimate by ID
-		estimateGroup.PUT("/:id", estimateController.UpdateEstimate)    // PUT /api/v1/estimates/:id - Update estimate by ID
-		estimateGroup.DELETE("/:id", estimateController.DeleteEstimate) // DELETE /api/v1/estimates/:id - Delete estimate by ID
+		estimateGroup.GET("/:id", estimateController.GetEstimateByID)                                                                          //  Чтение доступно всем авторизованным (или можно тоже сделать контекстно-зависимым)
+		estimateGroup.PUT("/:id", middlewares.CompanyRoleMiddleware(db, "estimate", "estimates:update"), estimateController.UpdateEstimate)    // CompanyRoleMiddleware
+		estimateGroup.DELETE("/:id", middlewares.CompanyRoleMiddleware(db, "estimate", "estimates:delete"), estimateController.DeleteEstimate) // CompanyRoleMiddleware
 
-		estimateGroup.GET("/company", estimateController.GetEstimateByCompany) // GET /api/v1/estimates/company?company_id=... - Get estimates by Company ID
+		estimateGroup.GET("/company", estimateController.GetEstimateByCompany) // Чтение списка смет компании - можно сделать доступным всем авторизованным, или ограничить контекстом
 	}
 
 	return r

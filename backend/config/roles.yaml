@@ -1,17 +1,22 @@
 roles:
   ADMIN:
     permissions:
+      - companies:create
+      - companies:read
+      - companies:update
+      - companies:delete
       - estimates:create
       - estimates:read
       - estimates:update
       - estimates:delete
-      - users:manage
   MANAGER:
     permissions:
+      - companies:read  # менеджеры могут читать компании (возможно, список своих компаний?)
       - estimates:create
       - estimates:read
       - estimates:update
       - estimates:delete
   USER:
     permissions:
+      - companies:read
       - estimates:read

@@ -18,22 +18,23 @@ func LoadEnv() {
 	}
 }
 
-var jwtSecret = []byte(os.Getenv("JWTOKEN")) // Обычно храним в env
+var jwtSecret = []byte(os.Getenv("JWTOKEN"))
 
 type Claims struct {
-	UserID uint        `json:"user_id"`
-	Role   models.Role `json:"role"`
+	UserID    uint   `json:"user_id"`
+	Role      string `json:"role"`
+	CompanyID uint   `json:"company_id"`
 	jwt.StandardClaims
 }
 
-// Генерация JWT
 func GenerateJWT(user *models.User) (string, error) {
 	now := time.Now()
 	expireTime := now.Add(24 * time.Hour)
 
 	claims := &Claims{
-		UserID: user.ID,
-		Role:   user.Role,
+		UserID:    user.ID,
+		Role:      user.Role,
+		CompanyID: user.CompanyID,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
 			IssuedAt:  now.Unix(),
@@ -45,7 +46,6 @@ func GenerateJWT(user *models.User) (string, error) {
 	return token.SignedString(jwtSecret)
 }
 
-// Валидация JWT
 func ValidateJWT(tokenStr string) (*Claims, error) {
 	token, err := jwt.ParseWithClaims(tokenStr, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		LoadEnv()
@@ -57,7 +57,16 @@ func ValidateJWT(tokenStr string) (*Claims, error) {
 	}
 
 	if claims, ok := token.Claims.(*Claims); ok && token.Valid {
-		return claims, nil
+		userID := claims.UserID
+		role := claims.Role
+		companyID := claims.CompanyID
+
+		return &Claims{
+			UserID:         userID,
+			Role:           role,
+			CompanyID:      companyID,
+			StandardClaims: jwt.StandardClaims{},
+		}, nil
 	}
 
 	return nil, fmt.Errorf("invalid token")

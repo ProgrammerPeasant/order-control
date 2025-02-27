@@ -6,14 +6,11 @@ import (
 	"github.com/ProgrammerPeasant/order-control/utils"
 	"golang.org/x/crypto/bcrypt"
 	"strings"
-	_ "strings"
-
-	_ "golang.org/x/crypto/bcrypt"
 )
 
 type UserService interface {
-	Register(username, email, password string, role models.Role) error
-	Login(username, password string) (string, error)
+	Register(username, email, password string, role string, companyID uint) error
+	Login(username, password string) (*models.User, string, error)
 	// ...
 }
 
@@ -28,39 +25,36 @@ func NewUserService(ur repositories.UserRepository) UserService {
 }
 
 // Регистрация нового пользователя
-func (s *userService) Register(username, email, password string, role models.Role) error {
-	// Хешируем пароль
+func (s *userService) Register(username, email, password string, role string, companyID uint) error { // Role is string, CompanyID is uint
 	hashed, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		return err
 	}
 
-	// Сохраняем пользователя
 	user := &models.User{
-		Username: username,
-		Email:    strings.ToLower(email),
-		Password: string(hashed),
-		Role:     role,
+		Username:  username,
+		Email:     strings.ToLower(email),
+		Password:  string(hashed),
+		Role:      role,
+		CompanyID: companyID,
 	}
 	return s.userRepo.CreateUser(user)
 }
 
-// Логин: проверяем хеш пароля и, если всё ок, выдаём JWT
-func (s *userService) Login(username, password string) (string, error) {
+// Логин: проверяем хеш пароля и, если всё ок, выдаём JWT и модель пользователя
+func (s *userService) Login(username, password string) (*models.User, string, error) {
 	user, err := s.userRepo.GetUserByUsername(username)
 	if err != nil {
-		return "", err
+		return nil, "", err
 	}
 
-	// Сравниваем хехированный пароль
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
-		return "", err
+		return nil, "", err
 	}
 
-	// Генерируем токен
 	token, err := utils.GenerateJWT(user)
 	if err != nil {
-		return "", err
+		return nil, "", err
 	}
-	return token, nil
+	return user, token, nil
 }
