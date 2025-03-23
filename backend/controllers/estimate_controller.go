@@ -29,7 +29,7 @@ func NewEstimateController(service *services.EstimateService) *EstimateControlle
 // @Failure 400 {object} gin.H "Неверный запрос"
 // @Failure 401 {object} gin.H "Не авторизован"
 // @Failure 500 {object} gin.H "Ошибка сервера"
-// @Router /api/v1/estimates [post]
+// @Router /v1/estimates [post]
 func (c *EstimateController) CreateEstimate(ctx *gin.Context) {
 	var estimate models.Estimate
 	if err := ctx.ShouldBindJSON(&estimate); err != nil {
@@ -71,7 +71,7 @@ func (c *EstimateController) CreateEstimate(ctx *gin.Context) {
 // @Failure 401 {object} gin.H "Не авторизован"
 // @Failure 403 {object} gin.H "Нет прав доступа"
 // @Failure 500 {object} gin.H "Ошибка сервера"
-// @Router /api/v1/estimates/{id} [put]
+// @Router /v1/estimates/{id} [put]
 func (c *EstimateController) UpdateEstimate(ctx *gin.Context) {
 	idStr := ctx.Param("id")
 	estimateID, err := strconv.ParseInt(idStr, 10, 64)
@@ -106,7 +106,7 @@ func (c *EstimateController) UpdateEstimate(ctx *gin.Context) {
 // @Failure 401 {object} gin.H "Не авторизован"
 // @Failure 403 {object} gin.H "Нет прав доступа"
 // @Failure 500 {object} gin.H "Ошибка сервера"
-// @Router /api/v1/estimates/{id} [delete]
+// @Router /v1/estimates/{id} [delete]
 func (c *EstimateController) DeleteEstimate(ctx *gin.Context) {
 	idStr := ctx.Param("id")
 	estimateID, err := strconv.ParseInt(idStr, 10, 64)
@@ -138,7 +138,7 @@ func (c *EstimateController) DeleteEstimate(ctx *gin.Context) {
 // @Failure 401 {object} gin.H "Не авторизован"
 // @Failure 404 {object} gin.H "Смета не найдена"
 // @Failure 500 {object} gin.H "Ошибка сервера"
-// @Router /api/v1/estimates/{id} [get]
+// @Router /v1/estimates/{id} [get]
 func (c *EstimateController) GetEstimateByID(ctx *gin.Context) {
 	idStr := ctx.Param("id")
 	estimateID, err := strconv.ParseInt(idStr, 10, 64)
@@ -189,7 +189,7 @@ func (c *TestController) GetTestEndpoint(ctx *gin.Context) {
 // @Failure 400 {object} gin.H "Неверный запрос или неверный Company ID"
 // @Failure 401 {object} gin.H "Не авторизован"
 // @Failure 500 {object} gin.H "Ошибка сервера"
-// @Router /api/v1/estimates/company [get]
+// @Router /v1/estimates/company [get]
 func (c *EstimateController) GetEstimateByCompany(ctx *gin.Context) {
 	companyIDStr := ctx.Query("company_id")
 	if companyIDStr == "" {

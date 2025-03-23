@@ -5,6 +5,7 @@ import (
 	"github.com/ProgrammerPeasant/order-control/middlewares"
 	"github.com/ProgrammerPeasant/order-control/repositories"
 	"github.com/ProgrammerPeasant/order-control/services"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
@@ -29,14 +30,14 @@ func InitRoutes(db *gorm.DB) *gin.Engine {
 	estimateController := controllers.NewEstimateController(estimateService) // Инициализация estimateController
 
 	// Маршруты аутентификации
-	auth := r.Group("/auth")
+	auth := r.Group("/api")
 	{
 		auth.POST("/register", authController.Register)
 		auth.POST("/login", authController.Login)
 	}
 
 	// Маршруты для компаний (доступны только авторизованным)
-	companies := r.Group("/companies")
+	companies := r.Group("/api/v1/companies")
 	companies.Use(middlewares.AuthMiddleware())
 	{
 		// Например, только ADMIN может создавать компании (общее право доступа "companies:create")
@@ -60,6 +61,13 @@ func InitRoutes(db *gorm.DB) *gin.Engine {
 		estimateGroup.DELETE("/:id", middlewares.CompanyRoleMiddleware(db, "estimate", "estimates:delete"), estimateController.DeleteEstimate) // CompanyRoleMiddleware
 
 		estimateGroup.GET("/company", estimateController.GetEstimateByCompany) // Чтение списка смет компании - можно сделать доступным всем авторизованным, или ограничить контекстом
+	}
+
+	api := r.Group("/api")
+	{
+		api.GET("/test", func(c *gin.Context) {
+			c.String(http.StatusOK, "Test endpoint is working!")
+		})
 	}
 
 	return r
