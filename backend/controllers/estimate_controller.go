@@ -1,6 +1,9 @@
 package controllers
 
 import (
+	"fmt"
+	"io"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -220,4 +223,51 @@ func (c *EstimateController) GetEstimateByCompany(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, estimates)
+}
+
+// ExportEstimateToExcel
+// @Summary Экспортировать смету в Excel по ID
+// @Description Экспортирует данные указанной сметы в файл Excel. Доступно всем авторизованным пользователям.
+// @Tags Estimates
+// @Produce application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+// @Param id path integer true "ID сметы для экспорта"
+// @Security ApiKeyAuth
+// @Success 200 {file} application/vnd.openxmlformats-officedocument.spreadsheetml.sheet "Файл Excel со сметой"
+// @Failure 400 {object} gin.H "Неверный ID сметы"
+// @Failure 401 {object} gin.H "Не авторизован"
+// @Failure 404 {object} gin.H "Смета не найдена"
+// @Failure 500 {object} gin.H "Ошибка при экспорте в Excel"
+// @Router /api/v1/estimates/{id}/export/excel [get]
+func (c *EstimateController) ExportEstimateToExcel(ctx *gin.Context) {
+	idStr := ctx.Param("id")
+	estimateID, err := strconv.ParseInt(idStr, 10, 64)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Неверный формат Estimate ID"})
+		return
+	}
+
+	excelFile, err := c.estimateService.ExportEstimateToExcelByID(estimateID)
+	if err != nil {
+		statusCode := http.StatusInternalServerError
+		if err.Error() == fmt.Sprintf("смета с ID %d не найдена", estimateID) {
+			statusCode = http.StatusNotFound
+		}
+		ctx.JSON(statusCode, gin.H{"error": err.Error()})
+		return
+	}
+
+	filename := fmt.Sprintf("estimate_%d.xlsx", estimateID)
+	ctx.Header("Content-Disposition", "attachment; filename="+filename)
+	ctx.Header("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+
+	buffer, err := excelFile.WriteToBuffer()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Ошибка при записи Excel файла в буфер"})
+		return
+	}
+
+	_, err = io.Copy(ctx.Writer, buffer)
+	if err != nil {
+		log.Println("Ошибка при отправке Excel файла:", err)
+	}
 }
