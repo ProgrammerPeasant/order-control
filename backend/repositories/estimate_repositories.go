@@ -29,7 +29,7 @@ func (r *EstimateRepositories) Delete(estimate *models.Estimate) error {
 func (r *EstimateRepositories) GetByID(estimateID int64) (*models.Estimate, error) {
 	var estimate models.Estimate
 
-	if err := r.db.First(&estimate, estimateID).Error; err != nil {
+	if err := r.db.Preload("Items").First(&estimate, estimateID).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}

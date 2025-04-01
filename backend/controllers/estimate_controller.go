@@ -22,11 +22,11 @@ func NewEstimateController(service *services.EstimateService) *EstimateControlle
 
 // CreateEstimate
 // @Summary Создать новую смету
-// @Description Создает новую смету на основе данных запроса. Доступно только менеджерам и администраторам своей компании.
+// @Description Создает новую смету на основе данных запроса, включая возможность указания общей скидки и скидок на отдельные позиции. Доступно только менеджерам и администраторам своей компании.
 // @Tags Estimates
 // @Accept json
 // @Produce json
-// @Param request body models.Estimate true "Данные сметы для создания"
+// @Param request body models.Estimate true "Данные сметы для создания (включая overall_discount_percent и items[].discount_percent)"
 // @Security ApiKeyAuth
 // @Success 201 {object} models.Estimate "Смета успешно создана"
 // @Failure 400 {object} gin.H "Неверный запрос"
@@ -39,6 +39,8 @@ func (c *EstimateController) CreateEstimate(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	log.Printf("Полученная смета: %+v", estimate)
 
 	userIDIf, exists := ctx.Get("userID") // Получаю userID из контекста
 	if !exists {
@@ -62,12 +64,12 @@ func (c *EstimateController) CreateEstimate(ctx *gin.Context) {
 
 // UpdateEstimate
 // @Summary Обновить существующую смету
-// @Description Обновляет данные существующей сметы по ID. Доступно только менеджерам и администраторам своей компании.
+// @Description Обновляет данные существующей сметы по ID, включая возможность изменения общей скидки и скидок на отдельные позиции. Доступно только менеджерам и администраторам своей компании.
 // @Tags Estimates
 // @Accept json
 // @Produce json
 // @Param id path integer true "ID сметы для обновления"
-// @Param request body models.Estimate true "Новые данные сметы"
+// @Param request body models.Estimate true "Новые данные сметы (включая overall_discount_percent и items[].discount_percent)"
 // @Security ApiKeyAuth
 // @Success 200 {object} models.Estimate "Смета успешно обновлена"
 // @Failure 400 {object} gin.H "Неверный запрос или неверный ID сметы"
@@ -237,7 +239,7 @@ func (c *EstimateController) GetEstimateByCompany(ctx *gin.Context) {
 // @Failure 401 {object} gin.H "Не авторизован"
 // @Failure 404 {object} gin.H "Смета не найдена"
 // @Failure 500 {object} gin.H "Ошибка при экспорте в Excel"
-// @Router /api/v1/estimates/{id}/export/excel [get]
+// @Router /v1/estimates/{id}/export/excel [get]
 func (c *EstimateController) ExportEstimateToExcel(ctx *gin.Context) {
 	idStr := ctx.Param("id")
 	estimateID, err := strconv.ParseInt(idStr, 10, 64)

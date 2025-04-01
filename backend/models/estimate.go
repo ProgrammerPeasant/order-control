@@ -4,20 +4,22 @@ import "github.com/jinzhu/gorm"
 
 type EstimateItem struct {
 	gorm.Model
-	EstimateID  uint    `json:"estimate_id"`
-	ProductName string  `json:"product_name"`
-	Quantity    int     `json:"quantity"`
-	UnitPrice   float64 `json:"unit_price"`
-	TotalPrice  float64 `json:"total_price"`
+	EstimateID      uint    `json:"estimate_id"`
+	ProductName     string  `json:"product_name"`
+	Quantity        int     `json:"quantity"`
+	UnitPrice       float64 `json:"unit_price"`
+	TotalPrice      float64 `json:"total_price"`
+	DiscountPercent float64 `json:"discount_percent"`
 }
 
 type Estimate struct {
 	gorm.Model
-	Title       string         `json:"title"`
-	TotalAmount float64        `json:"total_amount"`
-	CompanyID   uint           `json:"company_id"`
-	Company     Company        `gorm:"foreignkey:CompanyID"`
-	CreatedByID uint           `json:"created_by_id"`
-	CreatedBy   User           `gorm:"foreignkey:CreatedByID"`
-	Items       []EstimateItem `json:"items"`
+	Title                  string         `json:"title"`
+	TotalAmount            float64        `json:"total_amount"`
+	CompanyID              uint           `json:"company_id"`
+	Company                Company        `gorm:"foreignkey:CompanyID"`
+	CreatedByID            uint           `json:"created_by_id"`
+	CreatedBy              User           `gorm:"foreignkey:CreatedByID"`
+	Items                  []EstimateItem `json:"items"`
+	OverallDiscountPercent float64        `json:"overall_discount_percent"`
 }
