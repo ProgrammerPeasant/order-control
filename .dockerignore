@@ -1,0 +1,4 @@
+*.log
+*.swp
+.git
+node_modules

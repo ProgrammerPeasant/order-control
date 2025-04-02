@@ -26,7 +26,11 @@ func (s *companyService) Create(name, desc, address string) (*models.Company, er
 		Description: desc,
 		Address:     address,
 	}
-	return c, s.companyRepo.CreateCompany(c)
+	err := s.companyRepo.CreateCompany(c)
+	if err != nil {
+		return nil, err
+	}
+	return c, nil
 }
 
 func (s *companyService) GetByID(id uint) (*models.Company, error) {

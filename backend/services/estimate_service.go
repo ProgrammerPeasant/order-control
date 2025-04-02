@@ -9,10 +9,10 @@ import (
 )
 
 type EstimateService struct {
-	estimateRepo *repositories.EstimateRepositories
+	estimateRepo repositories.EstimateRepository // Используем интерфейс
 }
 
-func NewEstimateService(repo *repositories.EstimateRepositories) *EstimateService {
+func NewEstimateService(repo repositories.EstimateRepository) *EstimateService { // Принимаем интерфейс
 	return &EstimateService{estimateRepo: repo}
 }
 
@@ -84,29 +84,77 @@ func (s *EstimateService) ExportEstimateToExcelByID(estimateID int64) (*excelize
 		return nil, err
 	}
 
-	f.SetCellValue("Смета", "A1", "Название сметы:")
-	f.SetCellValue("Смета", "B1", estimate.Title)
+	err = f.SetCellValue("Смета", "A1", "Название сметы:")
+	if err != nil {
+		return nil, err
+	}
+	err = f.SetCellValue("Смета", "B1", estimate.Title)
+	if err != nil {
+		return nil, err
+	}
 
-	f.SetCellValue("Смета", "A2", "Общая сумма:")
-	f.SetCellValue("Смета", "B2", estimate.TotalAmount)
+	err = f.SetCellValue("Смета", "A2", "Общая сумма:")
+	if err != nil {
+		return nil, err
+	}
+	err = f.SetCellValue("Смета", "B2", estimate.TotalAmount)
+	if err != nil {
+		return nil, err
+	}
 
-	f.SetCellValue("Смета", "A4", "Продукт")
-	f.SetCellValue("Смета", "B4", "Количество")
-	f.SetCellValue("Смета", "C4", "Цена за единицу")
-	f.SetCellValue("Смета", "D4", "Скидка (%)")
-	f.SetCellValue("Смета", "E4", "Итого")
+	err = f.SetCellValue("Смета", "A4", "Продукт")
+	if err != nil {
+		return nil, err
+	}
+	err = f.SetCellValue("Смета", "B4", "Количество")
+	if err != nil {
+		return nil, err
+	}
+	err = f.SetCellValue("Смета", "C4", "Цена за единицу")
+	if err != nil {
+		return nil, err
+	}
+	err = f.SetCellValue("Смета", "D4", "Скидка (%)")
+	if err != nil {
+		return nil, err
+	}
+	err = f.SetCellValue("Смета", "E4", "Итого")
+	if err != nil {
+		return nil, err
+	}
 
 	for i, item := range estimate.Items {
 		row := i + 5
-		f.SetCellValue("Смета", fmt.Sprintf("A%d", row), item.ProductName)
-		f.SetCellValue("Смета", fmt.Sprintf("B%d", row), item.Quantity)
-		f.SetCellValue("Смета", fmt.Sprintf("C%d", row), item.UnitPrice)
-		f.SetCellValue("Смета", fmt.Sprintf("D%d", row), item.DiscountPercent)
-		f.SetCellValue("Смета", fmt.Sprintf("E%d", row), item.TotalPrice)
+		err := f.SetCellValue("Смета", fmt.Sprintf("A%d", row), item.ProductName)
+		if err != nil {
+			return nil, err
+		}
+		err = f.SetCellValue("Смета", fmt.Sprintf("B%d", row), item.Quantity)
+		if err != nil {
+			return nil, err
+		}
+		err = f.SetCellValue("Смета", fmt.Sprintf("C%d", row), item.UnitPrice)
+		if err != nil {
+			return nil, err
+		}
+		err = f.SetCellValue("Смета", fmt.Sprintf("D%d", row), item.DiscountPercent)
+		if err != nil {
+			return nil, err
+		}
+		err = f.SetCellValue("Смета", fmt.Sprintf("E%d", row), item.TotalPrice)
+		if err != nil {
+			return nil, err
+		}
 	}
 
-	f.SetCellValue("Смета", "A"+strconv.Itoa(len(estimate.Items)+6), "Общая скидка (%):")
-	f.SetCellValue("Смета", "B"+strconv.Itoa(len(estimate.Items)+6), estimate.OverallDiscountPercent)
+	err = f.SetCellValue("Смета", "A"+strconv.Itoa(len(estimate.Items)+6), "Общая скидка (%):")
+	if err != nil {
+		return nil, err
+	}
+	err = f.SetCellValue("Смета", "B"+strconv.Itoa(len(estimate.Items)+6), estimate.OverallDiscountPercent)
+	if err != nil {
+		return nil, err
+	}
 
 	f.SetActiveSheet(index)
 	return f, nil

@@ -87,7 +87,7 @@ func CompanyRoleMiddleware(db *gorm.DB, resourceType string, permissionRequired 
 			// В зависимости от resourceType, получаем CompanyID ресурса из БД
 			switch resourceType {
 			case "estimate":
-				estimateRepo := repositories.NewEstimateRepositories(db) // Используем репозиторий estimates
+				estimateRepo := repositories.NewEstimateRepository(db) // Используем репозиторий estimates
 				estimate, err := estimateRepo.GetByID(int64(resourceID))
 				if err != nil || estimate == nil {
 					ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Ошибка при получении сметы или смета не найдена"})

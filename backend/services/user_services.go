@@ -25,7 +25,7 @@ func NewUserService(ur repositories.UserRepository) UserService {
 }
 
 // Регистрация нового пользователя
-func (s *userService) Register(username, email, password string, role string, companyID uint) error { // Role is string, CompanyID is uint
+func (s *userService) Register(username, email, password string, role string, companyID uint) error {
 	hashed, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		return err

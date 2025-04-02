@@ -17,7 +17,7 @@ func InitRoutes(db *gorm.DB) *gin.Engine {
 	// Инициализируем репозитории
 	userRepo := repositories.NewUserRepository(db)
 	companyRepo := repositories.NewCompanyRepository(db)
-	estimateRepo := repositories.NewEstimateRepositories(db) // Инициализация estimateRepo
+	estimateRepo := repositories.NewEstimateRepository(db) // Инициализация estimateRepo
 
 	// Инициализируем сервисы
 	userService := services.NewUserService(userRepo)
