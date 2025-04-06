@@ -227,6 +227,52 @@ func (c *EstimateController) GetEstimateByCompany(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, estimates)
 }
 
+// GetMyEstimates
+// @Summary Получить сметы текущей компании пользователя
+// @Description Возвращает список смет для компании, к которой принадлежит авторизованный пользователь. Требуется авторизация.
+// @Tags Estimates
+// @Produce json
+// @Security ApiKeyAuth
+// @Success 200 {array} models.Estimate "Список смет компании текущего пользователя"
+// @Failure 401 {object} gin.H "Не авторизован"
+// @Failure 500 {object} gin.H "Ошибка сервера"
+// @Router /v1/estimates/my [get]
+func (c *EstimateController) GetMyEstimates(ctx *gin.Context) {
+	companyIDInterface, exists := ctx.Get("companyID")
+	if !exists {
+		log.Println("Company ID не найден в контексте запроса (пользователь не авторизован или middleware не настроен)")
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Не авторизован"})
+		return
+	}
+
+	companyID, ok := companyIDInterface.(uint)
+	if !ok {
+		log.Printf("Неверный тип Company ID в контексте: %T, ожидался uint", companyIDInterface)
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Ошибка сервера"})
+		return
+	}
+
+	estimates, err := c.estimateService.GetEstimatesByCompanyID(companyID)
+	if err != nil {
+		log.Printf("Ошибка при получении смет компании с ID %d: %v", companyID, err)
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Ошибка сервера при получении смет"})
+		return
+	}
+
+	if estimates == nil {
+		log.Printf("Сервис вернул nil при получении смет компании с ID %d", companyID)
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Ошибка при получении смет"})
+		return
+	}
+
+	if len(estimates) == 0 {
+		ctx.JSON(http.StatusOK, []models.Estimate{}) // Возвращаем 200 OK и пустой массив, если нет смет
+		return
+	}
+
+	ctx.JSON(http.StatusOK, estimates)
+}
+
 // ExportEstimateToExcel
 // @Summary Экспортировать смету в Excel по ID
 // @Description Экспортирует данные указанной сметы в файл Excel. Доступно всем авторизованным пользователям.
