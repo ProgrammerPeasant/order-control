@@ -5,9 +5,9 @@ import styles from "./AdminDashboardPage.module.css"
 
 
 function CompanyTable({companyId}) {
-    const handleCreate = () => {
-        console.log("create"); // ATTENTION
-    }
+    // const handleCreate = () => {
+    //     console.log("create"); // ATTENTION
+    // }
 
     const handleView = () => {
         console.log("view"); // ATTENTION
