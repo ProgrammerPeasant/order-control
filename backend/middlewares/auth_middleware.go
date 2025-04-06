@@ -32,10 +32,9 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		// Сохраняем информацию о пользователе в контекст, чтобы далее использовать
 		ctx.Set("userID", claims.UserID)
 		ctx.Set("role", claims.Role)
-		ctx.Set("companyID", claims.CompanyID) //  Добавляем companyID в контекст
+		ctx.Set("companyID", claims.CompanyID)
 
 		ctx.Next()
 	}

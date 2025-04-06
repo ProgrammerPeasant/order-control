@@ -2,13 +2,13 @@ package main
 
 import (
 	"fmt"
+	swaggerFiles "github.com/swaggo/files"
 	"log"
 
 	"github.com/ProgrammerPeasant/order-control/config" // Предполагается, что этот путь правильный
 	"github.com/ProgrammerPeasant/order-control/routes" // Предполагается, что этот путь правильный
 
 	"github.com/gin-contrib/cors" // Импортируем middleware CORS для Gin
-	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
@@ -57,13 +57,13 @@ func main() {
 
 	// **Добавляем middleware CORS здесь:**
 	configCors := cors.DefaultConfig()
-	configCors.AllowAllOrigins = true // Разрешить запросы со всех источников (для разработки)
+	configCors.AllowAllOrigins = true
 	configCors.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
 	configCors.AllowHeaders = []string{"Accept", "Accept-Language", "Content-Type", "Authorization"}
 
 	r.Use(cors.New(configCors))
 
-	// url := ginSwagger.URL("/swagger/index.html") // URL, по которому будет доступен Swagger UI
+	_ = ginSwagger.URL("/swagger/index.html") // URL, по которому будет доступен Swagger UI
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// Запуск сервера
