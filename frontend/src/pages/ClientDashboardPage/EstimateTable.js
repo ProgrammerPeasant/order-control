@@ -3,17 +3,13 @@ import Table from "../../components/Table";
 import Button from "../../components/Button";
 
 
-function EstimateTable({companyId}) {
+function EstimateTable({estimateId}) {
     const handleView = () => {
-        console.log("view")
+        console.log("view") // ATTENTION
     }
 
-    const handleDelete = () => {
-        console.log("delete")
-    }
-
-    const columns = ["ID", "Title", "Total", "Created at", "Created by", "", ""];
-    const apiUrl = "/api/v1/estimates/company?company_id=" + companyId;
+    const columns = ["ID", "Title", "Total", "Created at", "Created by", ""];
+    const apiUrl = estimateId ? `/api/v1/estimates/${estimateId}` : "/api/v1/estimates/my";
 
     const renderRow = (item) => (
         <tr key={item.ID}>
@@ -23,7 +19,6 @@ function EstimateTable({companyId}) {
             <td>{new Date(item?.CreatedAt).toLocaleString() || "N/A"}</td>
             <td>{item?.CreatedBy?.Username || "N/A"}</td>
             <td><Button title="View" variant="type3" onClick={handleView} /></td>
-            <td><Button title="Delete" variant="type4" onClick={handleDelete} /></td>
         </tr>
     );
 

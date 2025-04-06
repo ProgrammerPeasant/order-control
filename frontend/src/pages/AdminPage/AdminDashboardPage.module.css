@@ -33,3 +33,31 @@
     gap: 10px;
     width: 90%;
 }
+
+.input{
+    padding: 10px;
+    border: 2px solid #b2ceff;
+    border-radius: 20px;
+    background-color: rgba(129,164,255,255);
+    color: #fff;
+    font-size: 16px;
+    outline: none;
+}
+
+.input::placeholder{
+    color: #d9e6ff
+}
+
+.input:focus{
+    border-color: #003b62;
+}
+
+.text{
+    font-family: "Rubik", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 50px;
+
+    text-align: center;
+}

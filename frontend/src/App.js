@@ -7,7 +7,7 @@ import LoginPage from "./pages/LoginPage";
 import ClientDashboardPage from "./pages/ClientDashboardPage";
 import CompaniesPage from "./pages/CompaniesPage";
 import SettingsPage from "./pages/SettingsPage";
-import AdminPage from "./pages/AdminPage/AdminPage";
+import AdminDashboardPage from "./pages/AdminPage/AdminDashboardPage";
 import {AuthProvider} from "./AuthProvider";
 
 
@@ -22,7 +22,7 @@ function App() {
                     <Route path="/clientdashboard" element={<ClientDashboardPage />} />
                     <Route path="/companies" element={<CompaniesPage />} />
                     <Route path="/settings" element={<SettingsPage />} />
-                    <Route path="/admin" element={<AdminPage />} />
+                    <Route path="/admin" element={<AdminDashboardPage />} />
                 </Routes>
             </Router>
         </AuthProvider>

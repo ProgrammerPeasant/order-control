@@ -7,8 +7,8 @@ import useDebounce from "../../useDebounce";
 
 
 const ClientDashboardPage = () => {
-    const [companyId, setCompanyId] = useState("");
-    const debouncedValue = useDebounce(companyId, 500);
+    const [estimateId, setEstimateId] = useState("");
+    const debouncedValue = useDebounce(estimateId, 500);
 
     const navigate = useNavigate();
 
@@ -17,28 +17,16 @@ const ClientDashboardPage = () => {
         navigate("/settings");
     }
 
-    const handleCompanies = () => {
-        console.log("companies");
-        navigate("/companies");
-    }
-
-    const handleUpload = () => {
-        console.log("upload");
-    }
-
     return (
         <div className={styles.page}>
             <div className={styles.container}>
-                {!debouncedValue && <p className={styles.text}>Enter company ID below</p> || debouncedValue && <EstimateTable companyId={debouncedValue} />}
+                {<EstimateTable estimateId={debouncedValue} />}
             </div>
             <div className={styles.buttons}>
                 <Button title="Settings" variant="type3" onClick={handleSettings}/>
-                <input className={styles.input} id="company_id" type="text" value={companyId} onChange={(e) => setCompanyId(e.target.value)} placeholder="Company ID"/>
-                <Button title="Companies" variant="type1" onClick={handleCompanies}/>
-                <Button title="Upload" variant="type2" onClick={handleUpload}/>
+                <input className={styles.input} id="estimate_id" type="text" value={estimateId} onChange={(e) => setEstimateId(e.target.value)} placeholder="Estimate ID"/>
             </div>
         </div>
-
     )
 }
 

@@ -1,32 +1,42 @@
 import React from 'react';
 import Table from "../../components/Table";
 import Button from "../../components/Button";
+import styles from "./AdminDashboardPage.module.css"
 
 
-function CompanyTable() {
-    const handleInfo = () => {
-        console.log("info");
+function CompanyTable({companyId}) {
+    const handleCreate = () => {
+        console.log("create"); // ATTENTION
     }
 
-    const handleCreate = () => {
-        console.log("create");
+    const handleView = () => {
+        console.log("view"); // ATTENTION
+    }
+
+    const handleEdit = () => {
+        console.log("edit"); // ATTENTION
     }
 
     const handleDelete = () => {
-        console.log("delete");
+        console.log("delete"); // ATTENTION
     }
 
-    const columns = ["Logo", "Name", "Type", "Level", "", "", ""]
-    const apiUrl = "https://67ed9d094387d9117bbe2a38.mockapi.io/api/skkk/companies";
+    const columns = ["ID", "Title", "Total", "Created at", "Created by", "", "", ""];
+    const apiUrl = companyId ? `/api/v1/estimates/company?company_id=${companyId}` : null;
 
-    const renderRow = (company) => (
-        <tr key={company.id}>
-            <td><img src={company.logo} alt="" style={{display: "flex", width: "50px", height: "50px"}}/></td>
-            <td>{company.name}</td>
-            <td>{company.type}</td>
-            <td>{company.level}</td>
-            <td><Button title="See info" variant="type3" onClick={handleInfo} /></td>
-            <td><Button title="Create Estimate" variant="type2" onClick={handleCreate} /> </td>
+    if (apiUrl === null) {
+        return <p className={styles.text}>Type Company ID below</p>;
+    }
+
+    const renderRow = (item) => (
+        <tr key={item.ID}>
+            <td>{item.ID}</td>
+            <td>{item.title}</td>
+            <td>{item?.total_amount}</td>
+            <td>{new Date(item?.CreatedAt).toLocaleString()}</td>
+            <td>{item?.CreatedBy?.Username || "N/A"}</td>
+            <td><Button title="View" variant="type3" onClick={handleView} /></td>
+            <td><Button title="Edit" variant="type2" onClick={handleEdit} /> </td>
             <td><Button title="Delete" variant="type4" onClick={handleDelete} /></td>
         </tr>
     );

@@ -9,6 +9,11 @@
             <path value="file://$PROJECT_DIR$/estimate/src/pages/RegisterPage" />
             <path value="file://$PROJECT_DIR$/estimate/src/pages/LoginPage" />
             <path value="file://$PROJECT_DIR$/estimate/src/pages/ClientDashboardPage" />
+            <path value="file://$PROJECT_DIR$/frontend/src/pages/StartPage" />
+            <path value="file://$PROJECT_DIR$/frontend/src/pages/RegisterPage" />
+            <path value="file://$PROJECT_DIR$/frontend/src/pages/LoginPage" />
+            <path value="file://$PROJECT_DIR$/frontend/src/pages/ClientDashboardPage" />
+            <path value="file://$PROJECT_DIR$/frontend/src/pages/SettingsPage" />
           </resourceRoots>
         </entryData>
       </entry>
