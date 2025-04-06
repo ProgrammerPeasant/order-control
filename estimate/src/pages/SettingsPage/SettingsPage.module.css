@@ -1,0 +1,23 @@
+.container{
+    background-color: #4a7dff;
+    border-radius: 20px;
+    padding: 20px 20px 20px 20px;
+    text-align: center;
+
+    width: 30vmax;
+    height: auto;
+    margin: 10vh auto auto;
+}
+
+.text{
+    font-family: "Rubik", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+}
+
+.buttons{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
