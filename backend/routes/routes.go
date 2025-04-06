@@ -60,7 +60,7 @@ func InitRoutes(db *gorm.DB) *gin.Engine {
 		estimateGroup.PUT("/:id", middlewares.CompanyRoleMiddleware(db, "estimate", "estimates:update"), estimateController.UpdateEstimate)    // CompanyRoleMiddleware
 		estimateGroup.DELETE("/:id", middlewares.CompanyRoleMiddleware(db, "estimate", "estimates:delete"), estimateController.DeleteEstimate) // CompanyRoleMiddleware
 
-		estimateGroup.GET("/company", middlewares.RoleMiddleware("admin"), estimateController.GetEstimateByCompany)
+		estimateGroup.GET("/company", middlewares.RoleMiddleware("companies:create"), estimateController.GetEstimateByCompany)
 
 		// Новый маршрут для получения собственных смет пользователя
 		estimateGroup.GET("/my", estimateController.GetMyEstimates)
