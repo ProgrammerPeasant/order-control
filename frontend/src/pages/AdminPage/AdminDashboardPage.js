@@ -14,7 +14,7 @@ const AdminDashboardPage = () => {
     const closeModal = () => setActiveModal(null);
 
     const [companyId, setCompanyId] = useState("");
-    const debouncedValue = useDebounce(companyId, 500);
+    const debouncedValue = useDebounce(companyId, 100);
 
     const navigate = useNavigate();
 
@@ -33,6 +33,12 @@ const AdminDashboardPage = () => {
         openModal("modalCreateCompany");
     }
 
+    const handleUpdate = (companyId) => {
+        const copy = companyId
+        setCompanyId("");
+        setTimeout(() => {setCompanyId(copy)}, 200)
+    }
+
     return (
         <div className={styles.page}>
             <div className={styles.container}>
@@ -42,10 +48,10 @@ const AdminDashboardPage = () => {
                 <Button title="Settings" variant="type3" onClick={handleSettings}/>
                 <input className={styles.input} id="company_id" type="text" value={companyId} onChange={(e) => setCompanyId(e.target.value)} placeholder="Company ID" />
                 <Button title="Get Company Info" variant="type2" onClick={handleGetCompanyInfo} />
-                <Button title="Register Manager" variant="type2" onClick={() => console.log("")} />
+                <Button title="Register Manager" variant="type2" onClick={() => console.log("")} /> {/* ATTENTION */}
                 <Button title="Create Company" variant="type2" onClick={handleCreateCompany} />
             </div>
-            <ModalCompanyInfo isOpen={activeModal === "modalCompanyInfo"} onClose={closeModal} companyId={debouncedValue} />
+            <ModalCompanyInfo isOpen={activeModal === "modalCompanyInfo"} onClose={closeModal} companyId={debouncedValue} handleUpdate={handleUpdate} />
             <ModalCreateCompany isOpen={activeModal === "modalCreateCompany"} onClose={closeModal} />
         </div>
     )

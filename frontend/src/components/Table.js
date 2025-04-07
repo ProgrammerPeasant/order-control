@@ -56,7 +56,7 @@ function Table({apiUrl, columns, renderRow, emptyRows = 10}) {
     return (
         <table className={styles.table}>
             <thead>
-            <tr>{columns.map((column, index) => (<th key={index}>{column}</th>))}</tr>
+                <tr>{columns.map((column, index) => (<th key={index}>{column}</th>))}</tr>
             </thead>
             <tbody>
             {Array.isArray(data) && data.length > 0

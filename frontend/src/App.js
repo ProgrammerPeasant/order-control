@@ -5,7 +5,6 @@ import StartPage from "./pages/StartPage";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import ClientDashboardPage from "./pages/ClientDashboardPage";
-import CompaniesPage from "./pages/CompaniesPage";
 import SettingsPage from "./pages/SettingsPage";
 import AdminDashboardPage from "./pages/AdminPage/AdminDashboardPage";
 import {AuthProvider} from "./Utils/AuthProvider";
@@ -20,7 +19,6 @@ function App() {
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/clientdashboard" element={<ClientDashboardPage />} />
-                    <Route path="/companies" element={<CompaniesPage />} />
                     <Route path="/settings" element={<SettingsPage />} />
                     <Route path="/admin" element={<AdminDashboardPage />} />
                 </Routes>

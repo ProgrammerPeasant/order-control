@@ -7,18 +7,18 @@ import Form from "../../components/Form";
 import {AuthContext} from "../../Utils/AuthProvider";
 
 
-const ModalCompanyInfo = ({companyId, isOpen, onClose}) => {
+const ModalCompanyInfo = ({companyId, isOpen, onClose, handleUpdate}) => {
     const {user} = useContext(AuthContext);
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [isCreateMode, setIsCreateMode] = useState(false);
+    const [mode, setMode] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
             if (!isOpen) return;
 
-            setIsCreateMode(false);
+            setMode(null);
             setLoading(true);
             setError(null);
             try {
@@ -74,14 +74,38 @@ const ModalCompanyInfo = ({companyId, isOpen, onClose}) => {
         <p className={styles.text}><strong>{label}:</strong> {value || "Not provided"}</p>
     );
 
-    const fields = [
-        {id: "title", type: "text", placeholder: "Title", required: true},
+    const handleCreateEstimate = () => {
+        console.log("Create Estimate");
+        setMode("create")
+    }
+
+    const handleUpdateEstimate = () => {
+        console.log("Update Estimate");
+        setMode("update")
+    }
+
+    const handleDeleteCompany = () => {
+        console.log("Delete Company");
+        setMode("delete")
+    }
+
+    const fieldsCreate = [
+        {id: "title", type: "text", placeholder: "Title", required: true,},
         {id: "overall_discount_percent", type: "number", placeholder: "Overall discount", required: true},
     ]
 
-    const handleSubmit = async (e, formData) => {
-        e.preventDefault();
+    const fieldsUpdate = [
+        {id: "name", type: "text", placeholder: "Name", value: data?.name},
+        {id: "address", type: "text", placeholder: "Address", value: data?.address},
+        {id: "desc", type: "text", placeholder: "Description", value: data?.desc},
+    ]
 
+    const fieldsDelete = [
+        {id: "name", type: "text", placeholder: "Name", required: true},
+    ]
+
+    const handleSubmitCreate = async (e, formData) => {
+        e.preventDefault();
         const updatedData = {
             ...formData,
             overall_discount_percent: parseFloat(formData.overall_discount_percent),
@@ -98,38 +122,92 @@ const ModalCompanyInfo = ({companyId, isOpen, onClose}) => {
             });
 
             console.log(response.data);
-            setIsCreateMode(false);
+            setMode(null)
+            handleUpdate(companyId);
         } catch (error) {
-            if (error.response) {
-                const {status, data} = error.response;
-                if (status === 400) {
-                    alert(`Invalid data: ${data.message || "Check your input fields"}`);
-                } else if (status === 401) {
-                    alert(`Unauthorized: ${data.message}`);
-                } else if (status === 403) {
-                    alert(`Access denied: ${data.message || "Admin and manager only"}`);
-                } else if (status === 500) {
-                    alert(`Server error: ${data.message || "Please try again later"}`);
-                } else {
-                    alert(`Error: ${data.message || "Something went wrong"}`);
-                }
-            } else if (error.request) {
-                alert("No response from server. Please check your internet connection.");
-            } else {
-                alert(`Request error: ${error.message}`);
-            }
+            handleError(error)
         }
     }
 
-    const handleCreateEstimate = () => {
-        console.log("Create Estimate");
-        setIsCreateMode(true);
+    const handleSubmitUpdate = async (e, formData) => {
+        e.preventDefault();
+        try {
+            const response = await apiClient.put(`/api/v1/companies/${companyId}`, formData, {
+                headers: { "Content-Type": "application/json", "Accept": "application/json" },
+            })
+            console.log(response.data);
+            setMode(null)
+            onClose()
+            handleUpdate(companyId);
+        } catch (error) {
+            handleError(error)
+        }
     }
 
-    if (isCreateMode) {
+    const handleSubmitDelete = async (e, formData) => {
+        e.preventDefault();
+        if (formData.name !== data.name) {
+            alert("Names don't match");
+            return;
+        }
+
+        try {
+            const response = await apiClient.delete(`/api/v1/companies/${companyId}`, {
+                headers: { "Accept": "application/json" },
+            })
+            console.log(response.data);
+            setMode(null)
+            onClose()
+            handleUpdate(companyId);
+        } catch (error) {
+            handleError(error)
+        }
+    }
+
+    const handleError = (error) => {
+        if (error.response) {
+            const {status, data} = error.response;
+            if (status === 400) {
+                alert(`Invalid data: ${data.message || "Check your input fields"}`);
+            } else if (status === 401) {
+                alert(`Unauthorized: ${data.message}`);
+            } else if (status === 403) {
+                alert(`Access denied: ${data.message || "Not enough rights"}`);
+            } else if (status === 404) {
+                alert(`No data: ${data.message || "Not found"}`);
+            }else if (status === 500) {
+                alert(`Server error: ${data.message || "Please try again later"}`);
+            } else {
+                alert(`Error: ${data.message || "Something went wrong"}`);
+            }
+        } else if (error.request) {
+            alert("No response from server. Please check your internet connection.");
+        } else {
+            alert(`Request error: ${error.message}`);
+        }
+    }
+
+    if (mode === "create") {
         return (
-            <Modal title="Company Info" variant="type2" isOpen={isOpen} onClose={onClose}>
-                <Form fields={fields} handleSubmit={handleSubmit} />
+            <Modal title="Create estimate" variant="type2" isOpen={isOpen} onClose={() => setMode(null)}>
+                <Form fields={fieldsCreate} handleSubmit={handleSubmitCreate} />
+            </Modal>
+        )
+    }
+
+    if (mode === "update") {
+        return (
+            <Modal title="Edit Company Info" variant="type2" isOpen={isOpen} onClose={() => setMode(null)}>
+                <Form fields={fieldsUpdate} handleSubmit={handleSubmitUpdate} />
+            </Modal>
+        )
+    }
+
+    if (mode === "delete") {
+        return (
+            <Modal title="Delete Company" variant="type2" isOpen={isOpen} onClose={() => setMode(null)}>
+                <p className={styles.textWarning}>Please enter company name for confirmation</p>
+                <Form fields={fieldsDelete} handleSubmit={handleSubmitDelete} />
             </Modal>
         )
     }
@@ -146,8 +224,8 @@ const ModalCompanyInfo = ({companyId, isOpen, onClose}) => {
                 <InfoRow label="Deleted At" value={data?.DeletedAt ?new Date(data?.DeletedAt).toLocaleString() : "Not deleted"} />
             </div>
             <Button title="Create Estimate" variant="type2" onClick={handleCreateEstimate} />
-            <Button title="Edit Company Info" variant="type2" onClick={() => console.log("")} />
-            <Button title="Delete Company" variant="type4" onClick={() => console.log("")} />
+            <Button title="Edit Company Info" variant="type2" onClick={handleUpdateEstimate} />
+            <Button title="Delete Company" variant="type4" onClick={handleDeleteCompany} />
         </Modal>
     );
 };

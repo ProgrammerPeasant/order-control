@@ -21,6 +21,7 @@ function RegForm({children}) {
         e.preventDefault()
         if (formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword) {
             alert("Passwords don't match")
+            return;
         }
 
         const updatedData = {

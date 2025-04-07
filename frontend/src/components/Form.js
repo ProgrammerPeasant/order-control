@@ -6,7 +6,7 @@ import Button from "./Button";
 function Form({fields, handleSubmit, children}) {
     const [formData, setFormData] = useState(
         fields.reduce((acc, field) => {
-            acc[field.id] = "";
+            acc[field.id] = field.value || ""; // Используем field.value, если оно существует
             return acc;
         }, {})
     );
