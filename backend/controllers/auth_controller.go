@@ -6,7 +6,6 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -22,17 +21,55 @@ func NewAuthController(us services.UserService) *AuthController {
 }
 
 // Register
-// @Summary Зарегистрировать нового пользователя
-// @Description Регистрирует нового пользователя в системе. Доступно всем.
+// @Summary Зарегистрировать нового пользователя (обычная регистрация)
+// @Description Регистрирует нового пользователя в системе. Доступно всем. Пользователь отправляет запрос на присоединение к компании.
 // @Tags Auth
 // @Accept json
 // @Produce json
-// @Param request body controllers.RegisterRequest true "Данные для регистрации пользователя"
-// @Success 200 {object} gin.H{message=string} "Регистрация прошла успешно"
+// @Param request body controllers.StandardRegisterRequest true "Данные для регистрации пользователя (логин, email, пароль, CompanyID)"
+// @Success 200 {object} gin.H{message=string} "Регистрация прошла успешно. Запрос на присоединение к компании отправлен на одобрение."
 // @Failure 400 {object} gin.H "Невалидные данные запроса"
 // @Failure 500 {object} gin.H "Ошибка сервера при регистрации"
 // @Router /register [post]
 func (c *AuthController) Register(ctx *gin.Context) {
+	var request StandardRegisterRequest
+	if err := ctx.BindJSON(&request); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": invReq})
+		log.Println(err)
+		return
+	}
+
+	user, err := c.userService.Register(request.Username, request.Email, request.Password, "USER", 0) // CompanyID пока 0
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	err = c.userService.CreateJoinRequest(user.ID, request.CompanyID)
+	if err != nil {
+		// Обработка ошибки (например, удаление пользователя, если запрос не создался)
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Ошибка при создании запроса на присоединение к компании"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "Регистрация прошла успешно. Запрос на присоединение к компании отправлен на одобрение."})
+}
+
+// AdminRegister
+// @Summary Зарегистрировать нового пользователя (только для администраторов)
+// @Description Регистрирует нового пользователя в системе с указанием роли и компании. Требуется роль администратора.
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Param request body controllers.AdminRegisterRequest true "Данные для регистрации пользователя (включая роль и CompanyID)"
+// @Security ApiKeyAuth
+// @Success 200 {object} gin.H{message=string} "Регистрация прошла успешно"
+// @Failure 400 {object} gin.H "Невалидные данные запроса"
+// @Failure 401 {object} gin.H "Не авторизован"
+// @Failure 403 {object} gin.H "Доступ запрещен. Требуется роль администратора."
+// @Failure 500 {object} gin.H "Ошибка сервера при регистрации"
+// @Router /admin/register [post]
+func (c *AuthController) AdminRegister(ctx *gin.Context) {
 	bodyBytes, err := io.ReadAll(ctx.Request.Body)
 	if err != nil {
 		log.Println("Ошибка чтения тела запроса:", err)
@@ -42,22 +79,16 @@ func (c *AuthController) Register(ctx *gin.Context) {
 
 	ctx.Request.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
 
-	log.Printf("Register запрос: %s", string(bodyBytes))
+	log.Printf("AdminRegister запрос: %s", string(bodyBytes))
 
-	var request RegisterRequest
+	var request AdminRegisterRequest
 	if err := ctx.BindJSON(&request); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": invReq})
 		log.Println(err)
 		return
 	}
 
-	companyIDUint, err := strconv.ParseUint(request.CompanyID, 10, 32)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Неверный формат Company ID"})
-		return
-	}
-
-	err = c.userService.Register(request.Username, request.Email, request.Password, request.Role, uint(companyIDUint))
+	_, err = c.userService.Register(request.Username, request.Email, request.Password, request.Role, request.CompanyID)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -106,12 +137,6 @@ type RegisterRequest struct {
 	Password  string `json:"password"`
 	Role      string `json:"role"`
 	CompanyID string `json:"company_id"`
-}
-
-// LoginRequest represents the request body for user login.
-type LoginRequest struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
 }
 
 // LoginResponse represents the response body after successful login.

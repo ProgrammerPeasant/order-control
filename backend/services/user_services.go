@@ -9,26 +9,45 @@ import (
 )
 
 type UserService interface {
-	Register(username, email, password string, role string, companyID uint) error
+	Register(username, email, password string, role string, companyID uint) (*models.User, error)
 	Login(username, password string) (*models.User, string, error)
+	CreateJoinRequest(userID uint, companyID uint) error
 	// ...
 }
 
 type userService struct {
-	userRepo repositories.UserRepository
+	userRepo           repositories.UserRepository
+	joinRequestService JoinRequestService // Необходимо указать тип
 }
 
-func NewUserService(ur repositories.UserRepository) UserService {
+func NewUserService(userRepo repositories.UserRepository, joinRequestService JoinRequestService) UserService {
 	return &userService{
-		userRepo: ur,
+		userRepo:           userRepo,
+		joinRequestService: joinRequestService,
 	}
 }
 
 // Регистрация нового пользователя
-func (s *userService) Register(username, email, password string, role string, companyID uint) error {
+//func (s *userService) Register(username, email, password string, role string, companyID uint) error {
+//	hashed, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+//	if err != nil {
+//		return err
+//	}
+//
+//	user := &models.User{
+//		Username:  username,
+//		Email:     strings.ToLower(email),
+//		Password:  string(hashed),
+//		Role:      role,
+//		CompanyID: companyID,
+//	}
+//	return s.userRepo.CreateUser(user)
+//}
+
+func (s *userService) Register(username, email, password string, role string, companyID uint) (*models.User, error) {
 	hashed, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
-		return err
+		return nil, err // Возвращаем nil для пользователя и ошибку
 	}
 
 	user := &models.User{
@@ -38,7 +57,13 @@ func (s *userService) Register(username, email, password string, role string, co
 		Role:      role,
 		CompanyID: companyID,
 	}
-	return s.userRepo.CreateUser(user)
+
+	createdUser, err := s.userRepo.CreateUser(user)
+	if err != nil {
+		return nil, err // Возвращаем nil для пользователя и ошибку
+	}
+
+	return createdUser, nil // Возвращаем созданного пользователя и nil для ошибки
 }
 
 // Логин: проверяем хеш пароля и, если всё ок, выдаём JWT и модель пользователя
@@ -57,4 +82,8 @@ func (s *userService) Login(username, password string) (*models.User, string, er
 		return nil, "", err
 	}
 	return user, token, nil
+}
+
+func (s *userService) CreateJoinRequest(userID uint, companyID uint) error {
+	return s.joinRequestService.CreateJoinRequest(userID, companyID)
 }

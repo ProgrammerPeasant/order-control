@@ -17,23 +17,27 @@ func InitRoutes(db *gorm.DB) *gin.Engine {
 	// Инициализируем репозитории
 	userRepo := repositories.NewUserRepository(db)
 	companyRepo := repositories.NewCompanyRepository(db)
-	estimateRepo := repositories.NewEstimateRepository(db) // Инициализация estimateRepo
+	estimateRepo := repositories.NewEstimateRepository(db)
+	joinRequestRepo := repositories.NewJoinRequestRepository(db)
 
 	// Инициализируем сервисы
-	userService := services.NewUserService(userRepo)
 	companyService := services.NewCompanyService(companyRepo)
-	estimateService := services.NewEstimateService(estimateRepo) // Инициализация estimateService
+	estimateService := services.NewEstimateService(estimateRepo)
+	joinRequestService := services.NewJoinRequestService(joinRequestRepo, companyRepo, userRepo)
+	userService := services.NewUserService(userRepo, joinRequestService)
 
 	// Инициализируем контроллеры
 	authController := controllers.NewAuthController(userService)
 	companyController := controllers.NewCompanyController(companyService)
-	estimateController := controllers.NewEstimateController(estimateService) // Инициализация estimateController
+	estimateController := controllers.NewEstimateController(estimateService)
+	joinRequestController := controllers.NewJoinRequestController(joinRequestService)
 
 	// Маршруты аутентификации
 	auth := r.Group("/api")
 	{
 		auth.POST("/register", authController.Register)
 		auth.POST("/login", authController.Login)
+		auth.POST("/admin/register", middlewares.AuthMiddleware(), middlewares.RoleMiddleware("users:create"), authController.AdminRegister)
 	}
 
 	// Маршруты для компаний доступны только авторизованным
@@ -48,6 +52,11 @@ func InitRoutes(db *gorm.DB) *gin.Engine {
 		// Обновлять и удалять компанию может только ADMIN или MANAGER своей компании
 		companies.PUT("/:id", middlewares.CompanyRoleMiddleware(db, "company", "companies:update"), companyController.UpdateCompany)    // CompanyRoleMiddleware
 		companies.DELETE("/:id", middlewares.CompanyRoleMiddleware(db, "company", "companies:delete"), companyController.DeleteCompany) // CompanyRoleMiddleware
+
+		// Маршруты для одобрения/отклонения запросов на присоединение (только для менеджеров)
+		companies.GET("/join-request", middlewares.CompanyRoleMiddleware(db, "join_request", "join_request:read"), joinRequestController.GetPendingJoinRequests)
+		companies.POST("/join-request/approve", middlewares.CompanyRoleMiddleware(db, "join_request", "join_request:accept"), joinRequestController.ApproveJoinRequest)
+		companies.POST("/join-request/reject", middlewares.CompanyRoleMiddleware(db, "join_request", "join_request:reject"), joinRequestController.RejectJoinRequest)
 	}
 
 	estimateGroup := r.Group("/api/v1/estimates")

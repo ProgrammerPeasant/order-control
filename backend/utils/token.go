@@ -24,6 +24,7 @@ type Claims struct {
 	UserID    uint   `json:"user_id"`
 	Role      string `json:"role"`
 	CompanyID uint   `json:"company_id"`
+	Email     string `json:"email"` // Добавьте это поле
 	jwt.StandardClaims
 }
 
@@ -35,6 +36,7 @@ func GenerateJWT(user *models.User) (string, error) {
 		UserID:    user.ID,
 		Role:      user.Role,
 		CompanyID: user.CompanyID,
+		Email:     user.Email,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
 			IssuedAt:  now.Unix(),
@@ -47,27 +49,39 @@ func GenerateJWT(user *models.User) (string, error) {
 }
 
 func ValidateJWT(tokenStr string) (*Claims, error) {
+	log.Printf("Начало валидации токена: %s", tokenStr)
+
 	token, err := jwt.ParseWithClaims(tokenStr, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		LoadEnv()
+		log.Printf("JWT Secret: %s", string(jwtSecret))
 		return jwtSecret, nil
 	})
 
 	if err != nil {
+		log.Printf("Ошибка при парсинге токена: %v", err)
 		return nil, err
 	}
 
+	log.Printf("Токен успешно распарсен: %+v", token)
+
 	if claims, ok := token.Claims.(*Claims); ok && token.Valid {
+		log.Printf("Claims успешно извлечены и токен валиден: %+v", claims)
 		userID := claims.UserID
 		role := claims.Role
 		companyID := claims.CompanyID
+		email := claims.Email
+
+		log.Printf("Извлеченные данные из claims: UserID=%d, Role=%s, CompanyID=%d", userID, role, companyID)
 
 		return &Claims{
 			UserID:         userID,
 			Role:           role,
 			CompanyID:      companyID,
+			Email:          email,
 			StandardClaims: jwt.StandardClaims{},
 		}, nil
 	}
 
+	log.Println("Токен невалиден")
 	return nil, fmt.Errorf("invalid token")
 }
