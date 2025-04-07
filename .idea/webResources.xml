@@ -14,6 +14,8 @@
             <path value="file://$PROJECT_DIR$/frontend/src/pages/LoginPage" />
             <path value="file://$PROJECT_DIR$/frontend/src/pages/ClientDashboardPage" />
             <path value="file://$PROJECT_DIR$/frontend/src/pages/SettingsPage" />
+            <path value="file://$PROJECT_DIR$/frontend/src/Utils" />
+            <path value="file://$PROJECT_DIR$/frontend/src/components" />
           </resourceRoots>
         </entryData>
       </entry>

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import apiClient from "../apiClient";
+import apiClient from "../Utils/apiClient";
 import styles from "./Table.module.css"
 
 

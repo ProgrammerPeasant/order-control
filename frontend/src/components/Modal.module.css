@@ -11,7 +11,6 @@
 }
 
 .container{
-    background-color: white;
     border-radius: 20px;
     padding: 20px 20px 20px 20px;
     text-align: center;
@@ -24,10 +23,24 @@
     gap: 10px;
 }
 
+.container--type1{
+    background-color: white;
+}
+
+.container--type2{
+    background-color: #4a7dff;
+}
+
 .text{
     font-family: "Rubik", sans-serif;
     font-optical-sizing: auto;
     font-weight: 500;
     font-style: normal;
+}
+
+.text--type1{
     color: black;
+}
+.text--type2{
+    color: white;
 }

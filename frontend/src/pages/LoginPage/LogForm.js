@@ -1,20 +1,14 @@
 import React, {useContext} from "react";
-import Button from "../../components/Button";
 import {useNavigate} from "react-router-dom";
 import Form from "../../components/Form";
-import apiClient from "../../apiClient";
-import {AuthContext} from "../../AuthProvider";
+import apiClient from "../../Utils/apiClient";
+import {AuthContext} from "../../Utils/AuthProvider";
 
 
-function LogForm() {
+function LogForm({children}) {
     const {login} = useContext(AuthContext);
 
     const navigate = useNavigate();
-
-    const handleBack = () => {
-        console.log("backk");
-        navigate("/");
-    }
 
     const fields = [
         {id: "username", type: "text", placeholder: "Username", required: true},
@@ -61,7 +55,7 @@ function LogForm() {
 
     return (
         <Form fields={fields} handleSubmit={handleSubmit}>
-            <Button title="Back" variant="type3" onClick={handleBack} />
+            {children}
         </Form>
     )
 }

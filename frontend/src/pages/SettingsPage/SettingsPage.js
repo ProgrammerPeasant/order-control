@@ -3,7 +3,7 @@ import styles from "./SettingsPage.module.css"
 import Button from "../../components/Button";
 import {useNavigate} from "react-router-dom";
 import Modal from "../../components/Modal";
-import {AuthContext} from "../../AuthProvider";
+import {AuthContext} from "../../Utils/AuthProvider";
 
 
 const SettingsPage = () => {
@@ -54,10 +54,10 @@ const SettingsPage = () => {
                 <Button title="Back" variant="type3" onClick={handleBack} />
             </div>
 
-            <Modal title="Log out?" isOpen={activeModal === "modalLogout"} onClose={closeModal}>
+            <Modal title="Log out?" variant="type1" isOpen={activeModal === "modalLogout"} onClose={closeModal}>
                 <Button title="Log out" variant="type4" onClick={handleLogoutFinally} />
             </Modal>
-            <Modal title="Reset password?" isOpen={activeModal === "modalReset"} onClose={closeModal}>
+            <Modal title="Reset password?" variant="type1" isOpen={activeModal === "modalReset"} onClose={closeModal}>
                 <Button title="Reset" variant="type2" onClick={handleResetFinally} />
             </Modal>
         </div>

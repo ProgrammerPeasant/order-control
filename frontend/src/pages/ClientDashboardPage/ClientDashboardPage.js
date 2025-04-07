@@ -3,7 +3,7 @@ import styles from "./ClientDashboardPage.module.css"
 import EstimateTable from "./EstimateTable";
 import Button from "../../components/Button";
 import {useNavigate} from "react-router-dom";
-import useDebounce from "../../useDebounce";
+import useDebounce from "../../Utils/useDebounce";
 
 
 const ClientDashboardPage = () => {

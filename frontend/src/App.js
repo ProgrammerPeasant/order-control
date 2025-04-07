@@ -8,7 +8,7 @@ import ClientDashboardPage from "./pages/ClientDashboardPage";
 import CompaniesPage from "./pages/CompaniesPage";
 import SettingsPage from "./pages/SettingsPage";
 import AdminDashboardPage from "./pages/AdminPage/AdminDashboardPage";
-import {AuthProvider} from "./AuthProvider";
+import {AuthProvider} from "./Utils/AuthProvider";
 
 
 function App() {
