@@ -123,10 +123,11 @@ func (c *AuthController) Login(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, LoginResponse{
-		Token:    token,
-		Username: user.Username,
-		Role:     user.Role,
-		UserID:   user.ID,
+		Token:     token,
+		Username:  user.Username,
+		Role:      user.Role,
+		UserID:    user.ID,
+		CompanyID: user.CompanyID,
 	})
 }
 
@@ -141,8 +142,9 @@ type RegisterRequest struct {
 
 // LoginResponse represents the response body after successful login.
 type LoginResponse struct {
-	Token    string `json:"token"`
-	Username string `json:"username"`
-	Role     string `json:"role"`
-	UserID   uint   `json:"userId"`
+	Token     string `json:"token"`
+	Username  string `json:"username"`
+	Role      string `json:"role"`
+	UserID    uint   `json:"userId"`
+	CompanyID uint   `json:"companyId"`
 }
