@@ -1,70 +1,74 @@
-# Getting Started with Create React App
+# 📊 Приложение для управления сметами
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+##  О проекте
 
-## Available Scripts
+Данное приложение предназначено для автоматизации процесса создания, согласования и управления сметами в компаниях, предоставляющих услуги.  Оно упрощает взаимодействие между менеджерами и клиентами, снижает количество ошибок и ускоряет процесс согласования. 
 
-In the project directory, you can run:
+###   Функциональные возможности
 
-### `yarn start`
+Приложение предоставляет следующие возможности:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+* Регистрация компаний
+* Добавление услуг
+* Формирование детализированных смет
+* Внесение изменений и комментариев в сметы
+* Предоставление клиентам доступа к сметам через ссылки
+* Экспорт данных в различные форматы 
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+###   Целевая аудитория
 
-### `yarn test`
+Программа предназначена для использования через веб-браузеры. 
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+* **Администраторы:** используют систему для настройки услуг и управления правами доступа. 
+* **Менеджеры:** создают и редактируют сметы. 
+* **Клиенты:** просматривают, комментируют и согласовывают документы. 
 
-### `yarn build`
+##  🚀 Запуск проекта
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+###   Требования к окружению
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Для работы приложения необходимы:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+* Любое клиентское устройство с операционной системой Windows 7 или выше, либо Ubuntu 22 или выше. [cite: 22]
+* Сервер с операционной системой Ubuntu версии 22 или выше, 64-разрядным (x64) процессором, доступом в Интернет, 4 ГБ ОЗУ и 8 ГБ свободного места на внутреннем накопителе для программы и её зависимостей, а также 60 ГБ свободного места для хранения файлов клиентов. [cite: 23, 24, 25]
 
-### `yarn eject`
+###   Установка
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+1.  Клонируйте репозиторий:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+    ```bash
+    git clone [https://github.com/ProgrammerPeasant/order-control.git](https://github.com/ProgrammerPeasant/order-control.git)
+    cd order-control
+    ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+2.  Создайте файл переменных окружения `.env` в директории `/backend` и заполните его необходимыми значениями:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+    ```
+    DB_HOST=localhost
+    DB_PORT=5432
+    DB_USER=postgres
+    DB_PASSWORD=<пароль>
+    DB_NAME=order_control
+    JWT_SECRET=<секретный_ключ_для_jwt>
+    ```
 
-## Learn More
+###   Запуск
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Запуск программы осуществляется автоматически через Docker. 
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+##  🛠️ Используемые технологии
 
-### Code Splitting
+* Golang версии 1.23.2 
+* Docker (на базе образов golang:1.23-alpine и alpine:latest) 
+* HTTP-сервер на порту 8080 
+* Gin (веб-фреймворк) версии 1.10.0 
+* JWT (библиотека авторизации) версии 3.2.0 
+* GORM (ORM) версии 1.9.16 
+* Swagger/Swag (документирование API) версий 1.16.4/1.6.0 
+* Excelize (работа с Excel) версии 2.9.0 
+* Godotenv (работа с переменными окружения) версии 1.5.1 
+* PostgreSQL [cite: 26]
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+##  🤝 Вклад в разработку
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Приветствуются любые вклады в разработку проекта.
