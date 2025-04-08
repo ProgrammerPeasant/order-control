@@ -6,6 +6,7 @@ import (
 	"github.com/ProgrammerPeasant/order-control/config"
 	"github.com/ProgrammerPeasant/order-control/models"
 	"github.com/ProgrammerPeasant/order-control/routes"
+	"github.com/gin-contrib/cors"
 	"github.com/swaggo/files" // swagger embed files
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"log"
@@ -27,7 +28,6 @@ import (
 // @contact.name API Support
 // @contact.url http://www.swagger.io/support
 // @contact.email support@swagger.io
-
 // @host localhost:8080
 // @BasePath /api
 
@@ -56,6 +56,8 @@ func main() {
 	}()
 	// Инициализируем руты gin
 	r := routes.InitRoutes(db)
+
+	r.Use(cors.Default())
 
 	// url := ginSwagger.URL("/swagger/index.html") // URL, по которому будет доступен Swagger UI
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
