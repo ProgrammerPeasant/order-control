@@ -1,0 +1,28 @@
+.form{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form input{
+    padding: 10px;
+    border: 2px solid #b2ceff;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.3);
+    color: #fff;
+    font-size: 14px;
+    outline: none;
+}
+
+.form input::placeholder{
+    color: #d9e6ff
+}
+
+.form input:focus{
+    border-color: #fff;
+}
+
+.buttons{
+    display: flex;
+    gap: 10px;
+}

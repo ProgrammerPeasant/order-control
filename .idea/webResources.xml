@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebResourcesPaths">
+    <contentEntries>
+      <entry url="file://$PROJECT_DIR$">
+        <entryData>
+          <resourceRoots>
+            <path value="file://$PROJECT_DIR$/estimate/src/pages/StartPage" />
+            <path value="file://$PROJECT_DIR$/estimate/src/pages/RegisterPage" />
+            <path value="file://$PROJECT_DIR$/estimate/src/pages/LoginPage" />
+            <path value="file://$PROJECT_DIR$/estimate/src/pages/ClientDashboardPage" />
+            <path value="file://$PROJECT_DIR$/frontend/src/pages/StartPage" />
+            <path value="file://$PROJECT_DIR$/frontend/src/Utils" />
+            <path value="file://$PROJECT_DIR$/frontend/src/components" />
+            <path value="file://$PROJECT_DIR$/frontend/src/pages/LoginPage" />
+            <path value="file://$PROJECT_DIR$/frontend/src/pages/RegisterPage" />
+            <path value="file://$PROJECT_DIR$/frontend/src/pages/SettingsPage" />
+            <path value="file://$PROJECT_DIR$/frontend/src/pages/ClientDashboardPage" />
+            <path value="file://$PROJECT_DIR$/frontend/src/pages/AdminDashboardPage" />
+          </resourceRoots>
+        </entryData>
+      </entry>
+    </contentEntries>
+  </component>
+</project>
