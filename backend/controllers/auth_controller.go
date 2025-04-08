@@ -45,7 +45,7 @@ func (c *AuthController) Register(ctx *gin.Context) {
 		return
 	}
 
-	err = c.userService.CreateJoinRequest(user.ID, request.CompanyID)
+	err = c.userService.CreateJoinRequest(user.ID, request.CompanyID, request.Email)
 	if err != nil {
 		// Обработка ошибки (например, удаление пользователя, если запрос не создался)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Ошибка при создании запроса на присоединение к компании"})

@@ -8,7 +8,7 @@ import (
 )
 
 type JoinRequestService interface {
-	CreateJoinRequest(userID uint, companyID uint) error
+	CreateJoinRequest(userID uint, companyID uint, email string) error
 	GetPendingJoinRequests(companyID uint) ([]models.JoinRequest, error)
 	ApproveJoinRequest(userID uint, companyID uint) error
 	RejectJoinRequest(userID uint, companyID uint) error
@@ -24,7 +24,7 @@ func NewJoinRequestService(joinRequestRepo repositories.JoinRequestRepository, c
 	return &joinRequestService{joinRequestRepo: joinRequestRepo, companyRepo: companyRepo, userRepo: userRepo}
 }
 
-func (s *joinRequestService) CreateJoinRequest(userID uint, companyID uint) error {
+func (s *joinRequestService) CreateJoinRequest(userID uint, companyID uint, email string) error {
 	// Проверка, существует ли уже такой запрос
 	existingRequest, err := s.joinRequestRepo.FindByUserAndCompanyID(userID, companyID)
 	if err == nil && existingRequest != nil {
@@ -37,6 +37,7 @@ func (s *joinRequestService) CreateJoinRequest(userID uint, companyID uint) erro
 	joinRequest := &models.JoinRequest{
 		UserID:    userID,
 		CompanyID: companyID,
+		Email:     email,
 	}
 	return s.joinRequestRepo.Create(joinRequest)
 }

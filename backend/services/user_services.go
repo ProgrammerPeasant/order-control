@@ -11,7 +11,7 @@ import (
 type UserService interface {
 	Register(username, email, password string, role string, companyID uint) (*models.User, error)
 	Login(username, password string) (*models.User, string, error)
-	CreateJoinRequest(userID uint, companyID uint) error
+	CreateJoinRequest(userID uint, companyID uint, email string) error
 	// ...
 }
 
@@ -84,6 +84,6 @@ func (s *userService) Login(username, password string) (*models.User, string, er
 	return user, token, nil
 }
 
-func (s *userService) CreateJoinRequest(userID uint, companyID uint) error {
-	return s.joinRequestService.CreateJoinRequest(userID, companyID)
+func (s *userService) CreateJoinRequest(userID uint, companyID uint, email string) error {
+	return s.joinRequestService.CreateJoinRequest(userID, companyID, email)
 }
