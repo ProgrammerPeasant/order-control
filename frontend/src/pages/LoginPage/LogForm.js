@@ -28,10 +28,10 @@ function LogForm({children}) {
             login(token, username, role, userId);
             if (role === "ADMIN") {
                 navigate("/admin");
-            } else if (role === "CLIENT") {
-                navigate("/clientdashboard");
             } else if (role === "MANAGER") {
                 navigate("/managerdashboard");
+            } else if (role === "USER") {
+                navigate("/clientdashboard");
             }
         } catch (error) {
             alert(handleErrorMessage(error, true));

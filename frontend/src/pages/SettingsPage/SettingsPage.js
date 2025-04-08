@@ -17,12 +17,12 @@ const SettingsPage = () => {
     const navigate = useNavigate();
 
     const handleBack = () => {
-        if (user.role === "CLIENT") {
-            navigate("/clientdashboard");
-        } else if (user.role === "ADMIN") {
+        if (user.role === "ADMIN") {
             navigate("/admin");
         } else if (user.role === "MANAGER") {
             navigate("/managerdashboard");
+        } else if (user.role === "USER") {
+            navigate("/clientdashboard");
         }
     }
 

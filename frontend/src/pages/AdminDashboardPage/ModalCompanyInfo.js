@@ -133,7 +133,7 @@ const ModalCompanyInfo = ({companyId, isOpen, onClose, handleUpdate}) => {
 
     if (mode === "create") {
         return (
-            <Modal title="Create estimate" variant="type2" isOpen={isOpen} onClose={() => setMode(null)}>
+            <Modal title="Create Estimate" variant="type2" isOpen={isOpen} onClose={() => setMode(null)}>
                 <Form fields={fieldsCreate} handleSubmit={handleSubmitCreate} />
             </Modal>
         )

@@ -4,9 +4,20 @@ import Button from "../../components/Button";
 import styles from "./AdminDashboardPage.module.css"
 import apiClient from "../../Utils/apiClient";
 import {handleErrorMessage} from "../../Utils/ErrorHandler";
+import Modal from "../../components/Modal";
 
 
 function CompanyTable({companyId, handleUpdate}) {
+    const [activeModal, setActiveModal] = useState(null);
+    const [selectedEstimateId, setSelectedEstimateId] = useState(null);
+    const openModal = (modalId, estimateId) => {
+        setSelectedEstimateId(estimateId)
+        setActiveModal(modalId);
+    }
+    const closeModal = () => {
+        setSelectedEstimateId(null);
+        setActiveModal(null);
+    }
     const columns = ["Company status", "ID", "Title", "Total", "Created at", "Created by ID", "", ""];
     const apiUrl = companyId ? `/api/v1/estimates/company?company_id=${companyId}` : null;
     const [status, setStatus] = useState("Loading...");
@@ -41,11 +52,13 @@ function CompanyTable({companyId, handleUpdate}) {
         console.log(estimateId);
     }
 
-    const handleDelete = async (estimateId) => {
+    const handleDelete = async () => {
+        if (!selectedEstimateId) return;
         try {
-            const response = await apiClient.delete(`/api/v1/estimates/${estimateId}`, {headers: { Accept: "application/json" }});
+            const response = await apiClient.delete(`/api/v1/estimates/${selectedEstimateId}`, {headers: { Accept: "application/json" }});
             console.log(response.data);
             handleUpdate(companyId);
+            closeModal();
         } catch (error) {
             alert(handleErrorMessage(error));
         }
@@ -60,11 +73,18 @@ function CompanyTable({companyId, handleUpdate}) {
             <td>{new Date(item?.CreatedAt).toLocaleString() || "N/A"}</td>
             <td>{item?.created_by_id || "N/A"}</td>
             <td><Button title="View" variant="type3" onClick={() => handleView(item.ID)}/></td>
-            <td><Button title="Delete" variant="type4" onClick={() => handleDelete(item.ID)}/></td>
+            <td><Button title="Delete" variant="type4" onClick={() => openModal("modalDeleteEstimate", item.ID)}/></td>
         </tr>
     );
 
-    return <Table apiUrl={apiUrl} columns={columns} renderRow={renderRow} />;
+    return (
+        <div>
+            <Table apiUrl={apiUrl} columns={columns} renderRow={renderRow} />
+            <Modal title="Delete estimate?" variant="type1" isOpen={activeModal === "modalDeleteEstimate"} onClose={closeModal}>
+                <Button title="Delete" variant="type4" onClick={() => handleDelete()} />
+            </Modal>
+        </div>
+    );
 }
 
 export default CompanyTable;

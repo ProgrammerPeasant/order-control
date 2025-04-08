@@ -25,8 +25,14 @@ function RegForm({children}) {
             alert("Passwords don't match")
             return;
         }
+
+        const updatedData = {
+            ...formData,
+            company_id: parseInt(formData.company_id, 10),
+        }
+
         try {
-            const response = await apiClient.post("/api/register", formData, {
+            const response = await apiClient.post("/api/register", updatedData, {
                 headers: {"Content-Type": "application/json", "Accept": "application/json"},
             });
 
@@ -44,10 +50,10 @@ function RegForm({children}) {
             login(token, username, role, userId);
             if (role === "ADMIN") {
                 navigate("/admin");
-            } else if (role === "CLIENT") {
-                navigate("/clientdashboard");
             } else if (role === "MANAGER") {
                 navigate("/managerdashboard");
+            } else if (role === "USER") {
+                navigate("/clientdashboard");
             }
         } catch (error) {
             alert(handleErrorMessage(error));
