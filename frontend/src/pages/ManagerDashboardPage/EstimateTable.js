@@ -7,7 +7,7 @@ import {handleErrorMessage} from "../../Utils/ErrorHandler";
 import Modal from "../../components/Modal";
 
 
-function EstimateTable({estimateId, companyId, handleUpdate}) {
+function EstimateTable({estimateId, handleUpdate}) {
     const [activeModal, setActiveModal] = useState(null);
     const [selectedEstimateId, setSelectedEstimateId] = useState(null);
     const openModal = (modalId, estimateId) => {
