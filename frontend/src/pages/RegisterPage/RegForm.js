@@ -3,6 +3,7 @@ import {useNavigate} from "react-router-dom";
 import Form from "../../components/Form";
 import apiClient from "../../Utils/apiClient";
 import {AuthContext} from "../../Utils/AuthProvider";
+import {handleErrorMessage} from "../../Utils/ErrorHandler";
 
 
 function RegForm({children}) {
@@ -12,6 +13,7 @@ function RegForm({children}) {
 
     const fields = [
         {id: "username", type: "text", placeholder: "Username", required: true},
+        {id: "company_id", type: "number", placeholder: "Company ID", required: true},
         {id: "email", type: "email", placeholder: "Email", required: true},
         {id: "password", type: "password", placeholder: "Password", required: true},
         {id: "confirmPassword", type: "password", placeholder: "Password confirmation", required: true},
@@ -23,40 +25,21 @@ function RegForm({children}) {
             alert("Passwords don't match")
             return;
         }
-
-        const updatedData = {
-            ...formData,
-            role: "CLIENT", // ATTENTION
-            company_id: "1" // ATTENTION
-        }
-
         try {
-            const response = await apiClient.post("/api/register", updatedData, {
+            const response = await apiClient.post("/api/register", formData, {
                 headers: {"Content-Type": "application/json", "Accept": "application/json"},
             });
 
             console.log(response.data);
         } catch (error) {
-            if (error.response) {
-                const { status, data } = error.response;
-                if (status === 400) {
-                    alert(`Invalid data: ${data.message || "Check your input fields"}`);
-                } else if (status === 500) {
-                    alert(`Server error: ${data.message || "Please try again later"}`);
-                } else {
-                    alert(`Error: ${data.message || "Something went wrong"}`);
-                }
-            } else if (error.request) {
-                alert("No response from server. Please check your internet connection.");
-            } else {
-                alert(`Request error: ${error.message}`);
-            }
+            alert(handleErrorMessage(error));
         }
         try {
             const response = await apiClient.post("/api/login", formData, {
                 headers: {"Content-Type": "application/json", "Accept": "application/json"},
             });
 
+            console.log(response.data);
             const {token, username, role, userId} = response.data;
             login(token, username, role, userId);
             if (role === "ADMIN") {
@@ -64,23 +47,10 @@ function RegForm({children}) {
             } else if (role === "CLIENT") {
                 navigate("/clientdashboard");
             } else if (role === "MANAGER") {
-                console.log("managerdash")
-                // navigate("/managerdashboard"); // ATTENTION
+                navigate("/managerdashboard");
             }
-            console.log(response.data);
         } catch (error) {
-            if (error.response) {
-                const { status, data } = error.response;
-                if (status === 500) {
-                    alert(`Server error: ${data.message || "Please try again later"}`);
-                } else {
-                    alert(`Error: ${data.message || "Something went wrong"}`);
-                }
-            } else if (error.request) {
-                alert("No response from server. Please check your internet connection.");
-            } else {
-                alert(`Request error: ${error.message}`);
-            }
+            alert(handleErrorMessage(error));
         }
     };
 

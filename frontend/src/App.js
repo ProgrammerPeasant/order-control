@@ -1,13 +1,14 @@
 import React from "react";
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import {AuthProvider} from "./Utils/AuthProvider";
 
 import StartPage from "./pages/StartPage";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import ClientDashboardPage from "./pages/ClientDashboardPage";
 import SettingsPage from "./pages/SettingsPage";
-import AdminDashboardPage from "./pages/AdminPage/AdminDashboardPage";
-import {AuthProvider} from "./Utils/AuthProvider";
+import AdminDashboardPage from "./pages/AdminDashboardPage/AdminDashboardPage";
+import ManagerDashboardPage from "./pages/ManagerDashboardPage";
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
                     <Route path="/clientdashboard" element={<ClientDashboardPage />} />
                     <Route path="/settings" element={<SettingsPage />} />
                     <Route path="/admin" element={<AdminDashboardPage />} />
+                    <Route path="/managerdashboard" element={<ManagerDashboardPage />} />
                 </Routes>
             </Router>
         </AuthProvider>

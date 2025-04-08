@@ -3,6 +3,7 @@ import {useNavigate} from "react-router-dom";
 import Form from "../../components/Form";
 import apiClient from "../../Utils/apiClient";
 import {AuthContext} from "../../Utils/AuthProvider";
+import {handleErrorMessage} from "../../Utils/ErrorHandler";
 
 
 function LogForm({children}) {
@@ -22,6 +23,7 @@ function LogForm({children}) {
                 headers: {"Content-Type": "application/json", "Accept": "application/json"},
             });
 
+            console.log(response.data);
             const {token, username, role, userId} = response.data;
             login(token, username, role, userId);
             if (role === "ADMIN") {
@@ -29,27 +31,10 @@ function LogForm({children}) {
             } else if (role === "CLIENT") {
                 navigate("/clientdashboard");
             } else if (role === "MANAGER") {
-                console.log("managerdash")
-                // navigate("/managerdashboard"); // ATTENTION
+                navigate("/managerdashboard");
             }
-            console.log(response.data);
         } catch (error) {
-            if (error.response) {
-                const { status, data } = error.response;
-                if (status === 400) {
-                    alert(`Invalid data: ${data.message || "Check your input fields"}`);
-                } else if (status === 401) {
-                    alert(`Authentication error: ${data.message || "Invalid credentials"}`);
-                } else if (status === 500) {
-                    alert(`Server error: ${data.message || "Please try again later"}`);
-                } else {
-                    alert(`Error: ${data.message || "Something went wrong"}`);
-                }
-            } else if (error.request) {
-                alert("No response from server. Please check your internet connection.");
-            } else {
-                alert(`Request error: ${error.message}`);
-            }
+            alert(handleErrorMessage(error, true));
         }
     }
 

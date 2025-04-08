@@ -8,15 +8,11 @@ import Button from "../../components/Button";
 const RegisterPage = () => {
     const navigate = useNavigate();
 
-    const handleBack = () => {
-        console.log("Back to start")
-        navigate("/");
-    }
     return (
         <div className={styles.container}>
             <h1 className={styles.text}>Registration</h1>
             <RegForm>
-                <Button title="Back" variant="type3" onClick={handleBack} />
+                <Button title="Back" variant="type3" onClick={() => navigate("/")} />
             </RegForm>
         </div>
     )

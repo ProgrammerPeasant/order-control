@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import apiClient from "../Utils/apiClient";
 import styles from "./Table.module.css"
+import {handleErrorMessage} from "../Utils/ErrorHandler";
 
 
 function Table({apiUrl, columns, renderRow, emptyRows = 10}) {
@@ -40,16 +41,7 @@ function Table({apiUrl, columns, renderRow, emptyRows = 10}) {
     }
 
     if (error) {
-        let message;
-        if (error.status === 400) {
-            message = "Wrong format";
-        } else if (error.status === 401) {
-            message = "Unauthorized";
-        } else if (error.status === 404) {
-            message = "Not Found";
-        } else if (error.status === 500) {
-            message = "Internal Server Error";
-        }
+        const message = handleErrorMessage(error);
         return <p className={styles.text}>{message}</p>;
     }
 
