@@ -34,11 +34,16 @@ func NewEstimateController(service *services.EstimateService) *EstimateControlle
 // @Failure 500 {object} gin.H "Ошибка сервера"
 // @Router /v1/estimates [post]
 func (c *EstimateController) CreateEstimate(ctx *gin.Context) {
+	companyIDInterface, _ := ctx.Get("companyID")
+	companyID := companyIDInterface.(uint)
+
 	var estimate models.Estimate
 	if err := ctx.ShouldBindJSON(&estimate); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	estimate.CompanyID = companyID
 
 	log.Printf("Полученная смета: %+v", estimate)
 
