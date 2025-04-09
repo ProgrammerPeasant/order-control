@@ -1,43 +1,10 @@
-import React, { useState, useEffect } from "react";
-import apiClient from "../../Utils/apiClient";
-import {handleErrorMessage} from "../../Utils/ErrorHandler";
+import React from "react";
 import styles from "../../components/Table.module.css"
 
 
-const DataTable = ({estimateId}) => {
-    const [items, setItems] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            setError(null);
-            try {
-                const response = await apiClient.get(`/api/v1/estimates/${estimateId}`, {headers: {Accept : "application/json"}});
-                setItems(response.data.items);
-            } catch (error) {
-                if (error.response) {
-                    const {status, data} = error.response;
-                    setError({status, message: data.message || "An error occurred"});
-                } else {
-                    setError({status: null, message: error.message || "Network error"});
-                }
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchData();
-    }, [estimateId]);
-
-    if (loading) {
-        return <p className={styles.text}>Loading...</p>;
-    }
-
-    if (error) {
-        const message = handleErrorMessage(error);
-        return <p className={styles.text}>{message}</p>;
+const DataTable = ({items}) => {
+    if (!items) {
+        return <p className={styles.text}>No data</p> ;
     }
 
     return (

@@ -1,5 +1,4 @@
 import Button from "../../components/Button";
-import styles from "./EstimateViewPage.module.css"
 import {useContext, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {AuthContext} from "../../Utils/AuthProvider";
@@ -7,6 +6,7 @@ import apiClient from "../../Utils/apiClient";
 import {handleErrorMessage} from "../../Utils/ErrorHandler";
 import Modal from "../../components/Modal";
 import Form from "../../components/Form";
+import styles from "./EditableDataTable.module.css"
 
 
 const ButtonPanel = ({estimateId, data, fetchData}) => {
@@ -43,17 +43,6 @@ const ButtonPanel = ({estimateId, data, fetchData}) => {
         }
     }
 
-    const handleSave = async () => {
-        try {
-            const response = await apiClient.put(`/api/v1/estimates/${estimateId}`, data, {headers: {"Content-Type": "application/json", "Accept": "application/json"}});
-            console.log(response.data);
-            fetchData();
-            closeModal();
-        } catch (error) {
-            alert(handleErrorMessage(error));
-        }
-    }
-
     const handleSubmitUpdate = async (e, formData) => {
         e.preventDefault();
         const updatedData = {
@@ -71,12 +60,10 @@ const ButtonPanel = ({estimateId, data, fetchData}) => {
         }
     }
 
-    const handleExit = async () => {
+    const handleExit = () => {
         if (user.role === "ADMIN") {
-            await handleSave();
             navigate("/admin");
         } else if (user.role === "MANAGER") {
-            await handleSave();
             navigate("/managerdashboard");
         } else if (user.role === "USER") {
             navigate("/clientdashboard");
@@ -86,11 +73,14 @@ const ButtonPanel = ({estimateId, data, fetchData}) => {
     return (
         <div className={styles.buttons}>
             <Button title="Export xlsx" variant="type2" onClick={handleExport}/>
-            {user.role !== "USER" && <Button title="Save changes" variant="type2" onClick={handleSave}/>}
             {user.role !== "USER" && <Button title="Edit info" variant="type2" onClick={() => openModal("modalEditInfo")}/>}
-            <Button title="Exit" variant="type3" onClick={handleExit}/>
-            <Modal title="Edit Estimate Info" variant={"type1"} isOpen={activeModal === "modalEditInfo"} onClose={closeModal}>
+            <Button title="Exit" variant="type3" onClick={() => openModal("modalExit")}/>
+            <Modal title="Edit Estimate Info" variant="type2" isOpen={activeModal === "modalEditInfo"} onClose={closeModal}>
                 <Form fields={fieldsUpdate} handleSubmit={handleSubmitUpdate} variant="type2"/>
+            </Modal>
+            <Modal title="Exit?" variant="type1" isOpen={activeModal === "modalExit"} onClose={closeModal}>
+                <p className={styles.text}>Unsaved changes will not be applied. Please save your work before proceeding </p>
+                <Button title="Exit" variant="type4" onClick={handleExit}/>
             </Modal>
         </div>
     )

@@ -50,21 +50,6 @@
     flex-direction: row;
 }
 
-.table{
-    width: 90%;
-}
-
-.panel{
-    width: 10%;
-
-    display: flex;
-    flex-direction: column;
-
-    background-color: #ff6cb4;
-    border-bottom-right-radius: 20px;
-    border-left: 2px solid black;
-}
-
 .text{
     font-family: "Rubik", sans-serif;
     font-optical-sizing: auto;
@@ -73,12 +58,4 @@
     font-size: 20px;
 
     text-align: left;
-}
-
-.buttons{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin: 10px;
-    height: 65%;
 }
