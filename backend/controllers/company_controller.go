@@ -22,7 +22,7 @@ func NewCompanyController(cs services.CompanyService) *CompanyController {
 // @Tags Companies
 // @Accept json
 // @Produce json
-// @Param request body models.Company true "Данные компании для создания"
+// @Param request body CreateCompanyRequest true "Данные компании для создания (включая logo_url и design_colors)"
 // @Security ApiKeyAuth
 // @Success 200 {object} models.Company "Компания успешно создана"
 // @Failure 400 {object} gin.H "Невалидные данные"
@@ -31,18 +31,13 @@ func NewCompanyController(cs services.CompanyService) *CompanyController {
 // @Failure 500 {object} gin.H "Ошибка сервера"
 // @Router /v1/companies [post]
 func (c *CompanyController) CreateCompany(ctx *gin.Context) {
-	var req struct {
-		Name        string `json:"name"`
-		Description string `json:"desc"`
-		Address     string `json:"address"`
-	}
-
+	var req CreateCompanyRequest
 	if err := ctx.BindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Невалидные данные"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Невалидные данные: " + err.Error()})
 		return
 	}
 
-	company, err := c.companyService.Create(req.Name, req.Description, req.Address)
+	company, err := c.companyService.Create(req.Name, req.Description, req.Address, req.LogoURL, req.DesignColors)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -51,9 +46,18 @@ func (c *CompanyController) CreateCompany(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, company)
 }
 
+// CreateCompanyRequest represents the request body for creating a company with logo and design colors.
+type CreateCompanyRequest struct {
+	Name         string   `json:"name"`
+	Description  string   `json:"desc"`
+	Address      string   `json:"address"`
+	LogoURL      string   `json:"logo_url"`
+	DesignColors []string `json:"design_colors"`
+}
+
 // GetCompany
 // @Summary Получить информацию о компании по ID
-// @Description Возвращает детальную информацию о компании по указанному ID. Доступно всем авторизованным пользователям.
+// @Description Возвращает детальную информацию о компании по указанному ID, включая logo_url и design_colors. Доступно всем авторизованным пользователям.
 // @Tags Companies
 // @Produce json
 // @Param id path integer true "ID компании"
@@ -78,17 +82,17 @@ func (c *CompanyController) GetCompany(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, company)
+	ctx.JSON(http.StatusOK, company) // Этот метод уже возвращает все поля модели Company
 }
 
 // UpdateCompany
 // @Summary Обновить информацию о компании
-// @Description Обновляет информацию о существующей компании по указанному ID. Доступно только администраторам.
+// @Description Обновляет информацию о существующей компании по указанному ID, включая logo_url и design_colors. Доступно только администраторам.
 // @Tags Companies
 // @Accept json
 // @Produce json
 // @Param id path integer true "ID компании для обновления"
-// @Param request body controllers.UpdateCompanyRequest true "Новые данные компании"
+// @Param request body UpdateCompanyRequest true "Новые данные компании (включая logo_url и design_colors)"
 // @Security ApiKeyAuth
 // @Success 200 {object} models.Company "Информация о компании успешно обновлена"
 // @Failure 400 {object} gin.H "Неверный ID компании или невалидные данные"
@@ -107,7 +111,7 @@ func (c *CompanyController) UpdateCompany(ctx *gin.Context) {
 
 	var req UpdateCompanyRequest
 	if err := ctx.BindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Невалидные данные"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Невалидные данные: " + err.Error()})
 		return
 	}
 
@@ -120,6 +124,8 @@ func (c *CompanyController) UpdateCompany(ctx *gin.Context) {
 	company.Name = req.Name
 	company.Description = req.Desc
 	company.Address = req.Address
+	company.LogoURL = req.LogoURL
+	company.DesignColors = req.DesignColors
 
 	if err := c.companyService.Update(company); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -129,11 +135,13 @@ func (c *CompanyController) UpdateCompany(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, company)
 }
 
-// UpdateCompanyRequest represents the request body for updating a company.
+// UpdateCompanyRequest represents the request body for updating a company with logo and design colors.
 type UpdateCompanyRequest struct {
-	Name    string `json:"name"`
-	Desc    string `json:"desc"`
-	Address string `json:"address"`
+	Name         string   `json:"name"`
+	Desc         string   `json:"desc"`
+	Address      string   `json:"address"`
+	LogoURL      string   `json:"logo_url"`
+	DesignColors []string `json:"design_colors"`
 }
 
 // DeleteCompany

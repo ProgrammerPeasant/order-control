@@ -6,7 +6,7 @@ import (
 )
 
 type CompanyService interface {
-	Create(name, desc, address string) (*models.Company, error)
+	Create(name, desc, address, logoURL string, designColors []string) (*models.Company, error)
 	GetByID(id uint) (*models.Company, error)
 	Update(company *models.Company) error
 	Delete(id uint) error
@@ -20,11 +20,13 @@ func NewCompanyService(cr repositories.CompanyRepository) CompanyService {
 	return &companyService{companyRepo: cr}
 }
 
-func (s *companyService) Create(name, desc, address string) (*models.Company, error) {
+func (s *companyService) Create(name, desc, address, logoURL string, designColors []string) (*models.Company, error) {
 	c := &models.Company{
-		Name:        name,
-		Description: desc,
-		Address:     address,
+		Name:         name,
+		Description:  desc,
+		Address:      address,
+		LogoURL:      logoURL,
+		DesignColors: designColors,
 	}
 	err := s.companyRepo.CreateCompany(c)
 	if err != nil {
