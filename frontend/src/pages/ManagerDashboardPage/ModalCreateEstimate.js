@@ -3,6 +3,7 @@ import {handleErrorMessage} from "../../Utils/ErrorHandler";
 import Form from "../../components/Form";
 import apiClient from "../../Utils/apiClient";
 
+
 const ModalCreateEstimate = ({estimateId, isOpen, onClose, handleUpdate}) => {
     const fields = [
         {id: "title", type: "text", placeholder: "Title", required: true},
@@ -14,8 +15,12 @@ const ModalCreateEstimate = ({estimateId, isOpen, onClose, handleUpdate}) => {
         const updatedData = {
             ...formData,
             overall_discount_percent: parseFloat(formData.overall_discount_percent),
-            // ATTENTION company_id
         }
+        if (updatedData.overall_discount_percent < 0 || updatedData.overall_discount_percent > 100) {
+            alert("Overall discount percent must be greater than 0 and less than 100");
+            return;
+        }
+
         try {
             const response = await apiClient.post("/api/v1/estimates", updatedData, {
                 headers: {"Content-Type": "application/json", Accept: "application/json"},
@@ -24,7 +29,7 @@ const ModalCreateEstimate = ({estimateId, isOpen, onClose, handleUpdate}) => {
             onClose();
             handleUpdate(estimateId)
         } catch (error) {
-            handleErrorMessage(error)
+            alert(handleErrorMessage(error))
         }
     }
 

@@ -9,6 +9,7 @@ import ClientDashboardPage from "./pages/ClientDashboardPage";
 import SettingsPage from "./pages/SettingsPage";
 import AdminDashboardPage from "./pages/AdminDashboardPage/AdminDashboardPage";
 import ManagerDashboardPage from "./pages/ManagerDashboardPage";
+import EstimateViewPage from "./pages/EstimateViewPage";
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
                     <Route path="/settings" element={<SettingsPage />} />
                     <Route path="/admin" element={<AdminDashboardPage />} />
                     <Route path="/managerdashboard" element={<ManagerDashboardPage />} />
+                    <Route path="/estimateview/:estimateId" element={<EstimateViewPage />} />
                 </Routes>
             </Router>
         </AuthProvider>

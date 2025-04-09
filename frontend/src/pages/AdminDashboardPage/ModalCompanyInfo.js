@@ -79,12 +79,11 @@ const ModalCompanyInfo = ({companyId, isOpen, onClose, handleUpdate}) => {
         {id: "name", type: "text", placeholder: "Name", required: true},
     ]
 
-    const handleSubmitCreate = async (e, formData) => {
+    const handleSubmitCreate = async (e, formData) => { // ATTENTION
         e.preventDefault();
         const updatedData = {
             ...formData,
             overall_discount_percent: parseFloat(formData.overall_discount_percent),
-            company_id: parseInt(companyId, 10)
         }
         try {
             const response = await apiClient.post("/api/v1/estimates", updatedData, {
@@ -94,7 +93,7 @@ const ModalCompanyInfo = ({companyId, isOpen, onClose, handleUpdate}) => {
             setMode(null)
             handleUpdate(companyId);
         } catch (error) {
-            handleErrorMessage(error)
+            alert(handleErrorMessage(error));
         }
     }
 
@@ -108,7 +107,7 @@ const ModalCompanyInfo = ({companyId, isOpen, onClose, handleUpdate}) => {
             setMode(null)
             handleUpdate(companyId);
         } catch (error) {
-            handleErrorMessage(error)
+            alert(handleErrorMessage(error))
         }
     }
 
@@ -127,11 +126,11 @@ const ModalCompanyInfo = ({companyId, isOpen, onClose, handleUpdate}) => {
             onClose()
             handleUpdate(companyId);
         } catch (error) {
-            handleErrorMessage(error)
+            alert(handleErrorMessage(error))
         }
     }
 
-    if (mode === "create") {
+    if (mode === "create") { // ATTENTION
         return (
             <Modal title="Create Estimate" variant="type2" isOpen={isOpen} onClose={() => setMode(null)}>
                 <Form fields={fieldsCreate} handleSubmit={handleSubmitCreate} />
@@ -167,7 +166,7 @@ const ModalCompanyInfo = ({companyId, isOpen, onClose, handleUpdate}) => {
                 <InfoRow label="Updated At" value={new Date(data?.UpdatedAt).toLocaleString()} />
                 <InfoRow label="Deleted At" value={data?.DeletedAt ?new Date(data?.DeletedAt).toLocaleString() : "Not deleted"} />
             </div>
-            <Button title="Create Estimate" variant="type2" onClick={() => setMode("create")} />
+            {/*<Button title="Create Estimate" variant="type2" onClick={() => setMode("create")} /> /!* ATTENTION *!/*/}
             <Button title="Edit Company Info" variant="type2" onClick={() => setMode("update")} />
             <Button title="Delete Company" variant="type4" onClick={() => setMode("delete")} />
         </Modal>

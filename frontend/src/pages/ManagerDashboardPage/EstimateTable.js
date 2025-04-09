@@ -5,6 +5,7 @@ import Table from "../../components/Table";
 import apiClient from "../../Utils/apiClient";
 import {handleErrorMessage} from "../../Utils/ErrorHandler";
 import Modal from "../../components/Modal";
+import {useNavigate} from "react-router-dom";
 
 
 function EstimateTable({estimateId, handleUpdate}) {
@@ -18,6 +19,8 @@ function EstimateTable({estimateId, handleUpdate}) {
         setSelectedEstimateId(null);
         setActiveModal(null);
     }
+    const navigate = useNavigate();
+
     const columns = ["ID", "Title", "Total", "Created at", "Created by ID", "", ""]
     const apiUrl = estimateId ? `/api/v1/estimates/${estimateId}` : "/api/v1/estimates/my";
 
@@ -25,8 +28,8 @@ function EstimateTable({estimateId, handleUpdate}) {
         return <p className={styles.text}>Refreshing...</p>;
     }
 
-    const handleView = (estimateId) => { // ATTENTION
-        console.log(estimateId);
+    const handleView = (estimateId) => {
+        navigate(`/estimateview/${estimateId}`);
     }
 
     const handleDelete = async () => {

@@ -24,8 +24,8 @@ function LogForm({children}) {
             });
 
             console.log(response.data);
-            const {token, username, role, userId} = response.data;
-            login(token, username, role, userId);
+            const {token, username, role, userId, companyId} = response.data;
+            login(token, username, role, userId, companyId);
             if (role === "ADMIN") {
                 navigate("/admin");
             } else if (role === "MANAGER") {

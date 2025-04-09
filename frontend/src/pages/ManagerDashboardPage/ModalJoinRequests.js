@@ -1,9 +1,10 @@
 import Modal from "../../components/Modal";
+import RequestTable from "./RequestTable";
 
 const ModalJoinRequests = ({isOpen, onClose}) => {
     return (
-        <Modal title="Join Requests" variant="type1" isOpen={isOpen} onClose={onClose}>
-
+        <Modal title="Join Requests" variant="type2" isOpen={isOpen} onClose={onClose}>
+            <RequestTable onClose={onClose} />
         </Modal>
     )
 }

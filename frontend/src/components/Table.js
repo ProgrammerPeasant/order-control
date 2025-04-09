@@ -4,7 +4,7 @@ import styles from "./Table.module.css"
 import {handleErrorMessage} from "../Utils/ErrorHandler";
 
 
-function Table({apiUrl, columns, renderRow, emptyRows = 10}) {
+function Table({apiUrl, columns, renderRow, emptyRows = 7}) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);

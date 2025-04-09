@@ -3,7 +3,7 @@ import styles from "./Form.module.css"
 import Button from "./Button";
 
 
-function Form({fields, handleSubmit, children}) {
+function Form({fields, handleSubmit, children, variant="type1"}) {
     const [formData, setFormData] = useState(
         fields.reduce((acc, field) => {
             acc[field.id] = field.value || "";
@@ -16,7 +16,7 @@ function Form({fields, handleSubmit, children}) {
     };
 
     return (
-        <form className={styles.form} onSubmit={(e) => handleSubmit(e, formData)}>
+        <form className={`${styles.form} ${styles[`form--${variant}`]}`} onSubmit={(e) => handleSubmit(e, formData)}>
             {fields.map((field) => (
                 <input
                     key={field.id}

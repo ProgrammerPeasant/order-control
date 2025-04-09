@@ -5,6 +5,7 @@ import styles from "./AdminDashboardPage.module.css"
 import apiClient from "../../Utils/apiClient";
 import {handleErrorMessage} from "../../Utils/ErrorHandler";
 import Modal from "../../components/Modal";
+import {useNavigate} from "react-router-dom";
 
 
 function CompanyTable({companyId, handleUpdate}) {
@@ -18,6 +19,8 @@ function CompanyTable({companyId, handleUpdate}) {
         setSelectedEstimateId(null);
         setActiveModal(null);
     }
+    const navigate = useNavigate();
+
     const columns = ["Company status", "ID", "Title", "Total", "Created at", "Created by ID", "", ""];
     const apiUrl = companyId ? `/api/v1/estimates/company?company_id=${companyId}` : null;
     const [status, setStatus] = useState("Loading...");
@@ -48,8 +51,8 @@ function CompanyTable({companyId, handleUpdate}) {
         return <p className={styles.text}>Refreshing...</p>;
     }
 
-    const handleView = (estimateId) => { // ATTENTION
-        console.log(estimateId);
+    const handleView = (estimateId) => {
+        navigate(`/estimateview/${estimateId}`);
     }
 
     const handleDelete = async () => {

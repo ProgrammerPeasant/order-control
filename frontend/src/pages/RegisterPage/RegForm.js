@@ -1,14 +1,11 @@
-import React, {useContext} from "react";
-import {useNavigate} from "react-router-dom";
+import React from "react";
 import Form from "../../components/Form";
 import apiClient from "../../Utils/apiClient";
-import {AuthContext} from "../../Utils/AuthProvider";
 import {handleErrorMessage} from "../../Utils/ErrorHandler";
+import {useNavigate} from "react-router-dom";
 
 
 function RegForm({children}) {
-    const {login} = useContext(AuthContext);
-
     const navigate = useNavigate();
 
     const fields = [
@@ -37,24 +34,7 @@ function RegForm({children}) {
             });
 
             console.log(response.data);
-        } catch (error) {
-            alert(handleErrorMessage(error));
-        }
-        try {
-            const response = await apiClient.post("/api/login", formData, {
-                headers: {"Content-Type": "application/json", "Accept": "application/json"},
-            });
-
-            console.log(response.data);
-            const {token, username, role, userId} = response.data;
-            login(token, username, role, userId);
-            if (role === "ADMIN") {
-                navigate("/admin");
-            } else if (role === "MANAGER") {
-                navigate("/managerdashboard");
-            } else if (role === "USER") {
-                navigate("/clientdashboard");
-            }
+            navigate("/login");
         } catch (error) {
             alert(handleErrorMessage(error));
         }
