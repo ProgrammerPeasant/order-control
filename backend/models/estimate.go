@@ -8,7 +8,7 @@ type EstimateItem struct {
 	ProductName     string  `json:"product_name"`
 	Quantity        int     `json:"quantity"`
 	UnitPrice       float64 `json:"unit_price"`
-	TotalPrice      float64 `json:"total_price"`
+	TotalPrice      float64 `json:"total_price" gorm:"type:real"`
 	DiscountPercent float64 `json:"discount_percent"`
 }
 
