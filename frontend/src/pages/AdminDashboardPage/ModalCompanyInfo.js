@@ -164,7 +164,7 @@ const ModalCompanyInfo = ({companyId, isOpen, onClose, handleUpdate}) => {
                 <InfoRow label="Address" value={data?.address} />
                 <InfoRow label="Created At" value={new Date(data?.CreatedAt).toLocaleString()} />
                 <InfoRow label="Updated At" value={new Date(data?.UpdatedAt).toLocaleString()} />
-                <InfoRow label="Deleted At" value={data?.DeletedAt ?new Date(data?.DeletedAt).toLocaleString() : "Not deleted"} />
+                <InfoRow label="Deleted At" value={data?.DeletedAt ? new Date(data?.DeletedAt).toLocaleString() : "Not deleted"} />
             </div>
             {/*<Button title="Create Estimate" variant="type2" onClick={() => setMode("create")} /> /!* ATTENTION *!/*/}
             <Button title="Edit Company Info" variant="type2" onClick={() => setMode("update")} />

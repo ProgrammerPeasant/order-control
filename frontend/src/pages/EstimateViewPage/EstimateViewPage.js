@@ -1,14 +1,18 @@
 import styles from "./EstimateViewPage.module.css"
 import ButtonPanel from "./ButtonPanel";
 import {useParams} from "react-router-dom";
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useContext, useEffect, useState} from "react";
 import apiClient from "../../Utils/apiClient";
 import {handleErrorMessage} from "../../Utils/ErrorHandler";
+import DataTable from "./DataTable";
+import {AuthContext} from "../../Utils/AuthProvider";
+import EditableDataTable from "./EditableDataTable";
 
 
 const EstimateViewPage = () => {
     const { estimateId } = useParams();
     const [data, setData] = useState([]);
+    const user = useContext(AuthContext)
 
     const InfoRow = ({ label, value }) => (
         <p className={styles.text}><strong>{label}:</strong> {value || "Not provided"}</p>
@@ -34,8 +38,8 @@ const EstimateViewPage = () => {
                 <div className={styles.info}>
                     <InfoRow label="Title" value={data?.title} />
                     <InfoRow label="Estimate ID" value={data?.ID} />
-                    <InfoRow label="Total" value={data?.total_amount.toLocaleString()} />
-                    <InfoRow label="Overall discount" value={data?.overall_discount_percent.toLocaleString()} />
+                    <InfoRow label="Total" value={data?.total_amount?.toLocaleString()} />
+                    <InfoRow label="Overall discount" value={data?.overall_discount_percent?.toLocaleString()} />
                 </div>
                 <div className={styles.manager}>
                     <InfoRow label="Manager" value={data?.created_by_id} /> {/* ATTENTION manager contact*/}
@@ -43,7 +47,10 @@ const EstimateViewPage = () => {
                 <div className={styles.logo}>{/* ATTENTION company logo */}</div>
             </div>
             <div className={styles.body}>
-                <div className={styles.table}>{/* ATTENTION table */}</div>
+                <div className={styles.table}>
+                    {user.role === "USER" && <DataTable estimateId={estimateId} />}
+                    {user.role !== "USER" && <EditableDataTable estimateId={estimateId} />}
+                </div>
                 <div className={styles.panel}>
                     <ButtonPanel estimateId={estimateId} data={data} fetchData={fetchData} />
                 </div>

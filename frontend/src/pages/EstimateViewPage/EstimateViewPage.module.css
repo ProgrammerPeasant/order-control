@@ -75,17 +75,6 @@
     text-align: left;
 }
 
-.textbig{
-    font-family: "Rubik", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 500;
-    font-style: normal;
-    font-size: 30px;
-
-    text-align: center;
-    color: black;
-}
-
 .buttons{
     display: flex;
     flex-direction: column;

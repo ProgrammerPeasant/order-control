@@ -71,10 +71,12 @@ const ButtonPanel = ({estimateId, data, fetchData}) => {
         }
     }
 
-    const handleExit = () => {
+    const handleExit = async () => {
         if (user.role === "ADMIN") {
+            await handleSave();
             navigate("/admin");
         } else if (user.role === "MANAGER") {
+            await handleSave();
             navigate("/managerdashboard");
         } else if (user.role === "USER") {
             navigate("/clientdashboard");
@@ -84,15 +86,11 @@ const ButtonPanel = ({estimateId, data, fetchData}) => {
     return (
         <div className={styles.buttons}>
             <Button title="Export xlsx" variant="type2" onClick={handleExport}/>
-            <Button title="Save changes" variant="type2" onClick={handleSave}/>
-            <Button title="Edit info" variant="type2" onClick={() => openModal("modalEditInfo")}/>
-            <Button title="Exit" variant="type3" onClick={() => openModal("modalExit")}/>
+            {user.role !== "USER" && <Button title="Save changes" variant="type2" onClick={handleSave}/>}
+            {user.role !== "USER" && <Button title="Edit info" variant="type2" onClick={() => openModal("modalEditInfo")}/>}
+            <Button title="Exit" variant="type3" onClick={handleExit}/>
             <Modal title="Edit Estimate Info" variant={"type1"} isOpen={activeModal === "modalEditInfo"} onClose={closeModal}>
                 <Form fields={fieldsUpdate} handleSubmit={handleSubmitUpdate} variant="type2"/>
-            </Modal>
-            <Modal title="Exit?" variant={"type1"} isOpen={activeModal === "modalExit"} onClose={closeModal}>
-                <p className={styles.textbig}>Are you sure? Unsaved changes won't be made</p>
-                <Button title="Exit" variant="type4"  onClick={handleExit} />
             </Modal>
         </div>
     )
