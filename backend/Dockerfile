@@ -13,4 +13,7 @@ COPY --from=builder /app/main .
 COPY .env .env
 COPY config/roles.yaml config/roles.yaml
 
+EXPOSE 8080
+EXPOSE 9090
+
 CMD ["./main"]

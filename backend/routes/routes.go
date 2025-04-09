@@ -34,11 +34,11 @@ func InitRoutes(db *gorm.DB) *gin.Engine {
 	// Инициализируем сервисы
 	companyService := services.NewCompanyService(companyRepo)
 	estimateService := services.NewEstimateService(estimateRepo)
-	joinRequestService := services.NewJoinRequestService(joinRequestRepo, companyRepo, userRepo)
-	userService := services.NewUserService(userRepo, joinRequestService)
+	joinRequestService := services.NewJoinRequestService(joinRequestRepo, companyRepo, userRepo, metrics)
+	userService := services.NewUserService(userRepo, joinRequestService, metrics)
 
 	// Инициализируем контроллеры
-	authController := controllers.NewAuthController(userService)
+	authController := controllers.NewAuthController(userService, metrics)
 	companyController := controllers.NewCompanyController(companyService)
 	estimateController := controllers.NewEstimateController(estimateService)
 	joinRequestController := controllers.NewJoinRequestController(joinRequestService)

@@ -1,6 +1,7 @@
 package services
 
 import (
+	"errors"
 	"github.com/ProgrammerPeasant/order-control/models"
 	"github.com/ProgrammerPeasant/order-control/repositories"
 	"github.com/ProgrammerPeasant/order-control/utils"
@@ -18,12 +19,14 @@ type UserService interface {
 type userService struct {
 	userRepo           repositories.UserRepository
 	joinRequestService JoinRequestService // Необходимо указать тип
+	metrics            *utils.Metrics
 }
 
-func NewUserService(userRepo repositories.UserRepository, joinRequestService JoinRequestService) UserService {
+func NewUserService(userRepo repositories.UserRepository, joinRequestService JoinRequestService, metrics *utils.Metrics) UserService {
 	return &userService{
 		userRepo:           userRepo,
 		joinRequestService: joinRequestService,
+		metrics:            metrics,
 	}
 }
 
@@ -45,9 +48,22 @@ func NewUserService(userRepo repositories.UserRepository, joinRequestService Joi
 //}
 
 func (s *userService) Register(username, email, password string, role string, companyID uint) (*models.User, error) {
+	existingUser, err := s.userRepo.GetUserByUsername(username)
+	if err == nil && existingUser != nil {
+		s.metrics.RegisterError("registration_error", "Username already exists")
+		return nil, errors.New("пользователь с таким именем уже существует")
+	}
+
+	existingEmail, err := s.userRepo.FindByEmail(email)
+	if err == nil && existingEmail != nil {
+		s.metrics.RegisterError("registration_error", "Email already exists")
+		return nil, errors.New("пользователь с таким email уже существует")
+	}
+
 	hashed, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
-		return nil, err // Возвращаем nil для пользователя и ошибку
+		return nil, err
+
 	}
 
 	user := &models.User{
@@ -60,6 +76,7 @@ func (s *userService) Register(username, email, password string, role string, co
 
 	createdUser, err := s.userRepo.CreateUser(user)
 	if err != nil {
+		s.metrics.RegisterDBError("create", "users")
 		return nil, err // Возвращаем nil для пользователя и ошибку
 	}
 
@@ -70,15 +87,18 @@ func (s *userService) Register(username, email, password string, role string, co
 func (s *userService) Login(username, password string) (*models.User, string, error) {
 	user, err := s.userRepo.GetUserByUsername(username)
 	if err != nil {
+		s.metrics.RegisterError("authentication_error", "User not found")
 		return nil, "", err
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
+		s.metrics.RegisterError("authentication_error", "Invalid password")
 		return nil, "", err
 	}
 
 	token, err := utils.GenerateJWT(user)
 	if err != nil {
+		s.metrics.RegisterError("token_generation_error", err.Error())
 		return nil, "", err
 	}
 	return user, token, nil
