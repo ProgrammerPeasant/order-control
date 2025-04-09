@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"github.com/jinzhu/gorm"
 	"testing"
 
 	"github.com/ProgrammerPeasant/order-control/models"
@@ -30,6 +31,31 @@ func (m *MockCompanyRepository) UpdateCompany(company *models.Company) error {
 
 func (m *MockCompanyRepository) DeleteCompany(company *models.Company) error {
 	args := m.Called(company)
+	return args.Error(0)
+}
+
+func (m *MockCompanyRepository) UpdateUserCompanyID(userID uint, companyID uint) error {
+	args := m.Called(userID, companyID)
+	return args.Error(0)
+}
+
+func (m *MockCompanyRepository) UpdateJoinRequestStatus(userID uint, companyID uint, status string) error {
+	args := m.Called(userID, companyID, status)
+	return args.Error(0)
+}
+
+func (m *MockCompanyRepository) Begin() *gorm.DB {
+	args := m.Called()
+	return args.Get(0).(*gorm.DB)
+}
+
+func (m *MockCompanyRepository) Commit(tx *gorm.DB) error {
+	args := m.Called(tx)
+	return args.Error(0)
+}
+
+func (m *MockCompanyRepository) Rollback(tx *gorm.DB) error {
+	args := m.Called(tx)
 	return args.Error(0)
 }
 
