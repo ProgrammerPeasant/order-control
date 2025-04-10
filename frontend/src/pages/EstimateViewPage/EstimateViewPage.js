@@ -44,7 +44,9 @@ const EstimateViewPage = () => {
                 console.log(response.data);
                 setCompanyInfo(response.data);
             } catch (error) {
-                setError(handleErrorMessage(error));
+                if (user.role !== "ADMIN") {
+                    setError(handleErrorMessage(error));
+                }
             } finally {
                 setLoading(false);
             }
@@ -52,7 +54,7 @@ const EstimateViewPage = () => {
 
         fetchData();
         fetchInfo();
-    }, [fetchData, user.companyId]);
+    }, [fetchData, user.companyId, user.role]);
 
     if (loading) {
         return (

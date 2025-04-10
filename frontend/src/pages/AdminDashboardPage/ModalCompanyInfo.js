@@ -63,9 +63,9 @@ const ModalCompanyInfo = ({companyId, isOpen, onClose, handleUpdate}) => {
         {id: "address", type: "text", placeholder: "Address", value: data?.address},
         {id: "desc", type: "text", placeholder: "Description", value: data?.desc, required: false},
         {id: "logo_url", type: "text", placeholder: "Logo Url", value: data?.logo_url, required: false},
-        {id: "color1", type: "color", placeholder: "Color 1", value: data?.color1, required: false},
-        {id: "color2", type: "color", placeholder: "Color 2", value: data?.color2, required: false},
-        {id: "color3", type: "color", placeholder: "Color 3", value: data?.color3, required: false},
+        {id: "color_primary", type: "color", placeholder: "Primary color", value: data?.color_primary, required: false},
+        {id: "color_secondary", type: "color", placeholder: "Secondary color", value: data?.color_secondary, required: false},
+        {id: "color_accent", type: "color", placeholder: "Accent color", value: data?.color_accent, required: false},
     ]
 
     const fieldsDelete = [
@@ -74,12 +74,8 @@ const ModalCompanyInfo = ({companyId, isOpen, onClose, handleUpdate}) => {
 
     const handleSubmitUpdate = async (e, formData) => {
         e.preventDefault();
-        const updatedData = {
-            ...formData,
-            design_colors: [formData?.color1, formData?.color2, formData?.color3]
-        };
         try {
-            const response = await apiClient.put(`/api/v1/companies/${companyId}`, updatedData, {
+            const response = await apiClient.put(`/api/v1/companies/${companyId}`, formData, {
                 headers: { "Content-Type": "application/json", "Accept": "application/json" },
             })
             console.log(response.data);

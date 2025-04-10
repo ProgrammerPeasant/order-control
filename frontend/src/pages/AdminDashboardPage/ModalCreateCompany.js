@@ -10,20 +10,15 @@ const ModalCreateCompany = ({isOpen, onClose}) => {
         {id: "address", type: "text", placeholder: "Address"},
         {id: "desc", type: "text", placeholder: "Description", required: false},
         {id: "logo_url", type: "text", placeholder: "Logo Url", required: false},
-        {id: "color1", type: "color", placeholder: "Color 1", value: "#4a7dff", required: false},
-        {id: "color2", type: "color", placeholder: "Color 2", value: "#003b62", required: false},
-        {id: "color3", type: "color", placeholder: "Color 3", value: "#ff6cb4", required: false},
+        {id: "color_primary", type: "color", placeholder: "Primary color", value: "#4a7dff"},
+        {id: "color_secondary", type: "color", placeholder: "Secondary color", value: "#003b62"},
+        {id: "color_accent", type: "color", placeholder: "Accent color", value: "#ff6cb4"},
     ];
 
     const handleSubmit = async (e, formData) => {
         e.preventDefault();
-        const updatedData = {
-            ...formData,
-            design_colors: [formData?.color1, formData?.color2, formData?.color3]
-        };
-
         try {
-            const response = await apiClient.post("/api/v1/companies", updatedData, {
+            const response = await apiClient.post("/api/v1/companies", formData, {
                 headers: { "Content-Type": "application/json", "Accept": "application/json" },
             });
             console.log(response.data);
