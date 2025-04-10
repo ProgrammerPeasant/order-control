@@ -51,7 +51,6 @@ func CompanyRoleMiddleware(db *gorm.DB, resourceType string, permissionRequired 
 			return
 		}
 
-		// Проверяем общее право доступа (например, "estimates:update") - первый уровень защиты
 		hasGeneralPermission := false
 		for _, rolePermission := range role.Permissions {
 			if rolePermission == permissionRequired {
@@ -91,10 +90,6 @@ func CompanyRoleMiddleware(db *gorm.DB, resourceType string, permissionRequired 
 						ctx.Abort()
 						return
 					}
-					// На данном этапе мы предполагаем, что контроллер/сервис будет устанавливать
-					// CompanyID создаваемого ресурса равным userCompanyID из контекста.
-					// Middleware здесь проверяет лишь право пользователя на создание
-					// в контексте своей компании (наличие companyID в контексте).
 					ctx.Next()
 					return
 				} else {
@@ -144,6 +139,6 @@ func CompanyRoleMiddleware(db *gorm.DB, resourceType string, permissionRequired 
 			}
 		}
 
-		ctx.Next() // Доступ разрешен, если все проверки пройдены
+		ctx.Next()
 	}
 }
