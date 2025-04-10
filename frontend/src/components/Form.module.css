@@ -1,0 +1,45 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form input {
+    padding: 10px;
+    border-radius: 20px;
+    font-size: 14px;
+    outline: none;
+}
+
+.form--type1 input {
+    border: 2px solid #b2ceff;
+    background-color: rgba(255, 255, 255, 0.3);
+    color: #fff;
+}
+
+.form--type2 input {
+    border: 2px solid #003b62;
+    background-color: #4a7dff;
+    color: #fff;
+}
+
+.form--type1 input::placeholder {
+    color: rgba(217, 230, 255, 0.7)
+}
+
+.form--type2 input::placeholder {
+    color: rgba(0, 59, 98, 0.7);
+}
+
+.form--type1 input:focus {
+    border-color: #fff;
+}
+
+.form-type2 input:focus {
+    border-color: #000;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+}

@@ -9,23 +9,46 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - DB_HOST=postgres
-    depends_on:
-      - postgres
+      - DB_HOST=185.239.51.126
+#    depends_on:
+#      - postgres
     networks:
       - app-network
 
-  postgres:
-    image: postgres:14-alpine
-    restart: unless-stopped
-    environment:
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=${DB_NAME}
+  prometheus:
+    image: prom/prometheus
     ports:
-      - "${DB_PORT}:5432"
+      - "9090:9090"
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    networks:
+      - app-network
+
+#  postgres:
+#    image: postgres:14-alpine
+#    restart: unless-stopped
+#    environment:
+#      - POSTGRES_USER=${DB_USER}
+#      - POSTGRES_PASSWORD=${DB_PASSWORD}
+#      - POSTGRES_DB=${DB_NAME}
+#    ports:
+#      - "${DB_PORT}:5432"
+#    volumes:
+#      - postgres-data:/var/lib/postgresql/data
+#    networks:
+#      - app-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    restart: unless-stopped
     networks:
       - app-network
 
@@ -36,3 +59,5 @@ networks:
 volumes:
   postgres-data:
     driver: local
+  prometheus_data:
+  grafana_data:

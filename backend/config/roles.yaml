@@ -9,6 +9,10 @@ roles:
       - estimates:read
       - estimates:update
       - estimates:delete
+      - join_request:read
+      - join_request:accept
+      - join_request:reject
+      - users:create
   MANAGER:
     permissions:
       - companies:read  # менеджеры могут читать компании (возможно, список своих компаний?)
@@ -16,6 +20,9 @@ roles:
       - estimates:read
       - estimates:update
       - estimates:delete
+      - join_request:read
+      - join_request:accept
+      - join_request:reject
   USER:
     permissions:
       - companies:read

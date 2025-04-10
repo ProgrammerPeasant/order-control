@@ -51,7 +51,6 @@ func CompanyRoleMiddleware(db *gorm.DB, resourceType string, permissionRequired 
 			return
 		}
 
-		// Проверяем общее право доступа (например, "estimates:update") - первый уровень защиты
 		hasGeneralPermission := false
 		for _, rolePermission := range role.Permissions {
 			if rolePermission == permissionRequired {
@@ -67,57 +66,79 @@ func CompanyRoleMiddleware(db *gorm.DB, resourceType string, permissionRequired 
 		}
 
 		// Дальнейшая проверка зависит от типа ресурса (estimate или company) и роли (MANAGER)
-		if userRoleName == "MANAGER" { // Контекстно-зависимая проверка только для менеджеров
-			resourceIDStr := ctx.Param("id") // Предполагаем, что ID ресурса передается как параметр пути "id"
-			if resourceIDStr == "" {
-				ctx.JSON(http.StatusBadRequest, gin.H{"error": "ID ресурса не указан"})
-				ctx.Abort()
-				return
-			}
-
-			resourceID, err := strconv.ParseUint(resourceIDStr, 10, 64)
-			if err != nil {
-				ctx.JSON(http.StatusBadRequest, gin.H{"error": "Неверный формат ID ресурса"})
-				ctx.Abort()
-				return
-			}
-
-			var resourceCompanyID uint
-
-			// В зависимости от resourceType, получаем CompanyID ресурса из БД
-			switch resourceType {
-			case "estimate":
-				estimateRepo := repositories.NewEstimateRepository(db) // Используем репозиторий estimates
-				estimate, err := estimateRepo.GetByID(int64(resourceID))
-				if err != nil || estimate == nil {
-					ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Ошибка при получении сметы или смета не найдена"})
+		if userRoleName == "MANAGER" {
+			if resourceType == "join-request" {
+				switch permissionRequired {
+				case "join_requests:read":
+					// Менеджер может читать запросы своей компании
+					ctx.Next()
+					return
+				case "join_requests:accept", "join_requests:reject":
+					ctx.Next()
+					return
+				default:
+					ctx.JSON(http.StatusForbidden, gin.H{"error": "Неизвестное право доступа для join-request"})
 					ctx.Abort()
 					return
 				}
-				resourceCompanyID = estimate.CompanyID // Получаем CompanyID из сметы
-			case "company":
-				companyRepo := repositories.NewCompanyRepository(db) // Используем репозиторий company
-				company, err := companyRepo.GetCompanyByID(uint(resourceID))
-				if err != nil || company == nil {
-					ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Ошибка при получении компании или компания не найдена"})
-					ctx.Abort()
+			} else if resourceType == "estimate" || resourceType == "company" { // Исправленная структура if-else if
+				if permissionRequired == "estimates:create" || permissionRequired == "companies:create" {
+					// Для создания сметы или компании проверяем соответствие CompanyID из контекста
+					_, companyIDExists := ctx.Get("companyID")
+					if !companyIDExists {
+						ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Company ID пользователя не найден в контексте"})
+						ctx.Abort()
+						return
+					}
+					ctx.Next()
 					return
-				}
-				resourceCompanyID = company.ID // CompanyID компании - это ее ID
-			default:
-				ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Неизвестный тип ресурса для контекстной проверки прав"})
-				ctx.Abort()
-				return
-			}
+				} else {
+					resourceIDStr := ctx.Param("id")
+					if resourceIDStr == "" {
+						ctx.JSON(http.StatusBadRequest, gin.H{"error": "ID ресурса не указан"})
+						ctx.Abort()
+						return
+					}
 
-			// Проверяем, принадлежит ли ресурс компании менеджера
-			if resourceCompanyID != userCompanyID {
-				ctx.JSON(http.StatusForbidden, gin.H{"error": "Нет прав доступа к ресурсам другой компании"}) // Ошибка контекста - ресурс не из компании менеджера
-				ctx.Abort()
-				return
+					resourceID, err := strconv.ParseUint(resourceIDStr, 10, 64)
+					if err != nil {
+						ctx.JSON(http.StatusBadRequest, gin.H{"error": "Неверный формат ID ресурса"})
+						ctx.Abort()
+						return
+					}
+
+					var resourceCompanyID uint
+
+					switch resourceType {
+					case "estimate":
+						estimateRepo := repositories.NewEstimateRepository(db)
+						estimate, err := estimateRepo.GetByID(int64(resourceID))
+						if err != nil || estimate == nil {
+							ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Ошибка при получении сметы или смета не найдена"})
+							ctx.Abort()
+							return
+						}
+						resourceCompanyID = estimate.CompanyID
+					case "company":
+						companyRepo := repositories.NewCompanyRepository(db)
+						company, err := companyRepo.GetCompanyByID(uint(resourceID))
+						if err != nil || company == nil {
+							ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Ошибка при получении компании или компания не найдена"})
+							ctx.Abort()
+							return
+						}
+						resourceCompanyID = company.ID
+					}
+
+					if resourceCompanyID != userCompanyID {
+						ctx.JSON(http.StatusForbidden, gin.H{"error": "Нет прав доступа к ресурсам другой компании"})
+						ctx.Abort()
+						return
+					}
+				}
 			}
 		}
 
-		ctx.Next() // Доступ разрешен, если все проверки пройдены
+		ctx.Next()
 	}
 }

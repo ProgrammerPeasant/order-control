@@ -1,0 +1,43 @@
+.table {
+    color: white;
+    width: 100%;
+    text-align: left;
+    border-collapse: collapse;
+}
+
+.table thead {
+    position: sticky;
+    top: 0;
+    background-color: #003b62;
+}
+
+.table th {
+    font-family: "Rubik", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    padding: 10px 15px;
+}
+
+.table td {
+    font-family: "Rubik", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+
+    font-size: 20px;
+    height: 50px;
+    border-bottom: 1px solid white;
+    border-top: 1px solid white;
+    padding: 0 15px;
+}
+
+.text {
+    font-family: "Rubik", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 50px;
+
+    text-align: center;
+}
