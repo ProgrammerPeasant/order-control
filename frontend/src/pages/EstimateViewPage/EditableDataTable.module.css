@@ -35,6 +35,8 @@
     flex-direction: column;
     gap: 10px;
     align-items: center;
+    overflow-y: auto;
+    overflow-x: auto;
 
     background-color: #ff6cb4;
     border-bottom-right-radius: 20px;

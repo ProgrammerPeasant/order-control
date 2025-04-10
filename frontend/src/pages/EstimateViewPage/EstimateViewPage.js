@@ -28,12 +28,7 @@ const EstimateViewPage = () => {
             console.log(response.data);
             setData(response.data);
         } catch (error) {
-            if (error.response) {
-                const {status, data} = error.response;
-                setError({status, message: data.message || "An error occurred"});
-            } else {
-                setError({status: null, message: error.message || "Network error"});
-            }
+            setError(handleErrorMessage(error));
         } finally {
             setLoading(false);
         }
@@ -54,7 +49,7 @@ const EstimateViewPage = () => {
     if (error) {
         return (
             <div className={styles.container}>
-                {error && <p className={styles.text}>{handleErrorMessage(error)}</p>}
+                <p className={styles.text}>{error}</p>
             </div>
         )
     }
@@ -69,16 +64,17 @@ const EstimateViewPage = () => {
                     <InfoRow label="Overall discount" value={data?.overall_discount_percent?.toLocaleString()} />
                 </div>
                 <div className={styles.manager}>
-                    <InfoRow label="Manager" value={data?.created_by_id} /> {/* ATTENTION manager contact*/}
+                    <InfoRow label="Manager" value={data?.created_by_id} />
                 </div>
                 <div className={styles.logo}>{/* ATTENTION company logo */}</div>
             </div>
             <div className={styles.body}>
-                {user.role === "USER" && <DataTable data={data.items} />}
+                {user.role === "USER" && <DataTable data={data}>
+                    <ButtonPanel estimateId={estimateId} data={data} fetchData={fetchData} />
+                </DataTable>}
                 {user.role !== "USER" && <EditableDataTable data={data} setData={setData} fetchData={fetchData}>
                     <ButtonPanel estimateId={estimateId} data={data} fetchData={fetchData} />
-                </EditableDataTable>
-                }
+                </EditableDataTable>}
             </div>
         </div>
     )

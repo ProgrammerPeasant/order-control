@@ -76,17 +76,17 @@ const EditableDataTable = ({data, setData, fetchData, children}) => {
                         <tr key={item.ID}>
                             <td>{item.ID}</td>
                             <td><input className={styles.input} type="text" value={item.product_name} onChange={(e) => handleCellChange(item.ID, "product_name", e.target.value)}/></td>
-                            <td><input className={styles.input} type="number" value={item.quantity} onChange={(e) => handleCellChange(item.ID, "quantity", +e.target.value)}/></td>
-                            <td><input className={styles.input} type="number" value={item.unit_price} onChange={(e) => handleCellChange(item.ID, "unit_price", +e.target.value)}/></td>
+                            <td><input className={styles.input} type="number" value={item.quantity} min={1} onChange={(e) => handleCellChange(item.ID, "quantity", +e.target.value)}/></td>
+                            <td><input className={styles.input} type="number" value={item.unit_price} min={0} onChange={(e) => handleCellChange(item.ID, "unit_price", +e.target.value)}/></td>
                             <td>{item.total_price}</td>
-                            <td><input className={styles.input} type="number" value={item.discount_percent} onChange={(e) => handleCellChange(item.ID, "discount_percent", +e.target.value)}/></td>
+                            <td><input className={styles.input} type="number" value={item.discount_percent} min={0} max={100} onChange={(e) => handleCellChange(item.ID, "discount_percent", +e.target.value)}/></td>
                             <td>{new Date(item.CreatedAt).toLocaleString()}</td>
                             <td>{new Date(item.UpdatedAt).toLocaleString()}</td>
                         </tr>
                     ))
                 ) : (
                     <tr>
-                        <td colSpan="8">No data</td>
+                        <td colSpan="8">No Data</td>
                     </tr>
                 )}
                 </tbody>

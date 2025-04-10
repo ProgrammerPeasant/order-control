@@ -1,19 +1,21 @@
-import React from "react";
+import React, {useContext} from "react";
 import Form from "../../components/Form";
 import apiClient from "../../Utils/apiClient";
 import {handleErrorMessage} from "../../Utils/ErrorHandler";
 import {useNavigate} from "react-router-dom";
+import {AuthContext} from "../../Utils/AuthProvider";
 
 
 function RegForm({children}) {
+    const {login} = useContext(AuthContext);
     const navigate = useNavigate();
 
     const fields = [
-        {id: "username", type: "text", placeholder: "Username", required: true},
-        {id: "company_id", type: "number", placeholder: "Company ID", required: true},
-        {id: "email", type: "email", placeholder: "Email", required: true},
-        {id: "password", type: "password", placeholder: "Password", required: true},
-        {id: "confirmPassword", type: "password", placeholder: "Password confirmation", required: true},
+        {id: "username", type: "text", placeholder: "Username"},
+        {id: "company_id", type: "number", placeholder: "Company ID"},
+        {id: "email", type: "email", placeholder: "Email"},
+        {id: "password", type: "password", placeholder: "Password"},
+        {id: "confirmPassword", type: "password", placeholder: "Password confirmation"},
     ];
 
     const handleSubmit = async (e, formData) => {
@@ -34,7 +36,15 @@ function RegForm({children}) {
             });
 
             console.log(response.data);
-            navigate("/login");
+        } catch (error) {
+            alert(handleErrorMessage(error));
+        }
+        try {
+            const response = await apiClient.post("/api/login", updatedData, {headers: {"Content-Type": "application/json", "Accept": "application/json"},});
+            console.log(response.data);
+            const {token, username, role, userId, companyId} = response.data;
+            login(token, username, role, userId, companyId);
+            navigate("/clientdashboard");
         } catch (error) {
             alert(handleErrorMessage(error));
         }

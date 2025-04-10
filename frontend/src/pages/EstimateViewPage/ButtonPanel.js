@@ -50,6 +50,11 @@ const ButtonPanel = ({estimateId, data, fetchData}) => {
             ...formData,
             overall_discount_percent: parseFloat(formData.overall_discount_percent),
         }
+        if (updatedData.overall_discount_percent < 0 || updatedData.overall_discount_percent > 100) {
+            alert("Overall discount percent must be greater than 0 and less than 100");
+            return;
+        }
+
         try {
             const response = await apiClient.put(`/api/v1/estimates/${estimateId}`, updatedData, {headers: {"Content-Type": "application/json", "Accept": "application/json"}});
             console.log(response.data);
@@ -74,7 +79,7 @@ const ButtonPanel = ({estimateId, data, fetchData}) => {
         <div className={styles.buttons}>
             <Button title="Export xlsx" variant="type2" onClick={handleExport}/>
             {user.role !== "USER" && <Button title="Edit info" variant="type2" onClick={() => openModal("modalEditInfo")}/>}
-            <Button title="Exit" variant="type3" onClick={() => openModal("modalExit")}/>
+            <Button title="Exit" variant="type3" onClick={() => user.role !== "USER" ? openModal("modalExit") : handleExit()}/>
             <Modal title="Edit Estimate Info" variant="type2" isOpen={activeModal === "modalEditInfo"} onClose={closeModal}>
                 <Form fields={fieldsUpdate} handleSubmit={handleSubmitUpdate} variant="type2"/>
             </Modal>

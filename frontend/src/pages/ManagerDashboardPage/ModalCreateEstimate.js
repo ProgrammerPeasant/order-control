@@ -6,8 +6,8 @@ import apiClient from "../../Utils/apiClient";
 
 const ModalCreateEstimate = ({estimateId, isOpen, onClose, handleUpdate}) => {
     const fields = [
-        {id: "title", type: "text", placeholder: "Title", required: true},
-        {id: "overall_discount_percent", type: "number", placeholder: "Overall discount", value: "0", required: true},
+        {id: "title", type: "text", placeholder: "Title"},
+        {id: "overall_discount_percent", type: "number", placeholder: "Overall discount", value: "0"},
     ]
 
     const handleSubmit = async (e, formData) => {

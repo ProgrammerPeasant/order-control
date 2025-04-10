@@ -12,8 +12,8 @@ function LogForm({children}) {
     const navigate = useNavigate();
 
     const fields = [
-        {id: "username", type: "text", placeholder: "Username", required: true},
-        {id: "password", type: "password", placeholder: "Password", required: true},
+        {id: "username", type: "text", placeholder: "Username"},
+        {id: "password", type: "password", placeholder: "Password"},
     ];
 
     const handleSubmit = async (e, formData) => {

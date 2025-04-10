@@ -6,9 +6,9 @@ import {handleErrorMessage} from "../../Utils/ErrorHandler";
 
 const ModalCreateCompany = ({isOpen, onClose}) => {
     const fields = [
-        {id: "name", type: "text", placeholder: "Name", required: true},
-        {id: "address", type: "text", placeholder: "Address", required: true},
-        {id: "desc", type: "text", placeholder: "Description", required: true}
+        {id: "name", type: "text", placeholder: "Name"},
+        {id: "address", type: "text", placeholder: "Address"},
+        {id: "desc", type: "text", placeholder: "Description", required: false}
     ];
 
     const handleSubmit = async (e, formData) => {

@@ -28,10 +28,6 @@ function EstimateTable({estimateId, handleUpdate}) {
         return <p className={styles.text}>Refreshing...</p>;
     }
 
-    const handleView = (estimateId) => {
-        navigate(`/estimateview/${estimateId}`);
-    }
-
     const handleDelete = async () => {
         if (!selectedEstimateId) return;
         try {
@@ -51,7 +47,7 @@ function EstimateTable({estimateId, handleUpdate}) {
             <td>{item?.total_amount}</td>
             <td>{new Date(item?.CreatedAt).toLocaleString() || "N/A"}</td>
             <td>{item?.created_by_id || "N/A"}</td>
-            <td><Button title="View" variant="type3" onClick={() => handleView(item.ID)}/></td>
+            <td><Button title="View" variant="type3" onClick={() => navigate(`/estimateview/${item.ID}`)}/></td>
             <td><Button title="Delete" variant="type4" onClick={() => openModal("modalDeleteEstimate", item.ID)}/></td>
         </tr>
     );

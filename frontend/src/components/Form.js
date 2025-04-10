@@ -25,7 +25,7 @@ function Form({fields, handleSubmit, children, variant="type1"}) {
                     placeholder={field.placeholder}
                     value={formData[field.id]}
                     onChange={handleChange}
-                    required={field.required}
+                    required={field.required || true}
                 />
             ))}
             <div className={styles.buttons}>

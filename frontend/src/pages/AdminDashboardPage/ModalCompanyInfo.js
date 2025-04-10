@@ -25,12 +25,7 @@ const ModalCompanyInfo = ({companyId, isOpen, onClose, handleUpdate}) => {
                 console.log(response.data);
                 setData(response.data);
             } catch (error) {
-                if (error.response) {
-                    const { status, data } = error.response;
-                    setError({ status, message: data.message || "An error occurred" });
-                } else {
-                    setError({ status: null, message: error.message || "Network error" });
-                }
+                setError(handleErrorMessage(error));
             } finally {
                 setLoading(false);
             }
@@ -52,10 +47,9 @@ const ModalCompanyInfo = ({companyId, isOpen, onClose, handleUpdate}) => {
     }
 
     if (error) {
-        const message = handleErrorMessage(error)
         return (
             <Modal title="Company Info" variant="type1" isOpen={isOpen} onClose={onClose}>
-                <p className={styles.text}>{message}</p>
+                <p className={styles.text}>{error}</p>
             </Modal>
         )
     }
@@ -64,38 +58,15 @@ const ModalCompanyInfo = ({companyId, isOpen, onClose, handleUpdate}) => {
         <p className={styles.text}><strong>{label}:</strong> {value || "Not provided"}</p>
     );
 
-    const fieldsCreate = [
-        {id: "title", type: "text", placeholder: "Title", required: true,},
-        {id: "overall_discount_percent", type: "number", placeholder: "Overall discount", value: "0", required: true},
-    ]
-
     const fieldsUpdate = [
         {id: "name", type: "text", placeholder: "Name", value: data?.name},
         {id: "address", type: "text", placeholder: "Address", value: data?.address},
-        {id: "desc", type: "text", placeholder: "Description", value: data?.desc},
+        {id: "desc", type: "text", placeholder: "Description", value: data?.desc, required: false},
     ]
 
     const fieldsDelete = [
-        {id: "name", type: "text", placeholder: "Name", required: true},
+        {id: "name", type: "text", placeholder: "Name"},
     ]
-
-    const handleSubmitCreate = async (e, formData) => { // ATTENTION
-        e.preventDefault();
-        const updatedData = {
-            ...formData,
-            overall_discount_percent: parseFloat(formData.overall_discount_percent),
-        }
-        try {
-            const response = await apiClient.post("/api/v1/estimates", updatedData, {
-                headers: { "Content-Type": "application/json", "Accept": "application/json" },
-            });
-            console.log(response.data);
-            setMode(null)
-            handleUpdate(companyId);
-        } catch (error) {
-            alert(handleErrorMessage(error));
-        }
-    }
 
     const handleSubmitUpdate = async (e, formData) => {
         e.preventDefault();
@@ -107,7 +78,7 @@ const ModalCompanyInfo = ({companyId, isOpen, onClose, handleUpdate}) => {
             setMode(null)
             handleUpdate(companyId);
         } catch (error) {
-            alert(handleErrorMessage(error))
+            alert(handleErrorMessage(error));
         }
     }
 
@@ -126,16 +97,8 @@ const ModalCompanyInfo = ({companyId, isOpen, onClose, handleUpdate}) => {
             onClose()
             handleUpdate(companyId);
         } catch (error) {
-            alert(handleErrorMessage(error))
+            alert(handleErrorMessage(error));
         }
-    }
-
-    if (mode === "create") { // ATTENTION
-        return (
-            <Modal title="Create Estimate" variant="type2" isOpen={isOpen} onClose={() => setMode(null)}>
-                <Form fields={fieldsCreate} handleSubmit={handleSubmitCreate} />
-            </Modal>
-        )
     }
 
     if (mode === "update") {
@@ -166,7 +129,6 @@ const ModalCompanyInfo = ({companyId, isOpen, onClose, handleUpdate}) => {
                 <InfoRow label="Updated At" value={new Date(data?.UpdatedAt).toLocaleString()} />
                 <InfoRow label="Deleted At" value={data?.DeletedAt ? new Date(data?.DeletedAt).toLocaleString() : "Not deleted"} />
             </div>
-            {/*<Button title="Create Estimate" variant="type2" onClick={() => setMode("create")} /> /!* ATTENTION *!/*/}
             <Button title="Edit Company Info" variant="type2" onClick={() => setMode("update")} />
             <Button title="Delete Company" variant="type4" onClick={() => setMode("delete")} />
         </Modal>

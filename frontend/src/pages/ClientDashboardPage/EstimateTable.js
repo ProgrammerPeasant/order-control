@@ -10,10 +10,6 @@ function EstimateTable({estimateId}) {
 
     const navigate = useNavigate();
 
-    const handleView = (estimateId) => {
-        navigate(`/estimateview/${estimateId}`);
-    }
-
     const renderRow = (item) => (
         <tr key={item.ID}>
             <td>{item.ID}</td>
@@ -21,7 +17,7 @@ function EstimateTable({estimateId}) {
             <td>{item?.total_amount?.toLocaleString()}</td>
             <td>{new Date(item?.CreatedAt).toLocaleString() || "N/A"}</td>
             <td>{item?.created_by_id || "N/A"}</td>
-            <td><Button title="View" variant="type3" onClick={() => handleView(item.ID)} /></td>
+            <td><Button title="View" variant="type3" onClick={() => navigate(`/estimateview/${item.ID}`)} /></td>
         </tr>
     );
 

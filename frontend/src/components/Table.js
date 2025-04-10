@@ -18,12 +18,7 @@ function Table({apiUrl, columns, renderRow, emptyRows = 7}) {
                 console.log(response.data);
                 setData(response.data);
             } catch (error) {
-                if (error.response) {
-                    const {status, data} = error.response;
-                    setError({status, message: data.message || "An error occurred"});
-                } else {
-                    setError({status: null, message: error.message || "Network error"});
-                }
+                setError(handleErrorMessage(error));
             } finally {
                 setLoading(false);
             }
@@ -37,12 +32,11 @@ function Table({apiUrl, columns, renderRow, emptyRows = 7}) {
     }
 
     if (!((Array.isArray(data) && data.length > 0) || (!Array.isArray(data) && data.ID))) {
-        return <p className={styles.text}>No data</p>
+        return <p className={styles.text}>No Data</p>
     }
 
     if (error) {
-        const message = handleErrorMessage(error);
-        return <p className={styles.text}>{message}</p>;
+        return <p className={styles.text}>{error}</p>;
     }
 
     return (
