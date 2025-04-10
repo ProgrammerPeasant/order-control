@@ -8,6 +8,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const WRONG_ID = "Неверный ID компании"
+
 type CompanyController struct {
 	companyService services.CompanyService
 }
@@ -22,7 +24,7 @@ func NewCompanyController(cs services.CompanyService) *CompanyController {
 // @Tags Companies
 // @Accept json
 // @Produce json
-// @Param request body CreateCompanyRequest true "Данные компании для создания (включая logo_url и design_colors)"
+// @Param request body CreateCompanyRequest true "Данные компании для создания (включая logo_url и цвета)"
 // @Security ApiKeyAuth
 // @Success 200 {object} models.Company "Компания успешно создана"
 // @Failure 400 {object} gin.H "Невалидные данные"
@@ -37,7 +39,7 @@ func (c *CompanyController) CreateCompany(ctx *gin.Context) {
 		return
 	}
 
-	company, err := c.companyService.Create(req.Name, req.Description, req.Address, req.LogoURL, req.DesignColors)
+	company, err := c.companyService.Create(req.Name, req.Description, req.Address, req.LogoURL, req.ColorPrimary, req.ColorSecondary, req.ColorAccent)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -48,16 +50,18 @@ func (c *CompanyController) CreateCompany(ctx *gin.Context) {
 
 // CreateCompanyRequest represents the request body for creating a company with logo and design colors.
 type CreateCompanyRequest struct {
-	Name         string   `json:"name"`
-	Description  string   `json:"desc"`
-	Address      string   `json:"address"`
-	LogoURL      string   `json:"logo_url"`
-	DesignColors []string `json:"design_colors"`
+	Name           string `json:"name"`
+	Description    string `json:"desc"`
+	Address        string `json:"address"`
+	LogoURL        string `json:"logo_url"`
+	ColorPrimary   string `json:"color_primary"`
+	ColorSecondary string `json:"color_secondary"`
+	ColorAccent    string `json:"color_accent"`
 }
 
 // GetCompany
 // @Summary Получить информацию о компании по ID
-// @Description Возвращает детальную информацию о компании по указанному ID, включая logo_url и design_colors. Доступно всем авторизованным пользователям.
+// @Description Возвращает детальную информацию о компании по указанному ID, включая logo_url и цвета. Доступно всем авторизованным пользователям.
 // @Tags Companies
 // @Produce json
 // @Param id path integer true "ID компании"
@@ -72,7 +76,7 @@ func (c *CompanyController) GetCompany(ctx *gin.Context) {
 	idParam := ctx.Param("id")
 	id, err := strconv.Atoi(idParam)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Неверный ID компании"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": WRONG_ID})
 		return
 	}
 
@@ -87,12 +91,12 @@ func (c *CompanyController) GetCompany(ctx *gin.Context) {
 
 // UpdateCompany
 // @Summary Обновить информацию о компании
-// @Description Обновляет информацию о существующей компании по указанному ID, включая logo_url и design_colors. Доступно только администраторам.
+// @Description Обновляет информацию о существующей компании по указанному ID, включая logo_url и цвета. Доступно только администраторам.
 // @Tags Companies
 // @Accept json
 // @Produce json
 // @Param id path integer true "ID компании для обновления"
-// @Param request body UpdateCompanyRequest true "Новые данные компании (включая logo_url и design_colors)"
+// @Param request body UpdateCompanyRequest true "Новые данные компании (включая logo_url и цвета)"
 // @Security ApiKeyAuth
 // @Success 200 {object} models.Company "Информация о компании успешно обновлена"
 // @Failure 400 {object} gin.H "Неверный ID компании или невалидные данные"
@@ -105,7 +109,7 @@ func (c *CompanyController) UpdateCompany(ctx *gin.Context) {
 	idParam := ctx.Param("id")
 	id, err := strconv.Atoi(idParam)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Неверный ID компании"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": WRONG_ID})
 		return
 	}
 
@@ -125,7 +129,9 @@ func (c *CompanyController) UpdateCompany(ctx *gin.Context) {
 	company.Description = req.Desc
 	company.Address = req.Address
 	company.LogoURL = req.LogoURL
-	company.DesignColors = req.DesignColors
+	company.ColorPrimary = req.ColorPrimary
+	company.ColorSecondary = req.ColorSecondary
+	company.ColorAccent = req.ColorAccent
 
 	if err := c.companyService.Update(company); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -137,11 +143,13 @@ func (c *CompanyController) UpdateCompany(ctx *gin.Context) {
 
 // UpdateCompanyRequest represents the request body for updating a company with logo and design colors.
 type UpdateCompanyRequest struct {
-	Name         string   `json:"name"`
-	Desc         string   `json:"desc"`
-	Address      string   `json:"address"`
-	LogoURL      string   `json:"logo_url"`
-	DesignColors []string `json:"design_colors"`
+	Name           string `json:"name"`
+	Desc           string `json:"desc"`
+	Address        string `json:"address"`
+	LogoURL        string `json:"logo_url"`
+	ColorPrimary   string `json:"color_primary"`
+	ColorSecondary string `json:"color_secondary"`
+	ColorAccent    string `json:"color_accent"`
 }
 
 // DeleteCompany
@@ -161,7 +169,7 @@ func (c *CompanyController) DeleteCompany(ctx *gin.Context) {
 	idParam := ctx.Param("id")
 	id, err := strconv.Atoi(idParam)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Неверный ID компании"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": WRONG_ID})
 		return
 	}
 
