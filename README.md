@@ -37,7 +37,8 @@
 1.  Клонируйте репозиторий:
 
     ```bash
-    git clone [https://github.com/ProgrammerPeasant/order-control.git](https://github.com/ProgrammerPeasant/order-control.git)
+    git clone https://github.com/ProgrammerPeasant/order-control.git
+    git checkout develop
     cd order-control
     ```
 
