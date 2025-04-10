@@ -1,18 +1,18 @@
-import React, {useEffect, useState} from 'react';
-import Table from "../../components/Table";
+import styles from "./ManagerDashboardPage.module.css"
 import Button from "../../components/Button";
-import styles from "./AdminDashboardPage.module.css"
+import React, {useState} from "react";
+import Table from "../../components/Table";
 import apiClient from "../../Utils/apiClient";
 import {handleErrorMessage} from "../../Utils/ErrorHandler";
 import Modal from "../../components/Modal";
 import {useNavigate} from "react-router-dom";
 
 
-function CompanyTable({companyId, handleUpdate}) {
+function EstimateTable({estimateId, handleUpdate}) {
     const [activeModal, setActiveModal] = useState(null);
     const [selectedEstimateId, setSelectedEstimateId] = useState(null);
     const openModal = (modalId, estimateId) => {
-        setSelectedEstimateId(estimateId)
+        setSelectedEstimateId(estimateId);
         setActiveModal(modalId);
     }
     const closeModal = () => {
@@ -21,33 +21,10 @@ function CompanyTable({companyId, handleUpdate}) {
     }
     const navigate = useNavigate();
 
-    const columns = ["Company status", "ID", "Title", "Total", "Created at", "Created by ID", "", ""];
-    const apiUrl = companyId ? `/api/v1/estimates/company?company_id=${companyId}` : null;
-    const [status, setStatus] = useState("Loading...");
+    const columns = ["ID", "Title", "Total", "Created at", "Created by ID", "", ""]
+    const apiUrl = estimateId ? `/api/v1/estimates/${estimateId}` : "/api/v1/estimates/my";
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                await apiClient.get(`/api/v1/companies/${companyId}`, {
-                    headers: {Accept: "application/json"},
-                })
-                setStatus("Active");
-            } catch (error) {
-                if (error.response && error.response.status === 404) {
-                    setStatus("Deleted");
-                } else {
-                    setStatus(handleErrorMessage(error));
-                }
-            }
-        }
-        fetchData();
-    }, [companyId]);
-
-    if (apiUrl === null) {
-        return <p className={styles.text}>Type Company ID below</p>;
-    }
-
-    if (companyId === "        ") {
+    if (estimateId === "        ") {
         return <p className={styles.text}>Refreshing...</p>;
     }
 
@@ -56,7 +33,7 @@ function CompanyTable({companyId, handleUpdate}) {
         try {
             const response = await apiClient.delete(`/api/v1/estimates/${selectedEstimateId}`, {headers: {Accept: "application/json"}});
             console.log(response.data);
-            handleUpdate(companyId);
+            handleUpdate(estimateId);
             closeModal();
         } catch (error) {
             alert(handleErrorMessage(error));
@@ -65,7 +42,6 @@ function CompanyTable({companyId, handleUpdate}) {
 
     const renderRow = (item) => (
         <tr key={item.ID}>
-            <td>{status}</td>
             <td>{item.ID}</td>
             <td>{item.title}</td>
             <td>{item?.total_amount}</td>
@@ -79,12 +55,12 @@ function CompanyTable({companyId, handleUpdate}) {
     return (
         <div>
             <Table apiUrl={apiUrl} columns={columns} renderRow={renderRow}/>
-            <Modal title="Delete estimate?" variant="type1" isOpen={activeModal === "modalDeleteEstimate"}
+            <Modal title={"Delete estimate?"} variant="type1" isOpen={activeModal === "modalDeleteEstimate"}
                    onClose={closeModal}>
                 <Button title="Delete" variant="type4" onClick={() => handleDelete()}/>
             </Modal>
         </div>
-    );
+    )
 }
 
-export default CompanyTable;
+export default EstimateTable;

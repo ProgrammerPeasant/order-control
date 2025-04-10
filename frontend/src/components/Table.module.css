@@ -1,17 +1,17 @@
-.table{
+.table {
     color: white;
     width: 100%;
     text-align: left;
     border-collapse: collapse;
 }
 
-.table thead{
+.table thead {
     position: sticky;
     top: 0;
     background-color: #003b62;
 }
 
-.table th{
+.table th {
     font-family: "Rubik", sans-serif;
     font-optical-sizing: auto;
     font-weight: 500;
@@ -19,7 +19,7 @@
     padding: 10px 15px;
 }
 
-.table td{
+.table td {
     font-family: "Rubik", sans-serif;
     font-optical-sizing: auto;
     font-weight: 500;
@@ -32,7 +32,7 @@
     padding: 0 15px;
 }
 
-.text{
+.text {
     font-family: "Rubik", sans-serif;
     font-optical-sizing: auto;
     font-weight: 500;

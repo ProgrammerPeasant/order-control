@@ -11,8 +11,8 @@ const StartPage = () => {
         <div className={styles.container}>
             <h1 className={styles.text}>Estimate-control</h1>
             <div className={styles.buttons}>
-                <Button title="Sign in" variant="type1" onClick={() => navigate("/login")} />
-                <Button title="Sign up" variant="type2" onClick={() => navigate("/register")} />
+                <Button title="Sign in" variant="type1" onClick={() => navigate("/login")}/>
+                <Button title="Sign up" variant="type2" onClick={() => navigate("/register")}/>
             </div>
         </div>
     )

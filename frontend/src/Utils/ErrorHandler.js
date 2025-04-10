@@ -11,7 +11,7 @@ export const handleErrorMessage = (error, isLoginPage = false) => {
             500: "Server error, please try again later"
         };
 
-        return errorMessages[status] || `Unknown error: (${data.message || "Something went wrong"})`;
+        return error.response.data.error || errorMessages[status] || `Unknown error: (${data.message || "Something went wrong"})`;
     } else if (error.request) {
         return "No response from the server, please check your internet connection"
     } else {

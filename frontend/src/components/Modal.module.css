@@ -1,4 +1,4 @@
-.overlay{
+.overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -10,12 +10,12 @@
     align-items: center;
 }
 
-.container{
+.container {
     border-radius: 20px;
     padding: 20px 20px 20px 20px;
     text-align: center;
 
-    width: 20vmax;
+    width: 40vmax;
     height: auto;
 
     display: flex;
@@ -23,24 +23,25 @@
     gap: 10px;
 }
 
-.container--type1{
+.container--type1 {
     background-color: white;
 }
 
-.container--type2{
+.container--type2 {
     background-color: #4a7dff;
 }
 
-.text{
+.text {
     font-family: "Rubik", sans-serif;
     font-optical-sizing: auto;
     font-weight: 500;
     font-style: normal;
 }
 
-.text--type1{
+.text--type1 {
     color: black;
 }
-.text--type2{
+
+.text--type2 {
     color: white;
 }

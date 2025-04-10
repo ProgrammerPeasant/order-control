@@ -15,11 +15,12 @@ const ClientDashboardPage = () => {
     return (
         <div className={styles.page}>
             <div className={styles.container}>
-                {<EstimateTable estimateId={debouncedValue} />}
+                {<EstimateTable estimateId={debouncedValue}/>}
             </div>
             <div className={styles.buttons}>
                 <Button title="Settings" variant="type3" onClick={() => navigate("/settings")}/>
-                <input className={styles.input} id="estimate_id" type="text" value={estimateId} onChange={(e) => setEstimateId(e.target.value)} placeholder="Estimate ID"/>
+                <input className={styles.input} id="estimate_id" type="text" value={estimateId}
+                       onChange={(e) => setEstimateId(e.target.value)} placeholder="Estimate ID"/>
             </div>
         </div>
     )

@@ -1,10 +1,10 @@
-import React, {useState, useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import apiClient from "../Utils/apiClient";
 import styles from "./Table.module.css"
 import {handleErrorMessage} from "../Utils/ErrorHandler";
 
 
-function Table({apiUrl, columns, renderRow, emptyRows = 10}) {
+function Table({apiUrl, columns, renderRow, emptyRows = 7}) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -18,12 +18,7 @@ function Table({apiUrl, columns, renderRow, emptyRows = 10}) {
                 console.log(response.data);
                 setData(response.data);
             } catch (error) {
-                if (error.response) {
-                    const {status, data} = error.response;
-                    setError({status, message: data.message || "An error occurred"});
-                } else {
-                    setError({status: null, message: error.message || "Network error"});
-                }
+                setError(handleErrorMessage(error));
             } finally {
                 setLoading(false);
             }
@@ -37,18 +32,17 @@ function Table({apiUrl, columns, renderRow, emptyRows = 10}) {
     }
 
     if (!((Array.isArray(data) && data.length > 0) || (!Array.isArray(data) && data.ID))) {
-        return <p className={styles.text}>No data</p>
+        return <p className={styles.text}>No Data</p>
     }
 
     if (error) {
-        const message = handleErrorMessage(error);
-        return <p className={styles.text}>{message}</p>;
+        return <p className={styles.text}>{error}</p>;
     }
 
     return (
         <table className={styles.table}>
             <thead>
-                <tr>{columns.map((column, index) => (<th key={index}>{column}</th>))}</tr>
+            <tr>{columns.map((column, index) => (<th key={index}>{column}</th>))}</tr>
             </thead>
             <tbody>
             {Array.isArray(data) && data.length > 0
@@ -56,9 +50,9 @@ function Table({apiUrl, columns, renderRow, emptyRows = 10}) {
                 : !Array.isArray(data) && data ? renderRow(data)
                     : null}
 
-                {[...Array(emptyRows)].map((_, i) => (
-                    <tr key={`empty-${i}`}>{columns.map((_, index) => (<td key={index}>&nbsp;</td>))}</tr>
-                ))}
+            {[...Array(emptyRows)].map((_, i) => (
+                <tr key={`empty-${i}`}>{columns.map((_, index) => (<td key={index}>&nbsp;</td>))}</tr>
+            ))}
             </tbody>
         </table>
     )

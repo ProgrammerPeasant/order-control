@@ -17,12 +17,12 @@ const SettingsPage = () => {
     const navigate = useNavigate();
 
     const handleBack = () => {
-        if (user.role === "CLIENT") {
-            navigate("/clientdashboard");
-        } else if (user.role === "ADMIN") {
+        if (user.role === "ADMIN") {
             navigate("/admin");
         } else if (user.role === "MANAGER") {
             navigate("/managerdashboard");
+        } else if (user.role === "USER") {
+            navigate("/clientdashboard");
         }
     }
 
@@ -35,11 +35,11 @@ const SettingsPage = () => {
         <div className={styles.container}>
             <h1 className={styles.text}>Settings</h1>
             <div className={styles.buttons}>
-                <Button title="Log out" variant="type2" onClick={() => openModal("modalLogout")} />
-                <Button title="Back" variant="type3" onClick={handleBack} />
+                <Button title="Log out" variant="type2" onClick={() => openModal("modalLogout")}/>
+                <Button title="Back" variant="type3" onClick={handleBack}/>
             </div>
             <Modal title="Log out?" variant="type1" isOpen={activeModal === "modalLogout"} onClose={closeModal}>
-                <Button title="Log out" variant="type4" onClick={handleLogout} />
+                <Button title="Log out" variant="type4" onClick={handleLogout}/>
             </Modal>
         </div>
     )

@@ -1,4 +1,4 @@
-.button{
+.button {
     flex: 1;
     padding: 10px;
     border: none;
@@ -7,40 +7,40 @@
     cursor: pointer;
 }
 
-.button--type1{
+.button--type1 {
     background-color: transparent;
     color: black;
     border: 2px solid #e581fe;
 }
 
-.button--type2{
+.button--type2 {
     background-color: #003b62;
     color: white;
 }
 
-.button--type3{
+.button--type3 {
     background-color: #000;
     color: white;
 }
 
-.button--type4{
+.button--type4 {
     color: black;
     border: 2px solid red;
 }
 
-.button--type1:hover{
+.button--type1:hover {
     background-color: #f3e7ff;
 }
 
-.button--type2:hover{
+.button--type2:hover {
     background-color: #005080;
 }
 
-.button--type3:hover{
+.button--type3:hover {
     background-color: #555555;
 }
 
-.button--type4:hover{
+.button--type4:hover {
     background-color: red;
     color: white;
 }

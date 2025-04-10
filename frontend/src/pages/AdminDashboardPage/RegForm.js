@@ -5,12 +5,12 @@ import {handleErrorMessage} from "../../Utils/ErrorHandler";
 
 function RegForm({onClose}) {
     const fields = [
-        {id: "role", type: "text", placeholder: "Role", required: true},
-        {id: "email", type: "email", placeholder: "Email", required: true},
-        {id: "username", type: "text", placeholder: "Username", required: true},
-        {id: "password", type: "password", placeholder: "Password", required: true},
-        {id: "confirmPassword", type: "password", placeholder: "Confirm Password", required: true},
-        {id: "company_id", type: "number", placeholder: "Company ID", required: true},
+        {id: "role", type: "text", placeholder: "Role (USER, MANAGER or ADMIN)"},
+        {id: "email", type: "email", placeholder: "Email"},
+        {id: "username", type: "text", placeholder: "Username"},
+        {id: "password", type: "password", placeholder: "Password"},
+        {id: "confirmPassword", type: "password", placeholder: "Confirm Password"},
+        {id: "company_id", type: "number", placeholder: "Company ID"},
     ];
 
     const handleSubmit = async (e, formData) => {
@@ -36,7 +36,7 @@ function RegForm({onClose}) {
     }
 
     return (
-        <Form fields={fields} handleSubmit={handleSubmit} />
+        <Form fields={fields} handleSubmit={handleSubmit}/>
     )
 }
 

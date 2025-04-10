@@ -12,7 +12,7 @@ const LoginPage = () => {
         <div className={styles.container}>
             <h1 className={styles.text}>Authentication</h1>
             <LogForm>
-                <Button title="Back" variant="type3" onClick={() => navigate("/")} />
+                <Button title="Back" variant="type3" onClick={() => navigate("/")}/>
             </LogForm>
         </div>
     )

@@ -12,8 +12,8 @@ function LogForm({children}) {
     const navigate = useNavigate();
 
     const fields = [
-        {id: "username", type: "text", placeholder: "Username", required: true},
-        {id: "password", type: "password", placeholder: "Password", required: true},
+        {id: "username", type: "text", placeholder: "Username"},
+        {id: "password", type: "password", placeholder: "Password"},
     ];
 
     const handleSubmit = async (e, formData) => {
@@ -24,14 +24,14 @@ function LogForm({children}) {
             });
 
             console.log(response.data);
-            const {token, username, role, userId} = response.data;
-            login(token, username, role, userId);
+            const {token, username, role, userId, companyId} = response.data;
+            login(token, username, role, userId, companyId);
             if (role === "ADMIN") {
                 navigate("/admin");
-            } else if (role === "CLIENT") {
-                navigate("/clientdashboard");
             } else if (role === "MANAGER") {
                 navigate("/managerdashboard");
+            } else if (role === "USER") {
+                navigate("/clientdashboard");
             }
         } catch (error) {
             alert(handleErrorMessage(error, true));
