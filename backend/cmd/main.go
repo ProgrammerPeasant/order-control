@@ -7,9 +7,11 @@ import (
 	"github.com/ProgrammerPeasant/order-control/models"
 	"github.com/ProgrammerPeasant/order-control/routes"
 	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 	"github.com/swaggo/files" // swagger embed files
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"log"
+	"time"
 )
 
 // @title Order Control API
@@ -54,10 +56,21 @@ func main() {
 			log.Printf("Ошибка при закрытии БД: %v", err)
 		}
 	}()
-	// Инициализируем руты gin
-	r := routes.InitRoutes(db)
 
-	r.Use(cors.Default())
+	r := gin.Default()
+	// Инициализируем руты gin
+
+	deconfig := cors.DefaultConfig()
+	deconfig.AllowOrigins = []string{"http://localhost:3000"} // Замените на URL вашего фронтенда
+	deconfig.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"}
+	deconfig.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type", "Authorization", "Accept"} // Добавлен 'Accept'
+	deconfig.AllowCredentials = true
+	deconfig.MaxAge = 12 * time.Hour
+
+	r.Use(cors.New(deconfig))
+	routes.InitRoutes(db, r)
+
+	//r.Use(cors.Default())
 
 	// url := ginSwagger.URL("/swagger/index.html") // URL, по которому будет доступен Swagger UI
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

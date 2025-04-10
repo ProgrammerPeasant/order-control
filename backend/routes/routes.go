@@ -13,8 +13,8 @@ import (
 	"net/http"
 )
 
-func InitRoutes(db *gorm.DB) *gin.Engine {
-	r := gin.Default()
+func InitRoutes(db *gorm.DB, r *gin.Engine) {
+	//r := gin.Default()
 
 	// Создаем метрики Prometheus
 	metrics := utils.NewMetrics()
@@ -94,6 +94,4 @@ func InitRoutes(db *gorm.DB) *gin.Engine {
 			c.String(http.StatusOK, "Test endpoint is working!")
 		})
 	}
-
-	return r
 }
