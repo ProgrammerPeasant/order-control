@@ -19,6 +19,8 @@
             <path value="file://$PROJECT_DIR$/frontend/src/pages/ManagerDashboardPage" />
             <path value="file://$PROJECT_DIR$/frontend/src/pages/AdminDashboardPage" />
             <path value="file://$PROJECT_DIR$/frontend/src/pages/EstimateViewPage" />
+            <path value="file://$PROJECT_DIR$/frontend/src/pages/NotFoundPage" />
+            <path value="file://$PROJECT_DIR$/frontend/src/pages/AccessDeniedPage" />
           </resourceRoots>
         </entryData>
       </entry>
