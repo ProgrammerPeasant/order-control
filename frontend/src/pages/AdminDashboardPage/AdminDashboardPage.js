@@ -23,25 +23,29 @@ const AdminDashboardPage = () => {
     const handleUpdate = (companyId) => {
         const prevId = companyId
         setCompanyId("        ");
-        setTimeout(() => {setCompanyId(prevId)}, delay * 2)
+        setTimeout(() => {
+            setCompanyId(prevId)
+        }, delay * 2)
     }
 
     return (
         <div className={styles.page}>
             <div className={styles.container}>
-                <CompanyTable companyId={debouncedValue} handleUpdate={handleUpdate} />
+                <CompanyTable companyId={debouncedValue} handleUpdate={handleUpdate}/>
             </div>
             <div className={styles.buttons}>
                 <Button title="Settings" variant="type3" onClick={() => navigate("/settings")}/>
-                <input className={styles.input} id="company_id" type="text" value={companyId} onChange={(e) => setCompanyId(e.target.value)} placeholder="Company ID" />
-                <Button title="Get Company Info" variant="type2" onClick={() => openModal("modalCompanyInfo")} />
-                <Button title="Register User" variant="type2" onClick={() => openModal("registerUser")} />
-                <Button title="Create Company" variant="type2" onClick={() => openModal("modalCreateCompany")} />
-                <Button title="Refresh Table" variant="type1" onClick={() => handleUpdate(companyId)} />
+                <input className={styles.input} id="company_id" type="text" value={companyId}
+                       onChange={(e) => setCompanyId(e.target.value)} placeholder="Company ID"/>
+                <Button title="Get Company Info" variant="type2" onClick={() => openModal("modalCompanyInfo")}/>
+                <Button title="Register User" variant="type2" onClick={() => openModal("registerUser")}/>
+                <Button title="Create Company" variant="type2" onClick={() => openModal("modalCreateCompany")}/>
+                <Button title="Refresh Table" variant="type1" onClick={() => handleUpdate(companyId)}/>
             </div>
-            <ModalCompanyInfo isOpen={activeModal === "modalCompanyInfo"} onClose={closeModal} companyId={debouncedValue} handleUpdate={handleUpdate} />
-            <ModalRegisterUser isOpen={activeModal === "registerUser"} onClose={closeModal} />
-            <ModalCreateCompany isOpen={activeModal === "modalCreateCompany"} onClose={closeModal} />
+            <ModalCompanyInfo isOpen={activeModal === "modalCompanyInfo"} onClose={closeModal}
+                              companyId={debouncedValue} handleUpdate={handleUpdate}/>
+            <ModalRegisterUser isOpen={activeModal === "registerUser"} onClose={closeModal}/>
+            <ModalCreateCompany isOpen={activeModal === "modalCreateCompany"} onClose={closeModal}/>
         </div>
     )
 }

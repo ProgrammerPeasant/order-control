@@ -8,10 +8,11 @@ const Modal = ({variant, isOpen, onClose, children, ...props}) => {
 
     return (
         <div className={styles.overlay} onClick={onClose}>
-            <div className={`${styles.container} ${styles[`container--${variant}`]}`} onClick={(e) => e.stopPropagation()}>
+            <div className={`${styles.container} ${styles[`container--${variant}`]}`}
+                 onClick={(e) => e.stopPropagation()}>
                 <h1 className={`${styles.text} ${styles[`text--${variant}`]}`}>{props.title}</h1>
                 {children}
-                <Button title="Close" variant="type3" onClick={onClose} />
+                <Button title="Close" variant="type3" onClick={onClose}/>
             </div>
         </div>
     )

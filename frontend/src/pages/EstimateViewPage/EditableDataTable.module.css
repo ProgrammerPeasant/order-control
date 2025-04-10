@@ -3,7 +3,7 @@
     display: flex;
 }
 
-.scrollable{
+.scrollable {
     overflow-y: auto;
     overflow-x: auto;
     width: 90%;
@@ -52,7 +52,7 @@
     margin: 15px;
 }
 
-.text{
+.text {
     font-family: "Rubik", sans-serif;
     font-optical-sizing: auto;
     font-weight: 500;

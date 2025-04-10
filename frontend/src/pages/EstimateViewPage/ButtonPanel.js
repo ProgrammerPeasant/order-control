@@ -19,12 +19,20 @@ const ButtonPanel = ({estimateId, data, fetchData}) => {
 
     const fieldsUpdate = [
         {id: "title", type: "text", placeholder: "Title", value: data?.title},
-        {id: "overall_discount_percent", type: "number", placeholder: "Overall discount", value: data?.overall_discount_percent},
+        {
+            id: "overall_discount_percent",
+            type: "number",
+            placeholder: "Overall discount",
+            value: data?.overall_discount_percent
+        },
     ]
 
     const handleExport = async () => {
         try {
-            const response = await apiClient.get(`/api/v1/estimates/${estimateId}/export/excel`, {headers: {Accept: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}, responseType: "blob"});
+            const response = await apiClient.get(`/api/v1/estimates/${estimateId}/export/excel`, {
+                headers: {Accept: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"},
+                responseType: "blob"
+            });
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = url;
@@ -56,7 +64,12 @@ const ButtonPanel = ({estimateId, data, fetchData}) => {
         }
 
         try {
-            const response = await apiClient.put(`/api/v1/estimates/${estimateId}`, updatedData, {headers: {"Content-Type": "application/json", "Accept": "application/json"}});
+            const response = await apiClient.put(`/api/v1/estimates/${estimateId}`, updatedData, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                }
+            });
             console.log(response.data);
             fetchData();
             closeModal();
@@ -78,13 +91,17 @@ const ButtonPanel = ({estimateId, data, fetchData}) => {
     return (
         <div className={styles.buttons}>
             <Button title="Export xlsx" variant="type2" onClick={handleExport}/>
-            {user.role !== "USER" && <Button title="Edit info" variant="type2" onClick={() => openModal("modalEditInfo")}/>}
-            <Button title="Exit" variant="type3" onClick={() => user.role !== "USER" ? openModal("modalExit") : handleExit()}/>
-            <Modal title="Edit Estimate Info" variant="type2" isOpen={activeModal === "modalEditInfo"} onClose={closeModal}>
+            {user.role !== "USER" &&
+                <Button title="Edit info" variant="type2" onClick={() => openModal("modalEditInfo")}/>}
+            <Button title="Exit" variant="type3"
+                    onClick={() => user.role !== "USER" ? openModal("modalExit") : handleExit()}/>
+            <Modal title="Edit Estimate Info" variant="type2" isOpen={activeModal === "modalEditInfo"}
+                   onClose={closeModal}>
                 <Form fields={fieldsUpdate} handleSubmit={handleSubmitUpdate} variant="type2"/>
             </Modal>
             <Modal title="Exit?" variant="type1" isOpen={activeModal === "modalExit"} onClose={closeModal}>
-                <p className={styles.text}>Unsaved changes will not be applied. Please save your work before proceeding </p>
+                <p className={styles.text}>Unsaved changes will not be applied. Please save your work before
+                    proceeding </p>
                 <Button title="Exit" variant="type4" onClick={handleExit}/>
             </Modal>
         </div>

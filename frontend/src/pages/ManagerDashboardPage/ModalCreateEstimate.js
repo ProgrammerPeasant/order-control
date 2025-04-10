@@ -35,7 +35,7 @@ const ModalCreateEstimate = ({estimateId, isOpen, onClose, handleUpdate}) => {
 
     return (
         <Modal title="Create Estimate" variant="type2" isOpen={isOpen} onClose={onClose}>
-            <Form fields={fields} handleSubmit={handleSubmit} />
+            <Form fields={fields} handleSubmit={handleSubmit}/>
         </Modal>
     )
 }

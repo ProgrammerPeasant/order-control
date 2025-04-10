@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import apiClient from "../../Utils/apiClient";
 import Modal from "../../components/Modal";
 import styles from "./ModalCompanyInfo.module.css";
@@ -21,7 +21,7 @@ const ModalCompanyInfo = ({companyId, isOpen, onClose, handleUpdate}) => {
             setLoading(true);
             setError(null);
             try {
-                const response = await apiClient.get(`/api/v1/companies/${companyId}`, {headers: { Accept: "application/json" },});
+                const response = await apiClient.get(`/api/v1/companies/${companyId}`, {headers: {Accept: "application/json"},});
                 console.log(response.data);
                 setData(response.data);
             } catch (error) {
@@ -54,7 +54,7 @@ const ModalCompanyInfo = ({companyId, isOpen, onClose, handleUpdate}) => {
         )
     }
 
-    const InfoRow = ({ label, value }) => (
+    const InfoRow = ({label, value}) => (
         <p className={styles.text}><strong>{label}:</strong> {value || "Not provided"}</p>
     );
 
@@ -64,7 +64,13 @@ const ModalCompanyInfo = ({companyId, isOpen, onClose, handleUpdate}) => {
         {id: "desc", type: "text", placeholder: "Description", value: data?.desc, required: false},
         {id: "logo_url", type: "text", placeholder: "Logo Url", value: data?.logo_url, required: false},
         {id: "color_primary", type: "color", placeholder: "Primary color", value: data?.color_primary, required: false},
-        {id: "color_secondary", type: "color", placeholder: "Secondary color", value: data?.color_secondary, required: false},
+        {
+            id: "color_secondary",
+            type: "color",
+            placeholder: "Secondary color",
+            value: data?.color_secondary,
+            required: false
+        },
         {id: "color_accent", type: "color", placeholder: "Accent color", value: data?.color_accent, required: false},
     ]
 
@@ -76,7 +82,7 @@ const ModalCompanyInfo = ({companyId, isOpen, onClose, handleUpdate}) => {
         e.preventDefault();
         try {
             const response = await apiClient.put(`/api/v1/companies/${companyId}`, formData, {
-                headers: { "Content-Type": "application/json", "Accept": "application/json" },
+                headers: {"Content-Type": "application/json", "Accept": "application/json"},
             })
             console.log(response.data);
             setMode(null)
@@ -94,7 +100,7 @@ const ModalCompanyInfo = ({companyId, isOpen, onClose, handleUpdate}) => {
         }
         try {
             const response = await apiClient.delete(`/api/v1/companies/${companyId}`, {
-                headers: { "Accept": "application/json" },
+                headers: {"Accept": "application/json"},
             })
             console.log(response.data);
             setMode(null)
@@ -108,7 +114,7 @@ const ModalCompanyInfo = ({companyId, isOpen, onClose, handleUpdate}) => {
     if (mode === "update") {
         return (
             <Modal title="Edit Company Info" variant="type2" isOpen={isOpen} onClose={() => setMode(null)}>
-                <Form fields={fieldsUpdate} handleSubmit={handleSubmitUpdate} />
+                <Form fields={fieldsUpdate} handleSubmit={handleSubmitUpdate}/>
             </Modal>
         )
     }
@@ -117,7 +123,7 @@ const ModalCompanyInfo = ({companyId, isOpen, onClose, handleUpdate}) => {
         return (
             <Modal title="Delete Company" variant="type2" isOpen={isOpen} onClose={() => setMode(null)}>
                 <p className={styles.textWarning}>Please enter company name for confirmation</p>
-                <Form fields={fieldsDelete} handleSubmit={handleSubmitDelete} />
+                <Form fields={fieldsDelete} handleSubmit={handleSubmitDelete}/>
             </Modal>
         )
     }
@@ -126,20 +132,22 @@ const ModalCompanyInfo = ({companyId, isOpen, onClose, handleUpdate}) => {
         <Modal title="Company Info" variant="type1" isOpen={isOpen} onClose={onClose}>
             <div className={styles.container}>
                 <div>
-                    <InfoRow label="ID" value={data?.ID} />
-                    <InfoRow label="Name" value={data?.name} />
-                    <InfoRow label="Description" value={data?.desc} />
-                    <InfoRow label="Address" value={data?.address} />
-                    <InfoRow label="Created At" value={new Date(data?.CreatedAt).toLocaleString()} />
-                    <InfoRow label="Updated At" value={new Date(data?.UpdatedAt).toLocaleString()} />
-                    <InfoRow label="Deleted At" value={data?.DeletedAt ? new Date(data?.DeletedAt).toLocaleString() : "Not deleted"} />
+                    <InfoRow label="ID" value={data?.ID}/>
+                    <InfoRow label="Name" value={data?.name}/>
+                    <InfoRow label="Description" value={data?.desc}/>
+                    <InfoRow label="Address" value={data?.address}/>
+                    <InfoRow label="Created At" value={new Date(data?.CreatedAt).toLocaleString()}/>
+                    <InfoRow label="Updated At" value={new Date(data?.UpdatedAt).toLocaleString()}/>
+                    <InfoRow label="Deleted At"
+                             value={data?.DeletedAt ? new Date(data?.DeletedAt).toLocaleString() : "Not deleted"}/>
                 </div>
                 <div>
-                    <img src={data?.logo_url || "/defaultpic.jpg"} alt="Company Logo" style={{ maxWidth: '50%', maxHeight: '50%'}} />
+                    <img src={data?.logo_url || "/defaultpic.jpg"} alt="Company Logo"
+                         style={{maxWidth: '50%', maxHeight: '50%'}}/>
                 </div>
             </div>
-            <Button title="Edit Company Info" variant="type2" onClick={() => setMode("update")} />
-            <Button title="Delete Company" variant="type4" onClick={() => setMode("delete")} />
+            <Button title="Edit Company Info" variant="type2" onClick={() => setMode("update")}/>
+            <Button title="Delete Company" variant="type4" onClick={() => setMode("delete")}/>
         </Modal>
     );
 };

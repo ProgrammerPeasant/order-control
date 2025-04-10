@@ -54,8 +54,9 @@ function EstimateTable({estimateId, handleUpdate}) {
 
     return (
         <div>
-            <Table apiUrl={apiUrl} columns={columns} renderRow={renderRow} />
-            <Modal title={"Delete estimate?"} variant="type1" isOpen={activeModal === "modalDeleteEstimate"} onClose={closeModal}>
+            <Table apiUrl={apiUrl} columns={columns} renderRow={renderRow}/>
+            <Modal title={"Delete estimate?"} variant="type1" isOpen={activeModal === "modalDeleteEstimate"}
+                   onClose={closeModal}>
                 <Button title="Delete" variant="type4" onClick={() => handleDelete()}/>
             </Modal>
         </div>

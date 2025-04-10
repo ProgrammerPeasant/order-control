@@ -10,7 +10,7 @@ import EditableDataTable from "./EditableDataTable";
 
 
 const EstimateViewPage = () => {
-    const { estimateId } = useParams();
+    const {estimateId} = useParams();
     const [data, setData] = useState([]);
     const [companyInfo, setCompanyInfo] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -18,7 +18,7 @@ const EstimateViewPage = () => {
     const {user} = useContext(AuthContext)
 
 
-    const InfoRow = ({ label, value }) => (
+    const InfoRow = ({label, value}) => (
         <p className={styles.text}><strong>{label}:</strong> {value || "Not provided"}</p>
     );
 
@@ -26,7 +26,7 @@ const EstimateViewPage = () => {
         setLoading(true);
         setError(null);
         try {
-            const response = await apiClient.get(`/api/v1/estimates/${estimateId}`, {headers: {Accept : "application/json"}});
+            const response = await apiClient.get(`/api/v1/estimates/${estimateId}`, {headers: {Accept: "application/json"}});
             console.log(response.data);
             setData(response.data);
         } catch (error) {
@@ -41,7 +41,7 @@ const EstimateViewPage = () => {
             setLoading(true);
             setError(null);
             try {
-                const response = await apiClient.get(`/api/v1/companies/${user.companyId}`, {headers: {Accept : "application/json"}});
+                const response = await apiClient.get(`/api/v1/companies/${user.companyId}`, {headers: {Accept: "application/json"}});
                 console.log(response.data);
                 setCompanyInfo(response.data);
             } catch (error) {
@@ -52,8 +52,6 @@ const EstimateViewPage = () => {
                 setLoading(false);
             }
         };
-
-
 
 
         fetchData();
@@ -80,24 +78,28 @@ const EstimateViewPage = () => {
         <div className={styles.container} style={{backgroundColor: companyInfo.color_primary}}>
             <div className={styles.header}>
                 <div className={styles.info}>
-                    <InfoRow label="Title" value={data?.title} />
-                    <InfoRow label="Estimate ID" value={data?.ID} />
-                    <InfoRow label="Total" value={data?.total_amount?.toLocaleString()} />
-                    <InfoRow label="Overall discount" value={data?.overall_discount_percent?.toLocaleString()} />
+                    <InfoRow label="Title" value={data?.title}/>
+                    <InfoRow label="Estimate ID" value={data?.ID}/>
+                    <InfoRow label="Total" value={data?.total_amount?.toLocaleString()}/>
+                    <InfoRow label="Overall discount" value={data?.overall_discount_percent?.toLocaleString()}/>
                 </div>
                 <div className={styles.manager}>
-                    <InfoRow label="Manager" value={data?.created_by_id} />
+                    <InfoRow label="Manager" value={data?.created_by_id}/>
                 </div>
                 <div className={styles.logo}>
-                    <img src={companyInfo?.logo_url || "/defaultpic.jpg"} alt="Company Logo" style={{ maxWidth: '80%', maxHeight: '80%', borderRadius: '10px' }} />
+                    <img src={companyInfo?.logo_url || "/defaultpic.jpg"} alt="Company Logo"
+                         style={{maxWidth: '80%', maxHeight: '80%', borderRadius: '10px'}}/>
                 </div>
             </div>
             <div className={styles.body}>
-                {user.role === "USER" && <DataTable data={data} color_secondary={companyInfo.color_secondary} color_accent={companyInfo.color_accent}>
-                    <ButtonPanel estimateId={estimateId} data={data} fetchData={fetchData} />
+                {user.role === "USER" && <DataTable data={data} color_secondary={companyInfo.color_secondary}
+                                                    color_accent={companyInfo.color_accent}>
+                    <ButtonPanel estimateId={estimateId} data={data} fetchData={fetchData}/>
                 </DataTable>}
-                {user.role !== "USER" && <EditableDataTable data={data} setData={setData} fetchData={fetchData} color_secondary={companyInfo.color_secondary} color_accent={companyInfo.color_accent}>
-                    <ButtonPanel estimateId={estimateId} data={data} fetchData={fetchData} />
+                {user.role !== "USER" && <EditableDataTable data={data} setData={setData} fetchData={fetchData}
+                                                            color_secondary={companyInfo.color_secondary}
+                                                            color_accent={companyInfo.color_accent}>
+                    <ButtonPanel estimateId={estimateId} data={data} fetchData={fetchData}/>
                 </EditableDataTable>}
             </div>
         </div>

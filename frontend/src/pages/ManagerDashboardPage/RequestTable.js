@@ -10,7 +10,12 @@ function RequestTable({onClose}) {
 
     const handleJoinRequest = async (userId, verdict) => {
         try {
-            const response = await apiClient.post(`/api/v1/companies/join-request/${verdict}`, {user_id: userId}, {headers: {"Content-Type": "application/json", Accept: "application/json"}});
+            const response = await apiClient.post(`/api/v1/companies/join-request/${verdict}`, {user_id: userId}, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json"
+                }
+            });
             console.log(response.data);
             onClose();
         } catch (error) {
@@ -22,14 +27,15 @@ function RequestTable({onClose}) {
         <tr key={item.ID}>
             <td>{item.user_id}</td>
             <td>{item.Email}</td>
-            <td><Button title="Approve" variant="type1" onClick={() => handleJoinRequest(item.user_id, "approve")} /></td>
-            <td><Button title="Reject" variant="type4" onClick={() => handleJoinRequest(item.user_id, "reject")} /></td>
+            <td><Button title="Approve" variant="type1" onClick={() => handleJoinRequest(item.user_id, "approve")}/>
+            </td>
+            <td><Button title="Reject" variant="type4" onClick={() => handleJoinRequest(item.user_id, "reject")}/></td>
         </tr>
     )
 
     return (
         <div>
-            <Table apiUrl={apiUrl} columns={columns} renderRow={renderRow} emptyRows={3} />
+            <Table apiUrl={apiUrl} columns={columns} renderRow={renderRow} emptyRows={3}/>
         </div>
     )
 }

@@ -19,7 +19,7 @@ const ModalCreateCompany = ({isOpen, onClose}) => {
         e.preventDefault();
         try {
             const response = await apiClient.post("/api/v1/companies", formData, {
-                headers: { "Content-Type": "application/json", "Accept": "application/json" },
+                headers: {"Content-Type": "application/json", "Accept": "application/json"},
             });
             console.log(response.data);
             onClose();
@@ -30,7 +30,7 @@ const ModalCreateCompany = ({isOpen, onClose}) => {
 
     return (
         <Modal title="Create company" variant="type2" isOpen={isOpen} onClose={onClose}>
-            <Form fields={fields} handleSubmit={handleSubmit} />
+            <Form fields={fields} handleSubmit={handleSubmit}/>
         </Modal>
     )
 }

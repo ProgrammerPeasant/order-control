@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import apiClient from "../Utils/apiClient";
 import styles from "./Table.module.css"
 import {handleErrorMessage} from "../Utils/ErrorHandler";
@@ -42,7 +42,7 @@ function Table({apiUrl, columns, renderRow, emptyRows = 7}) {
     return (
         <table className={styles.table}>
             <thead>
-                <tr>{columns.map((column, index) => (<th key={index}>{column}</th>))}</tr>
+            <tr>{columns.map((column, index) => (<th key={index}>{column}</th>))}</tr>
             </thead>
             <tbody>
             {Array.isArray(data) && data.length > 0
@@ -50,9 +50,9 @@ function Table({apiUrl, columns, renderRow, emptyRows = 7}) {
                 : !Array.isArray(data) && data ? renderRow(data)
                     : null}
 
-                {[...Array(emptyRows)].map((_, i) => (
-                    <tr key={`empty-${i}`}>{columns.map((_, index) => (<td key={index}>&nbsp;</td>))}</tr>
-                ))}
+            {[...Array(emptyRows)].map((_, i) => (
+                <tr key={`empty-${i}`}>{columns.map((_, index) => (<td key={index}>&nbsp;</td>))}</tr>
+            ))}
             </tbody>
         </table>
     )

@@ -22,22 +22,26 @@ const ManagerDashboardPage = () => {
     const handleUpdate = (estimateId) => {
         const prevId = estimateId
         setEstimateId("        ");
-        setTimeout(() => {setEstimateId(prevId)}, delay * 2)
+        setTimeout(() => {
+            setEstimateId(prevId)
+        }, delay * 2)
     }
 
     return (
         <div className={styles.page}>
             <div className={styles.container}>
-                <EstimateTable estimateId={debouncedValue} handleUpdate={handleUpdate} />
+                <EstimateTable estimateId={debouncedValue} handleUpdate={handleUpdate}/>
             </div>
             <div className={styles.buttons}>
                 <Button title="Settings" variant="type3" onClick={() => navigate("/settings")}/>
-                <input className={styles.input} id="estimate_id" type="text" value={estimateId} onChange={(e) => setEstimateId(e.target.value)} placeholder="Estimate ID" />
-                <Button title="Create Estimate" variant="type2" onClick={() => openModal("modalCreateEstimate")} />
-                <Button title="Show Requests" variant="type2" onClick={() => openModal("modalJoinRequests")} />
+                <input className={styles.input} id="estimate_id" type="text" value={estimateId}
+                       onChange={(e) => setEstimateId(e.target.value)} placeholder="Estimate ID"/>
+                <Button title="Create Estimate" variant="type2" onClick={() => openModal("modalCreateEstimate")}/>
+                <Button title="Show Requests" variant="type2" onClick={() => openModal("modalJoinRequests")}/>
             </div>
-            <ModalCreateEstimate isOpen={activeModal === "modalCreateEstimate"} onClose={closeModal} estimateId={debouncedValue} handleUpdate={handleUpdate}/>
-            <ModalJoinRequests isOpen={activeModal === "modalJoinRequests"} onClose={closeModal} />
+            <ModalCreateEstimate isOpen={activeModal === "modalCreateEstimate"} onClose={closeModal}
+                                 estimateId={debouncedValue} handleUpdate={handleUpdate}/>
+            <ModalJoinRequests isOpen={activeModal === "modalJoinRequests"} onClose={closeModal}/>
         </div>
     )
 }

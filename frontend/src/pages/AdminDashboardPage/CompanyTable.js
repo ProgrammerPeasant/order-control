@@ -29,7 +29,7 @@ function CompanyTable({companyId, handleUpdate}) {
         const fetchData = async () => {
             try {
                 await apiClient.get(`/api/v1/companies/${companyId}`, {
-                    headers: { Accept: "application/json" },
+                    headers: {Accept: "application/json"},
                 })
                 setStatus("Active");
             } catch (error) {
@@ -54,7 +54,7 @@ function CompanyTable({companyId, handleUpdate}) {
     const handleDelete = async () => {
         if (!selectedEstimateId) return;
         try {
-            const response = await apiClient.delete(`/api/v1/estimates/${selectedEstimateId}`, {headers: { Accept: "application/json" }});
+            const response = await apiClient.delete(`/api/v1/estimates/${selectedEstimateId}`, {headers: {Accept: "application/json"}});
             console.log(response.data);
             handleUpdate(companyId);
             closeModal();
@@ -78,9 +78,10 @@ function CompanyTable({companyId, handleUpdate}) {
 
     return (
         <div>
-            <Table apiUrl={apiUrl} columns={columns} renderRow={renderRow} />
-            <Modal title="Delete estimate?" variant="type1" isOpen={activeModal === "modalDeleteEstimate"} onClose={closeModal}>
-                <Button title="Delete" variant="type4" onClick={() => handleDelete()} />
+            <Table apiUrl={apiUrl} columns={columns} renderRow={renderRow}/>
+            <Modal title="Delete estimate?" variant="type1" isOpen={activeModal === "modalDeleteEstimate"}
+                   onClose={closeModal}>
+                <Button title="Delete" variant="type4" onClick={() => handleDelete()}/>
             </Modal>
         </div>
     );

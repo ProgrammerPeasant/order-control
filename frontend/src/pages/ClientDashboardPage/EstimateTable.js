@@ -17,11 +17,11 @@ function EstimateTable({estimateId}) {
             <td>{item?.total_amount?.toLocaleString()}</td>
             <td>{new Date(item?.CreatedAt).toLocaleString() || "N/A"}</td>
             <td>{item?.created_by_id || "N/A"}</td>
-            <td><Button title="View" variant="type3" onClick={() => navigate(`/estimateview/${item.ID}`)} /></td>
+            <td><Button title="View" variant="type3" onClick={() => navigate(`/estimateview/${item.ID}`)}/></td>
         </tr>
     );
 
-    return <Table apiUrl={apiUrl} columns={columns} renderRow={renderRow} />;
+    return <Table apiUrl={apiUrl} columns={columns} renderRow={renderRow}/>;
 }
 
 export default EstimateTable;

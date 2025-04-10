@@ -36,7 +36,7 @@ function RegForm({onClose}) {
     }
 
     return (
-        <Form fields={fields} handleSubmit={handleSubmit} />
+        <Form fields={fields} handleSubmit={handleSubmit}/>
     )
 }
 

@@ -40,7 +40,12 @@ function RegForm({children}) {
             alert(handleErrorMessage(error));
         }
         try {
-            const response = await apiClient.post("/api/login", updatedData, {headers: {"Content-Type": "application/json", "Accept": "application/json"},});
+            const response = await apiClient.post("/api/login", updatedData, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+            });
             console.log(response.data);
             const {token, username, role, userId, companyId} = response.data;
             login(token, username, role, userId, companyId);

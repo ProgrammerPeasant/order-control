@@ -3,7 +3,7 @@ import styles from "./Form.module.css"
 import Button from "./Button";
 
 
-function Form({fields, handleSubmit, children, variant="type1"}) {
+function Form({fields, handleSubmit, children, variant = "type1"}) {
     const [formData, setFormData] = useState(
         fields.reduce((acc, field) => {
             acc[field.id] = field.value || "";
@@ -30,7 +30,7 @@ function Form({fields, handleSubmit, children, variant="type1"}) {
             ))}
             <div className={styles.buttons}>
                 {children}
-                <Button title="Continue" variant="type2" type="submit" />
+                <Button title="Continue" variant="type2" type="submit"/>
             </div>
         </form>
     );

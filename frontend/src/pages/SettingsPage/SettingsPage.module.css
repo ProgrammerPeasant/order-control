@@ -1,4 +1,4 @@
-.container{
+.container {
     background-color: #4a7dff;
     border-radius: 20px;
     padding: 20px 20px 20px 20px;
@@ -9,14 +9,14 @@
     margin: 10vh auto auto;
 }
 
-.text{
+.text {
     font-family: "Rubik", sans-serif;
     font-optical-sizing: auto;
     font-weight: 500;
     font-style: normal;
 }
 
-.buttons{
+.buttons {
     display: flex;
     flex-direction: column;
     gap: 10px;
