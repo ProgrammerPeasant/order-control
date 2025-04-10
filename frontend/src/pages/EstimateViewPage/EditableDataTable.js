@@ -6,7 +6,7 @@ import {handleErrorMessage} from "../../Utils/ErrorHandler";
 import Button from "../../components/Button";
 
 
-const EditableDataTable = ({data, setData, fetchData, children}) => {
+const EditableDataTable = ({data, setData, fetchData, children, color_secondary, color_accent}) => {
     const [items, setItems] = useState([]);
 
     useEffect(() => {
@@ -58,7 +58,7 @@ const EditableDataTable = ({data, setData, fetchData, children}) => {
         <div className={styles.container}>
             <div className={styles.scrollable}>
             <table className={styles2.table}>
-                <thead>
+                <thead style={{backgroundColor: color_secondary}}>
                 <tr>
                     <th>ID</th>
                     <th>Product Name</th>
@@ -92,7 +92,7 @@ const EditableDataTable = ({data, setData, fetchData, children}) => {
                 </tbody>
             </table>
             </div>
-            <div className={styles.panel}>
+            <div className={styles.panel} style={{backgroundColor: color_accent}}>
                 <div className={styles.buttons}>
                     <Button title="Add" variant="type2" onClick={handleAdd} />
                     <Button title="Save changes" variant="type3" onClick={handleSave} />

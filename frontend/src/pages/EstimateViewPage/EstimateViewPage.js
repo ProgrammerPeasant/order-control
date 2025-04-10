@@ -17,6 +17,7 @@ const EstimateViewPage = () => {
     const [error, setError] = useState(null);
     const {user} = useContext(AuthContext)
 
+
     const InfoRow = ({ label, value }) => (
         <p className={styles.text}><strong>{label}:</strong> {value || "Not provided"}</p>
     );
@@ -52,6 +53,9 @@ const EstimateViewPage = () => {
             }
         };
 
+
+
+
         fetchData();
         fetchInfo();
     }, [fetchData, user.companyId, user.role]);
@@ -73,7 +77,7 @@ const EstimateViewPage = () => {
     }
 
     return (
-        <div className={styles.container}>
+        <div className={styles.container} style={{backgroundColor: companyInfo.color_primary}}>
             <div className={styles.header}>
                 <div className={styles.info}>
                     <InfoRow label="Title" value={data?.title} />
@@ -89,10 +93,10 @@ const EstimateViewPage = () => {
                 </div>
             </div>
             <div className={styles.body}>
-                {user.role === "USER" && <DataTable data={data}>
+                {user.role === "USER" && <DataTable data={data} color_secondary={companyInfo.color_secondary} color_accent={companyInfo.color_accent}>
                     <ButtonPanel estimateId={estimateId} data={data} fetchData={fetchData} />
                 </DataTable>}
-                {user.role !== "USER" && <EditableDataTable data={data} setData={setData} fetchData={fetchData}>
+                {user.role !== "USER" && <EditableDataTable data={data} setData={setData} fetchData={fetchData} color_secondary={companyInfo.color_secondary} color_accent={companyInfo.color_accent}>
                     <ButtonPanel estimateId={estimateId} data={data} fetchData={fetchData} />
                 </EditableDataTable>}
             </div>

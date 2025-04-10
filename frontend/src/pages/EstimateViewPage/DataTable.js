@@ -3,7 +3,7 @@ import styles from "./EditableDataTable.module.css"
 import styles2 from "../../components/Table.module.css"
 
 
-const DataTable = ({data, children}) => {
+const DataTable = ({data, children, color_secondary, color_accent}) => {
     const [items, setItems] = useState([]);
 
     useEffect(() => {
@@ -16,7 +16,7 @@ const DataTable = ({data, children}) => {
         <div className={styles.container}>
             <div className={styles.scrollable}>
                 <table className={styles2.table}>
-                    <thead>
+                    <thead style={{backgroundColor: color_secondary}}>
                     <tr>
                         <th>ID</th>
                         <th>Product Name</th>
@@ -50,7 +50,7 @@ const DataTable = ({data, children}) => {
                     </tbody>
                 </table>
             </div>
-            <div className={styles.panel}>
+            <div className={styles.panel} style={{backgroundColor: color_accent}}>
                 {children}
             </div>
         </div>
