@@ -12,6 +12,7 @@ import EditableDataTable from "./EditableDataTable";
 const EstimateViewPage = () => {
     const { estimateId } = useParams();
     const [data, setData] = useState([]);
+    const [companyInfo, setCompanyInfo] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const {user} = useContext(AuthContext)
@@ -35,8 +36,23 @@ const EstimateViewPage = () => {
     }, [estimateId]);
 
     useEffect(() => {
+        const fetchInfo = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                const response = await apiClient.get(`/api/v1/companies/${user.companyId}`, {headers: {Accept : "application/json"}});
+                console.log(response.data);
+                setCompanyInfo(response.data);
+            } catch (error) {
+                setError(handleErrorMessage(error));
+            } finally {
+                setLoading(false);
+            }
+        };
+
         fetchData();
-    }, [fetchData]);
+        fetchInfo();
+    }, [fetchData, user.companyId]);
 
     if (loading) {
         return (
@@ -66,7 +82,9 @@ const EstimateViewPage = () => {
                 <div className={styles.manager}>
                     <InfoRow label="Manager" value={data?.created_by_id} />
                 </div>
-                <div className={styles.logo}>{/* ATTENTION company logo */}</div>
+                <div className={styles.logo}>
+                    <img src={companyInfo?.logo_url || "/defaultpic.jpg"} alt="Company Logo" style={{ maxWidth: '80%', maxHeight: '80%', borderRadius: '10px' }} />
+                </div>
             </div>
             <div className={styles.body}>
                 {user.role === "USER" && <DataTable data={data}>

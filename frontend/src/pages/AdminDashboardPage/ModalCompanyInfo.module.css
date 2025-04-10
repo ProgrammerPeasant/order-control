@@ -19,3 +19,7 @@
     text-align: center;
     color: white;
 }
+
+.container{
+    display: flex;
+}

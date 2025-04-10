@@ -62,6 +62,10 @@ const ModalCompanyInfo = ({companyId, isOpen, onClose, handleUpdate}) => {
         {id: "name", type: "text", placeholder: "Name", value: data?.name},
         {id: "address", type: "text", placeholder: "Address", value: data?.address},
         {id: "desc", type: "text", placeholder: "Description", value: data?.desc, required: false},
+        {id: "logo_url", type: "text", placeholder: "Logo Url", value: data?.logo_url, required: false},
+        {id: "color1", type: "color", placeholder: "Color 1", value: data?.color1, required: false},
+        {id: "color2", type: "color", placeholder: "Color 2", value: data?.color2, required: false},
+        {id: "color3", type: "color", placeholder: "Color 3", value: data?.color3, required: false},
     ]
 
     const fieldsDelete = [
@@ -70,8 +74,12 @@ const ModalCompanyInfo = ({companyId, isOpen, onClose, handleUpdate}) => {
 
     const handleSubmitUpdate = async (e, formData) => {
         e.preventDefault();
+        const updatedData = {
+            ...formData,
+            design_colors: [formData?.color1, formData?.color2, formData?.color3]
+        };
         try {
-            const response = await apiClient.put(`/api/v1/companies/${companyId}`, formData, {
+            const response = await apiClient.put(`/api/v1/companies/${companyId}`, updatedData, {
                 headers: { "Content-Type": "application/json", "Accept": "application/json" },
             })
             console.log(response.data);
@@ -120,14 +128,19 @@ const ModalCompanyInfo = ({companyId, isOpen, onClose, handleUpdate}) => {
 
     return (
         <Modal title="Company Info" variant="type1" isOpen={isOpen} onClose={onClose}>
-            <div>
-                <InfoRow label="ID" value={data?.ID} />
-                <InfoRow label="Name" value={data?.name} />
-                <InfoRow label="Description" value={data?.desc} />
-                <InfoRow label="Address" value={data?.address} />
-                <InfoRow label="Created At" value={new Date(data?.CreatedAt).toLocaleString()} />
-                <InfoRow label="Updated At" value={new Date(data?.UpdatedAt).toLocaleString()} />
-                <InfoRow label="Deleted At" value={data?.DeletedAt ? new Date(data?.DeletedAt).toLocaleString() : "Not deleted"} />
+            <div className={styles.container}>
+                <div>
+                    <InfoRow label="ID" value={data?.ID} />
+                    <InfoRow label="Name" value={data?.name} />
+                    <InfoRow label="Description" value={data?.desc} />
+                    <InfoRow label="Address" value={data?.address} />
+                    <InfoRow label="Created At" value={new Date(data?.CreatedAt).toLocaleString()} />
+                    <InfoRow label="Updated At" value={new Date(data?.UpdatedAt).toLocaleString()} />
+                    <InfoRow label="Deleted At" value={data?.DeletedAt ? new Date(data?.DeletedAt).toLocaleString() : "Not deleted"} />
+                </div>
+                <div>
+                    <img src={data?.logo_url || "/defaultpic.jpg"} alt="Company Logo" style={{ maxWidth: '50%', maxHeight: '50%'}} />
+                </div>
             </div>
             <Button title="Edit Company Info" variant="type2" onClick={() => setMode("update")} />
             <Button title="Delete Company" variant="type4" onClick={() => setMode("delete")} />
