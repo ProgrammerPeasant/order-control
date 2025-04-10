@@ -16,28 +16,25 @@ import (
 func InitRoutes(db *gorm.DB, r *gin.Engine) {
 	//r := gin.Default()
 
-	// Создаем метрики Prometheus
 	metrics := utils.NewMetrics()
 
-	// Добавляем middleware для Prometheus
 	r.Use(middlewares.PrometheusMiddleware(metrics))
 
-	// Добавляем endpoint для Prometheus
 	r.GET("/metrics", gin.WrapH(promhttp.Handler()))
 
-	// Инициализируем репозитории
+	// репозитории
 	userRepo := repositories.NewUserRepository(db, metrics)
 	companyRepo := repositories.NewCompanyRepository(db)
 	estimateRepo := repositories.NewEstimateRepository(db)
 	joinRequestRepo := repositories.NewJoinRequestRepository(db)
 
-	// Инициализируем сервисы
+	// сервисы
 	companyService := services.NewCompanyService(companyRepo)
 	estimateService := services.NewEstimateService(estimateRepo)
 	joinRequestService := services.NewJoinRequestService(joinRequestRepo, companyRepo, userRepo, metrics)
 	userService := services.NewUserService(userRepo, joinRequestService, metrics)
 
-	// Инициализируем контроллеры
+	// контроллеры
 	authController := controllers.NewAuthController(userService, metrics)
 	companyController := controllers.NewCompanyController(companyService)
 	estimateController := controllers.NewEstimateController(estimateService)
