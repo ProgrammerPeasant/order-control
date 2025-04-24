@@ -39,7 +39,6 @@
 
     ```bash
     git clone https://github.com/ProgrammerPeasant/order-control.git
-    git checkout develop
     cd order-control
     ```
 3.  Установите и запустите Docker (приложение на Windows или через sudo apt install docker-compose-plugin на Линукс)
